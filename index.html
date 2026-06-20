@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DragoNuic — City Planning & GIS Portfolio</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1><a href="/">DragoNuic</a></h1>
+      <nav>
+        <a href="#projects">Projects</a>
+        <a href="#maps">Maps</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="hero">
+      <h2>City planning, mapping, and spatial analysis</h2>
+      <p>Welcome — I'm exploring how data-driven design and mapping can shape better cities. Below are selected projects and map demos.</p>
+    </section>
+
+    <section id="projects">
+      <h3>Featured projects</h3>
+      <ul class="project-list">
+        <li>
+          <h4><a href="projects/project-1.html">Sample project — Neighborhood accessibility analysis</a></h4>
+          <p>A short description of the project and what I did. <a href="projects/project-1.html">Read more →</a></p>
+        </li>
+        <!-- add more projects -->
+      </ul>
+    </section>
+
+    <section id="maps">
+      <h3>Map demo (Leaflet)</h3>
+      <p>This is a minimal interactive map. Replace data/sample.geojson with your GeoJSON or a tile layer.</p>
+      <div id="map" style="height:420px;"></div>
+    </section>
+
+    <section id="contact">
+      <h3>Contact</h3>
+      <p>Email: <a href="mailto:you@example.com">you@example.com</a> · LinkedIn: <a href="https://www.linkedin.com/">profile</a></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">© 2026 DragoNuic — City planning & GIS</div>
+  </footer>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script>
+    // Basic Leaflet map with a sample GeoJSON fetch
+    const map = L.map('map').setView([40.7128, -74.0060], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Try to load a small sample GeoJSON at data/sample.geojson (optional)
+    fetch('data/sample.geojson').then(r => {
+      if (!r.ok) throw new Error('No sample GeoJSON');
+      return r.json();
+    }).then(geojson => {
+      const geo = L.geoJSON(geojson, {
+        onEachFeature: (f, layer) => {
+          if (f.properties && f.properties.name) {
+            layer.bindPopup(f.properties.name);
+          }
+        }
+      }).addTo(map);
+      if (geo.getBounds && !geo.getBounds().isEmpty()) {
+        map.fitBounds(geo.getBounds());
+      }
+    }).catch(() => {
+      // If no GeoJSON, keep default view
+    });
+  </script>
+</body>
+</html>
