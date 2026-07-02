@@ -1,17 +1,34 @@
-# github-portfolio
+# GitHub Portfolio
 
-This repository contains a simple GitHub Pages portfolio for Drago Nuic (city planning & GIS). Files created as a starter site:
+A modern, dynamic portfolio showcasing urban spaces and geospatial analysis.
 
-- index.html — homepage with a Leaflet map demo
-- assets/css/style.css — site styles
-- about.html — about & contact page
-- projects/project-1.html — starter project page
-- data/sample.geojson — tiny GeoJSON used by the demo map
+## Theme
+- **Cities & Environment** - SVG illustrations of buildings, parks, and urban landscapes
+- **Soft Pastel Colors** - Green (#B8E6D5), Blue (#A0D4D4), Red (#FFB4BA), Purple (#C9A0DC)
+- **Scroll Animations** - Elements pop up as you scroll through the page
 
-How to edit
-- You can edit these files directly on GitHub (click a file → pencil icon) or clone the repo and edit locally.
+## Features
+- Interactive Leaflet map integration
+- Smooth scroll animations with AOS library
+- Responsive design for all devices
+- Dynamic visual effects and hover interactions
+- Project and article showcase sections
 
-Publishing (disabled for now)
-- The site is NOT published yet as requested. To publish later: Settings → Pages → Source: branch `main` and folder `/` (root). After enabling Pages, the site will be available at: https://DragoNuic.github.io/github-portfolio
+## Structure
+- `index.html` - Main portfolio page
+- `assets/css/style.css` - Complete styling with animations
+- `/projects/` - Project detail pages
+- `/articles/` - Article pages
 
-If you want, I can enable Pages and publish the site when you're ready.
+## Live Site
+Visit: https://dragornuic.github.io/github-portfolio/
+
+## Technologies Used
+- HTML5
+- CSS3 with animations
+- JavaScript (AOS, Leaflet)
+- SVG graphics
+
+---
+
+© 2026 Drago Nuic — Urban Systems & Geospatial Analysis
