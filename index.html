@@ -8,9 +8,19 @@
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
 
+  <!-- AOS (Animate On Scroll) CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
+  <!-- Floating decorative elements -->
+  <div class="floating-blob blob-1"></div>
+  <div class="floating-blob blob-2"></div>
+  <div class="floating-blob blob-3"></div>
+  <div class="floating-circle circle-1"></div>
+  <div class="floating-circle circle-2"></div>
+
   <header class="site-header">
     <div class="container">
       <h1><a href="/">Drago Nuic</a></h1>
@@ -24,44 +34,64 @@
   </header>
 
   <main class="container">
-    <section id="hero">
-      <h2>Socio-Political Research & Geospatial Analysis</h2>
-      <p>Hi, my name is Drago Nuic and I am interested in exploring urban spaces around us, the systems that shape it, and how these spaces in return shape us and our societies.</p>
+    <section id="hero" data-aos="fade-up" data-aos-duration="800">
+      <div class="hero-content">
+        <h2>Socio-Political Research & Geospatial Analysis</h2>
+        <p>Hi, my name is Drago Nuic and I am interested in exploring urban spaces around us, the systems that shape it, and how these spaces in return shape us and our societies.</p>
+        <div class="hero-illustration">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="30" r="12" fill="#B8E6D5" opacity="0.7"/>
+            <path d="M 30 50 Q 50 40 70 50 L 70 80 Q 50 85 30 80 Z" fill="#FFB4BA" opacity="0.6"/>
+            <circle cx="25" cy="55" r="3" fill="#A0D4D4" opacity="0.8"/>
+            <circle cx="75" cy="60" r="3" fill="#A0D4D4" opacity="0.8"/>
+          </svg>
+        </div>
+      </div>
     </section>
 
-    <section id="projects">
+    <section id="projects" data-aos="fade-up" data-aos-delay="100">
       <h3>Featured projects</h3>
       <ul class="project-list">
-        <li>
+        <li class="project-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="project-icon">🗺️</div>
           <h4><a href="projects/project-1.html">The Vienna Grassroots Atlas</a></h4>
-          <p>I am currently working on mapping the grassroots initiatives and organisations that contribute to the social, economic and environmental resilience of the city of Vienna. I believe th[...]
+          <p>I am currently working on mapping the grassroots initiatives and organisations that contribute to the social, economic and environmental resilience of the city of Vienna. I believe that these networks are vital to urban sustainability and social cohesion.</p>
+          <a href="projects/project-1.html" class="button">View Project</a>
         </li>
-        <!-- add more projects -->
       </ul>
     </section>
 
-    <section id="articles">
+    <section id="articles" data-aos="fade-up" data-aos-delay="150">
       <h3>Analytical Articles</h3>
       <ul class="article-list">
-        <li class="article-card">
+        <li class="article-card" data-aos="fade-up" data-aos-delay="250">
+          <div class="article-icon">📝</div>
           <h4><a href="articles/article-1.html">Urban Resilience & Community Networks</a></h4>
           <p class="article-meta">Published June 2026</p>
           <p>Exploring how grassroots initiatives strengthen urban resilience and create alternative systems for social, economic, and environmental well-being.</p>
           <a href="articles/article-1.html" class="button">Read Article</a>
         </li>
-        <!-- add more articles -->
       </ul>
     </section>
 
-    <section id="maps">
+    <section id="maps" data-aos="fade-up" data-aos-delay="200">
       <h3>Map demo (Leaflet)</h3>
       <p>This is a minimal interactive map. Replace data/sample.geojson with your GeoJSON or a tile layer.</p>
       <div id="map" style="height:420px;"></div>
     </section>
 
-    <section id="contact">
-      <h3>Contact</h3>
-      <p>Email: <a href="mailto:dragonuic98@gmail.com">dragonuic98@gmail.com</a></p>
+    <section id="contact" data-aos="fade-up" data-aos-delay="250">
+      <h3>Get in Touch</h3>
+      <p>Email: <a href="mailto:dragonuic98@gmail.com" class="email-link">dragonuic98@gmail.com</a></p>
+      <div class="contact-illustration">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="25" width="60" height="50" rx="5" fill="none" stroke="#9ECDC4" stroke-width="2" opacity="0.7"/>
+          <path d="M 20 25 L 50 50 L 80 25" stroke="#C9A0DC" stroke-width="2" fill="none" opacity="0.7"/>
+          <circle cx="35" cy="70" r="4" fill="#FFB4BA" opacity="0.6"/>
+          <circle cx="50" cy="75" r="4" fill="#FFB4BA" opacity="0.6"/>
+          <circle cx="65" cy="70" r="4" fill="#FFB4BA" opacity="0.6"/>
+        </svg>
+      </div>
     </section>
   </main>
 
@@ -71,7 +101,19 @@
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <!-- AOS JS -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
   <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out-cubic',
+      once: false,
+      mirror: true
+    });
+
     // Basic Leaflet map with a sample GeoJSON fetch
     const map = L.map('map').setView([40.7128, -74.0060], 12);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
