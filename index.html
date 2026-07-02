@@ -3,26 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Drago Nuic — Urban & Geospatial Analysis</title>
-
-  <!-- Leaflet CSS -->
+  <title>Drago Nuic / Urban & Geospatial Analysis</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
-
-  <!-- AOS (Animate On Scroll) CSS -->
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
-
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
-  <!-- Animated background elements -->
   <div class="animated-bg">
-    <!-- Street accent lines -->
     <div class="street-accent street-accent-1"></div>
     <div class="street-accent street-accent-2"></div>
     <div class="street-accent street-accent-3"></div>
     <div class="street-accent street-accent-4"></div>
-    
-    <!-- Organic shapes (buildings) -->
+    <div class="greenery greenery-1"></div>
+    <div class="greenery greenery-2"></div>
+    <div class="greenery greenery-3"></div>
     <div class="building building-1"></div>
     <div class="building building-2"></div>
     <div class="building building-3"></div>
@@ -35,12 +29,29 @@
 
   <header class="site-header">
     <div class="container">
-      <h1><a href="/">Drago Nuic</a></h1>
+      <h1><a href="/">
+        <svg class="house-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="houseWash">
+              <feTurbulence type="fractalNoise" baseFrequency="1.2" numOctaves="2"/>
+              <feDisplacementMap in="SourceGraphic" scale="0.8"/>
+            </filter>
+          </defs>
+          <g filter="url(#houseWash)">
+            <path d="M 3 20 L 3 10 L 12 3 L 21 10 L 21 20 Z" stroke="#7a9b8e" stroke-width="1.5" fill="none" opacity="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="12" y1="3" x2="12" y2="20" stroke="#7a9b8e" stroke-width="1" opacity="0.5" stroke-linecap="round"/>
+            <rect x="9" y="12" width="2.5" height="2.5" stroke="#7a9b8e" stroke-width="0.8" fill="none" opacity="0.6"/>
+            <rect x="13" y="12" width="2.5" height="2.5" stroke="#7a9b8e" stroke-width="0.8" fill="none" opacity="0.6"/>
+          </g>
+        </svg>
+        Drago Nuic
+      </a></h1>
       <nav>
         <a href="#projects">Projects</a>
         <a href="#articles">Articles</a>
         <a href="#maps">Maps</a>
         <a href="about.html">About</a>
+        <a href="cv.html">CV</a>
       </nav>
     </div>
   </header>
@@ -49,8 +60,8 @@
     <section id="hero" data-aos="fade-up" data-aos-duration="1000">
       <div class="hero-content">
         <div class="hero-text">
-          <h2>Exploring Urban Spaces & Environmental Systems</h2>
-          <p>Hi, I'm Drago Nuic. I explore the cities and environments around us—mapping the systems that shape our spaces, and understanding how these spaces shape our communities and futures.</p>
+          <h2>Exploring Urban Spaces and Environmental Systems</h2>
+          <p>Hi, I'm Drago Nuic. I explore the cities and environments around us, mapping the systems that shape our spaces, and understanding how these spaces shape our communities and futures.</p>
           <div class="hero-cta">
             <a href="#projects" class="button button-primary">Explore My Work</a>
             <a href="#contact" class="button button-secondary">Get in Touch</a>
@@ -68,42 +79,27 @@
                 <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.2"/>
               </filter>
             </defs>
-            
-            <!-- Watercolor sky wash -->
             <circle cx="120" cy="80" r="90" fill="#f0ebe5" opacity="0.4" filter="url(#watercolor)"/>
-            
-            <!-- Organic cityscape buildings with watercolor effect -->
             <g filter="url(#roughEdges)">
-              <!-- Building 1 - sage green -->
               <path d="M 30 140 Q 35 125 45 130 L 50 200 Q 40 205 30 200 Z" fill="#7a9b8e" opacity="0.8"/>
               <circle cx="37" cy="150" r="2.5" fill="#3d3d3d" opacity="0.4"/>
               <circle cx="37" cy="160" r="2.5" fill="#3d3d3d" opacity="0.4"/>
               <circle cx="37" cy="170" r="2.5" fill="#3d3d3d" opacity="0.3"/>
-              
-              <!-- Building 2 - clay/terracotta -->
               <path d="M 60 135 Q 70 110 85 125 L 88 205 Q 72 210 58 200 Z" fill="#c97a6f" opacity="0.85"/>
               <circle cx="70" cy="145" r="2.8" fill="#3d3d3d" opacity="0.35"/>
               <circle cx="70" cy="158" r="2.8" fill="#3d3d3d" opacity="0.35"/>
               <circle cx="80" cy="150" r="2.8" fill="#3d3d3d" opacity="0.3"/>
-              
-              <!-- Building 3 - golden ochre -->
               <path d="M 100 150 Q 115 120 130 145 L 132 210 Q 115 215 98 205 Z" fill="#d4a574" opacity="0.75"/>
               <circle cx="110" cy="160" r="2.5" fill="#3d3d3d" opacity="0.3"/>
               <circle cx="110" cy="175" r="2.5" fill="#3d3d3d" opacity="0.25"/>
               <circle cx="122" cy="165" r="2.5" fill="#3d3d3d" opacity="0.25"/>
-              
-              <!-- Building 4 - slate -->
               <path d="M 140 155 Q 155 130 170 150 L 172 205 Q 155 210 138 200 Z" fill="#8b9a9e" opacity="0.75"/>
               <circle cx="150" cy="165" r="2.5" fill="#3d3d3d" opacity="0.3"/>
               <circle cx="150" cy="180" r="2.5" fill="#3d3d3d" opacity="0.25"/>
-              
-              <!-- Building 5 - terracotta -->
               <path d="M 180 145 Q 195 125 210 148 L 212 200 Q 195 205 178 198 Z" fill="#b8744e" opacity="0.7"/>
               <circle cx="190" cy="155" r="2.3" fill="#3d3d3d" opacity="0.25"/>
               <circle cx="190" cy="170" r="2.3" fill="#3d3d3d" opacity="0.2"/>
             </g>
-            
-            <!-- Foreground trees/vegetation - sketchy style -->
             <g filter="url(#watercolor)" opacity="0.7">
               <ellipse cx="25" cy="200" rx="18" ry="22" fill="#7a9b8e" opacity="0.65"/>
               <ellipse cx="15" cy="190" rx="12" ry="16" fill="#7a9b8e" opacity="0.55"/>
@@ -127,26 +123,16 @@
                   <feDisplacementMap in="SourceGraphic" scale="2"/>
                 </filter>
               </defs>
-              
-              <!-- Paper background wash -->
               <rect width="320" height="220" fill="#f0ebe5" opacity="0.3" filter="url(#mapWash)"/>
-              
-              <!-- Organic landmasses - watercolor blobs -->
               <ellipse cx="70" cy="80" rx="48" ry="45" fill="#7a9b8e" opacity="0.65" filter="url(#mapWash)"/>
               <ellipse cx="85" cy="100" rx="35" ry="40" fill="#7a9b8e" opacity="0.4" filter="url(#mapWash)"/>
-              
               <ellipse cx="165" cy="75" rx="55" ry="50" fill="#d4a574" opacity="0.6" filter="url(#mapWash)"/>
               <ellipse cx="150" cy="95" rx="38" ry="42" fill="#d4a574" opacity="0.35" filter="url(#mapWash)"/>
-              
               <ellipse cx="255" cy="120" rx="42" ry="58" fill="#8b9a9e" opacity="0.58" filter="url(#mapWash)"/>
               <ellipse cx="240" cy="140" rx="30" ry="45" fill="#8b9a9e" opacity="0.35" filter="url(#mapWash)"/>
-              
-              <!-- Urban centers - irregular dots -->
               <circle cx="75" cy="85" r="6" fill="#c97a6f" opacity="0.8"/>
               <circle cx="165" cy="78" r="5.5" fill="#c97a6f" opacity="0.75"/>
               <circle cx="245" cy="125" r="5" fill="#b8744e" opacity="0.7"/>
-              
-              <!-- Flowing connection lines - uneven, hand-drawn -->
               <path d="M 75 85 Q 120 82 165 78" stroke="#b8744e" stroke-width="1.8" fill="none" opacity="0.45" stroke-linecap="round"/>
               <path d="M 165 78 Q 205 100 245 125" stroke="#8b9a9e" stroke-width="1.6" fill="none" opacity="0.38" stroke-linecap="round"/>
               <path d="M 75 85 Q 140 105 245 125" stroke="#7a9b8e" stroke-width="1.5" fill="none" opacity="0.3" stroke-linecap="round"/>
@@ -164,7 +150,6 @@
             <a href="projects/project-1.html" class="button">View Project</a>
           </div>
         </li>
-
         <li class="project-card" data-aos="zoom-in" data-aos-delay="200" data-aos-duration="900">
           <div class="project-image">
             <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
@@ -174,28 +159,17 @@
                   <feDisplacementMap in="SourceGraphic" scale="2.2"/>
                 </filter>
               </defs>
-              
-              <!-- Background paper tone -->
               <rect width="320" height="220" fill="#f0ebe5" opacity="0.2" filter="url(#leafWash)"/>
-              
-              <!-- Environmental/forest visualization - organic clusters -->
               <g filter="url(#leafWash)">
-                <!-- Left cluster -->
                 <ellipse cx="65" cy="110" rx="52" ry="58" fill="#7a9b8e" opacity="0.68"/>
                 <ellipse cx="50" cy="90" rx="35" ry="42" fill="#7a9b8e" opacity="0.5"/>
                 <ellipse cx="85" cy="95" rx="30" ry="38" fill="#7a9b8e" opacity="0.48"/>
-                
-                <!-- Center cluster -->
                 <ellipse cx="170" cy="85" rx="58" ry="62" fill="#d4a574" opacity="0.65"/>
                 <ellipse cx="150" cy="65" rx="38" ry="45" fill="#d4a574" opacity="0.48"/>
                 <ellipse cx="190" cy="70" rx="35" ry="42" fill="#d4a574" opacity="0.45"/>
-                
-                <!-- Right cluster -->
                 <ellipse cx="265" cy="125" rx="48" ry="56" fill="#7a9b8e" opacity="0.62"/>
                 <ellipse cx="280" cy="105" rx="32" ry="40" fill="#7a9b8e" opacity="0.45"/>
               </g>
-              
-              <!-- Organic pathways connecting nodes -->
               <path d="M 65 110 Q 115 98 170 85" stroke="#c97a6f" stroke-width="2.2" fill="none" opacity="0.42" stroke-linecap="round" stroke-linejoin="round"/>
               <path d="M 170 85 Q 220 105 265 125" stroke="#8b9a9e" stroke-width="2" fill="none" opacity="0.36" stroke-linecap="round" stroke-linejoin="round"/>
               <path d="M 65 110 Q 140 130 265 125" stroke="#7a9b8e" stroke-width="1.8" fill="none" opacity="0.28" stroke-linecap="round" stroke-linejoin="round"/>
@@ -228,15 +202,11 @@
                   <feDisplacementMap in="SourceGraphic" scale="1.8"/>
                 </filter>
               </defs>
-              
-              <!-- Network nodes with irregular edges -->
               <circle cx="55" cy="65" r="15" fill="#7a9b8e" opacity="0.72" filter="url(#nodeWash)"/>
               <circle cx="165" cy="50" r="16" fill="#c97a6f" opacity="0.78" filter="url(#nodeWash)"/>
               <circle cx="280" cy="70" r="14" fill="#d4a574" opacity="0.7" filter="url(#nodeWash)"/>
               <circle cx="100" cy="130" r="14" fill="#8b9a9e" opacity="0.65" filter="url(#nodeWash)"/>
               <circle cx="230" cy="135" r="15" fill="#7a9b8e" opacity="0.68" filter="url(#nodeWash)"/>
-              
-              <!-- Flowing uneven connection lines -->
               <path d="M 55 65 Q 110 57 165 50" stroke="#b8744e" stroke-width="2" fill="none" opacity="0.45" stroke-linecap="round"/>
               <path d="M 165 50 Q 222 60 280 70" stroke="#8b9a9e" stroke-width="1.8" fill="none" opacity="0.4" stroke-linecap="round"/>
               <path d="M 100 130 Q 165 90 230 135" stroke="#7a9b8e" stroke-width="1.6" fill="none" opacity="0.32" stroke-linecap="round"/>
@@ -245,13 +215,12 @@
           </div>
           <div class="article-content">
             <div class="article-icon"></div>
-            <h4><a href="articles/article-1.html">Urban Resilience & Community Networks</a></h4>
+            <h4><a href="articles/article-1.html">Urban Resilience and Community Networks</a></h4>
             <p class="article-meta">Published June 2026</p>
             <p>Exploring how grassroots initiatives strengthen urban resilience and create alternative systems for social, economic, and environmental well-being.</p>
             <a href="articles/article-1.html" class="button">Read Article</a>
           </div>
         </li>
-
         <li class="article-card" data-aos="flip-left" data-aos-delay="200" data-aos-duration="900">
           <div class="article-image">
             <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
@@ -261,8 +230,6 @@
                   <feDisplacementMap in="SourceGraphic" scale="1.5"/>
                 </filter>
               </defs>
-              
-              <!-- Data visualization bars with uneven watercolor edges -->
               <g filter="url(#barWash)">
                 <path d="M 35 125 L 38 88 L 62 90 L 60 128 Q 48 132 35 125" fill="#7a9b8e" opacity="0.72"/>
                 <path d="M 75 110 L 78 60 L 102 62 L 100 115 Q 88 120 75 110" fill="#c97a6f" opacity="0.78"/>
@@ -271,8 +238,6 @@
                 <path d="M 195 118 L 198 78 L 222 80 L 220 125 Q 208 130 195 118" fill="#7a9b8e" opacity="0.68"/>
                 <path d="M 235 130 L 238 100 L 262 102 L 260 135 Q 248 138 235 130" fill="#8b9a9e" opacity="0.65"/>
               </g>
-              
-              <!-- Axis line - sketchy -->
               <line x1="20" y1="145" x2="280" y2="145" stroke="#3d3d3d" stroke-width="1.2" opacity="0.25"/>
               <line x1="25" y1="150" x2="25" y2="140" stroke="#3d3d3d" stroke-width="1" opacity="0.2"/>
             </svg>
@@ -298,36 +263,41 @@
       <div class="contact-content">
         <h3>Let's Connect</h3>
         <p>Interested in discussing urban systems, geospatial analysis, or community-driven initiatives?</p>
-        <p>Get in touch—I'd love to hear from you.</p>
-        <p class="contact-email">
-          <strong>Email:</strong> <a href="mailto:dragonuic98@gmail.com" class="email-link">dragonuic98@gmail.com</a>
-        </p>
-        <div class="contact-illustration">
-          <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <filter id="envelopeWash">
-                <feTurbulence type="fractalNoise" baseFrequency="1" numOctaves="2"/>
-                <feDisplacementMap in="SourceGraphic" scale="1.5"/>
-              </filter>
-            </defs>
-            
-            <!-- Envelope with uneven edges -->
-            <g filter="url(#envelopeWash)">
-              <path d="M 50 75 L 170 75 Q 175 75 175 80 L 175 155 Q 175 160 170 160 L 50 160 Q 45 160 45 155 L 45 80 Q 45 75 50 75" 
-                    stroke="#7a9b8e" stroke-width="2.5" fill="none" opacity="0.75" stroke-linecap="round" stroke-linejoin="round"/>
-              
-              <!-- Flap - sketchy lines -->
-              <path d="M 50 75 L 110 115 L 170 75" stroke="#8b9a9e" stroke-width="2" fill="none" opacity="0.65" stroke-linecap="round" stroke-linejoin="round"/>
-              
-              <!-- Decorative dots - irregular -->
-              <circle cx="65" cy="155" r="6" fill="#c97a6f" opacity="0.62"/>
-              <circle cx="110" cy="165" r="6.5" fill="#d4a574" opacity="0.58"/>
-              <circle cx="155" cy="158" r="5.5" fill="#8b9a9e" opacity="0.55"/>
-              
-              <!-- Additional detail lines -->
-              <line x1="55" y1="85" x2="165" y2="85" stroke="#7a9b8e" stroke-width="1" opacity="0.25" stroke-linecap="round"/>
-            </g>
-          </svg>
+        <p>Get in touch. I'd love to hear from you.</p>
+        <div class="contact-methods">
+          <div class="contact-item">
+            <svg class="contact-icon" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="envelopeWash">
+                  <feTurbulence type="fractalNoise" baseFrequency="1" numOctaves="2"/>
+                  <feDisplacementMap in="SourceGraphic" scale="1.5"/>
+                </filter>
+              </defs>
+              <g filter="url(#envelopeWash)">
+                <path d="M 50 75 L 170 75 Q 175 75 175 80 L 175 155 Q 175 160 170 160 L 50 160 Q 45 160 45 155 L 45 80 Q 45 75 50 75" stroke="#7a9b8e" stroke-width="2.5" fill="none" opacity="0.75" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M 50 75 L 110 115 L 170 75" stroke="#8b9a9e" stroke-width="2" fill="none" opacity="0.65" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+            </svg>
+            <a href="mailto:dragonuic98@gmail.com" class="email-link">dragonuic98@gmail.com</a>
+          </div>
+          <div class="contact-item">
+            <svg class="contact-icon" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="linkedinWash">
+                  <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2"/>
+                  <feDisplacementMap in="SourceGraphic" scale="1.4"/>
+                </filter>
+              </defs>
+              <g filter="url(#linkedinWash)">
+                <rect x="50" y="65" width="120" height="105" rx="8" stroke="#c97a6f" stroke-width="2.2" fill="none" opacity="0.78" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="65" cy="82" r="5" fill="#c97a6f" opacity="0.7"/>
+                <line x1="65" y1="95" x2="65" y2="155" stroke="#c97a6f" stroke-width="1.5" opacity="0.65" stroke-linecap="round"/>
+                <path d="M 80 95 Q 90 95 95 105 L 95 155" stroke="#c97a6f" stroke-width="1.5" fill="none" opacity="0.65" stroke-linecap="round"/>
+                <circle cx="155" cy="85" r="4.5" fill="#c97a6f" opacity="0.65"/>
+              </g>
+            </svg>
+            <a href="https://www.linkedin.com/in/drago-nui%C4%87-ab7ba41a4/" target="_blank" class="email-link">LinkedIn</a>
+          </div>
         </div>
       </div>
     </section>
@@ -335,57 +305,22 @@
 
   <footer class="site-footer">
     <div class="container">
-      <p>© 2026 Drago Nuic — Urban Systems & Geospatial Analysis</p>
+      <p>© 2026 Drago Nuic / Urban Systems and Geospatial Analysis</p>
       <p class="footer-tagline">Mapping cities. Understanding systems. Building resilience.</p>
     </div>
   </footer>
 
-  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-
-  <!-- AOS JS -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-
   <script>
-    // Initialize AOS with enhanced settings
-    AOS.init({
-      duration: 800,
-      easing: 'ease-in-out-cubic',
-      once: false,
-      mirror: true,
-      offset: 100
-    });
-
-    // Refresh AOS on scroll for dynamic content
-    window.addEventListener('load', () => {
-      AOS.refresh();
-    });
-
-    // Basic Leaflet map
+    AOS.init({ duration: 800, easing: 'ease-in-out-cubic', once: false, mirror: true, offset: 100 });
+    window.addEventListener('load', () => { AOS.refresh(); });
     const map = L.map('map').setView([48.2082, 16.3738], 12);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-
-    // Try to load sample GeoJSON
-    fetch('data/sample.geojson').then(r => {
-      if (!r.ok) throw new Error('No sample GeoJSON');
-      return r.json();
-    }).then(geojson => {
-      const geo = L.geoJSON(geojson, {
-        onEachFeature: (f, layer) => {
-          if (f.properties && f.properties.name) {
-            layer.bindPopup(f.properties.name);
-          }
-        }
-      }).addTo(map);
-      if (geo.getBounds && !geo.getBounds().isEmpty()) {
-        map.fitBounds(geo.getBounds());
-      }
-    }).catch(() => {
-      // Keep default view if no GeoJSON
-    });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap contributors' }).addTo(map);
+    fetch('data/sample.geojson').then(r => r.ok ? r.json() : Promise.reject()).then(geojson => {
+      const geo = L.geoJSON(geojson, { onEachFeature: (f, layer) => { if (f.properties && f.properties.name) layer.bindPopup(f.properties.name); } }).addTo(map);
+      if (geo.getBounds && !geo.getBounds().isEmpty()) map.fitBounds(geo.getBounds());
+    }).catch(() => {});
   </script>
 </body>
 </html>
