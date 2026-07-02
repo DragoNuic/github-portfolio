@@ -14,16 +14,21 @@
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
-  <!-- Floating decorative elements -->
-  <div class="floating-blob blob-1"></div>
-  <div class="floating-blob blob-2"></div>
-  <div class="floating-blob blob-3"></div>
-  <div class="floating-circle circle-1"></div>
-  <div class="floating-circle circle-2"></div>
+  <!-- Animated background elements -->
+  <div class="animated-bg">
+    <div class="building building-1"></div>
+    <div class="building building-2"></div>
+    <div class="building building-3"></div>
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="floating-blob blob-1"></div>
+    <div class="floating-blob blob-2"></div>
+    <div class="floating-blob blob-3"></div>
+  </div>
 
   <header class="site-header">
     <div class="container">
-      <h1><a href="/">Drago Nuic</a></h1>
+      <h1><a href="/">🏙️ Drago Nuic</a></h1>
       <nav>
         <a href="#projects">Projects</a>
         <a href="#articles">Articles</a>
@@ -34,69 +39,184 @@
   </header>
 
   <main class="container">
-    <section id="hero" data-aos="fade-up" data-aos-duration="800">
+    <section id="hero" data-aos="fade-up" data-aos-duration="1000">
       <div class="hero-content">
-        <h2>Socio-Political Research & Geospatial Analysis</h2>
-        <p>Hi, my name is Drago Nuic and I am interested in exploring urban spaces around us, the systems that shape it, and how these spaces in return shape us and our societies.</p>
+        <div class="hero-text">
+          <h2>Exploring Urban Spaces & Environmental Systems</h2>
+          <p>Hi, I'm Drago Nuic. I explore the cities and environments around us—mapping the systems that shape our spaces, and understanding how these spaces shape our communities and futures.</p>
+          <div class="hero-cta">
+            <a href="#projects" class="button button-primary">Explore My Work</a>
+            <a href="#contact" class="button button-secondary">Get in Touch</a>
+          </div>
+        </div>
         <div class="hero-illustration">
-          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="30" r="12" fill="#B8E6D5" opacity="0.7"/>
-            <path d="M 30 50 Q 50 40 70 50 L 70 80 Q 50 85 30 80 Z" fill="#FFB4BA" opacity="0.6"/>
-            <circle cx="25" cy="55" r="3" fill="#A0D4D4" opacity="0.8"/>
-            <circle cx="75" cy="60" r="3" fill="#A0D4D4" opacity="0.8"/>
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- City skyline -->
+            <rect x="20" y="100" width="30" height="80" fill="#B8E6D5" opacity="0.8"/>
+            <rect x="55" y="80" width="35" height="100" fill="#A0D4D4" opacity="0.8"/>
+            <rect x="95" y="90" width="30" height="90" fill="#FFB4BA" opacity="0.8"/>
+            <rect x="130" y="100" width="28" height="80" fill="#B8E6D5" opacity="0.8"/>
+            <rect x="162" y="95" width="25" height="85" fill="#A0D4D4" opacity="0.8"/>
+            <!-- Windows -->
+            <circle cx="27" cy="110" r="3" fill="#2c2c2c" opacity="0.5"/>
+            <circle cx="27" cy="125" r="3" fill="#2c2c2c" opacity="0.5"/>
+            <circle cx="27" cy="140" r="3" fill="#2c2c2c" opacity="0.5"/>
+            <!-- Trees/Nature -->
+            <circle cx="170" cy="95" r="15" fill="#B8E6D5" opacity="0.6"/>
+            <circle cx="185" cy="100" r="12" fill="#A0D4D4" opacity="0.6"/>
           </svg>
         </div>
       </div>
     </section>
 
-    <section id="projects" data-aos="fade-up" data-aos-delay="100">
-      <h3>Featured projects</h3>
+    <section id="projects" class="projects-section">
+      <h3 data-aos="fade-right" data-aos-duration="800">Featured Projects</h3>
       <ul class="project-list">
-        <li class="project-card" data-aos="fade-up" data-aos-delay="200">
-          <div class="project-icon">🗺️</div>
-          <h4><a href="projects/project-1.html">The Vienna Grassroots Atlas</a></h4>
-          <p>I am currently working on mapping the grassroots initiatives and organisations that contribute to the social, economic and environmental resilience of the city of Vienna. I believe that these networks are vital to urban sustainability and social cohesion.</p>
-          <a href="projects/project-1.html" class="button">View Project</a>
+        <li class="project-card" data-aos="zoom-in" data-aos-delay="0" data-aos-duration="900">
+          <div class="project-image">
+            <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+              <!-- Sky gradient effect -->
+              <rect width="300" height="100" fill="#C9E4E8" opacity="0.3"/>
+              <rect y="100" width="300" height="100" fill="#B8E6D5" opacity="0.2"/>
+              <!-- City buildings -->
+              <rect x="30" y="80" width="40" height="120" fill="#A0D4D4"/>
+              <rect x="80" y="60" width="45" height="140" fill="#FFB4BA"/>
+              <rect x="140" y="75" width="40" height="125" fill="#B8E6D5"/>
+              <rect x="195" y="85" width="35" height="115" fill="#C9A0DC" opacity="0.7"/>
+              <!-- Green spaces -->
+              <circle cx="250" cy="130" r="25" fill="#B8E6D5" opacity="0.8"/>
+              <circle cx="260" cy="120" r="18" fill="#A0D4D4" opacity="0.6"/>
+            </svg>
+          </div>
+          <div class="project-content">
+            <div class="project-icon">🗺️</div>
+            <h4><a href="projects/project-1.html">Vienna Grassroots Atlas</a></h4>
+            <p>Mapping grassroots initiatives that contribute to Vienna's social, economic, and environmental resilience. An interactive exploration of community-led urban transformation.</p>
+            <div class="project-tags">
+              <span class="tag">Mapping</span>
+              <span class="tag">Community</span>
+              <span class="tag">Urban Systems</span>
+            </div>
+            <a href="projects/project-1.html" class="button">View Project</a>
+          </div>
+        </li>
+
+        <li class="project-card" data-aos="zoom-in" data-aos-delay="200" data-aos-duration="900">
+          <div class="project-image">
+            <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+              <!-- Park/environment view -->
+              <rect width="300" height="200" fill="#B8E6D5" opacity="0.15"/>
+              <!-- Trees -->
+              <circle cx="60" cy="100" r="35" fill="#A0D4D4"/>
+              <circle cx="45" cy="85" r="25" fill="#B8E6D5"/>
+              <circle cx="150" cy="80" r="40" fill="#FFB4BA" opacity="0.6"/>
+              <circle cx="130" cy="70" r="30" fill="#A0D4D4"/>
+              <circle cx="240" cy="110" r="35" fill="#B8E6D5"/>
+              <!-- Pathways -->
+              <line x1="80" y1="140" x2="220" y2="140" stroke="#C9A0DC" stroke-width="3" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="project-content">
+            <div class="project-icon">🌳</div>
+            <h4><a href="#">Environmental Networks</a></h4>
+            <p>Analysis of green spaces and environmental corridors in European cities, examining their role in climate adaptation and urban well-being.</p>
+            <div class="project-tags">
+              <span class="tag">Environment</span>
+              <span class="tag">Networks</span>
+              <span class="tag">Climate</span>
+            </div>
+            <a href="#" class="button">Coming Soon</a>
+          </div>
         </li>
       </ul>
     </section>
 
-    <section id="articles" data-aos="fade-up" data-aos-delay="150">
-      <h3>Analytical Articles</h3>
+    <section id="articles" class="articles-section">
+      <h3 data-aos="fade-left" data-aos-duration="800">Analytical Articles</h3>
       <ul class="article-list">
-        <li class="article-card" data-aos="fade-up" data-aos-delay="250">
-          <div class="article-icon">📝</div>
-          <h4><a href="articles/article-1.html">Urban Resilience & Community Networks</a></h4>
-          <p class="article-meta">Published June 2026</p>
-          <p>Exploring how grassroots initiatives strengthen urban resilience and create alternative systems for social, economic, and environmental well-being.</p>
-          <a href="articles/article-1.html" class="button">Read Article</a>
+        <li class="article-card" data-aos="flip-left" data-aos-delay="0" data-aos-duration="900">
+          <div class="article-image">
+            <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+              <!-- Network visualization -->
+              <circle cx="60" cy="50" r="15" fill="#B8E6D5" opacity="0.8"/>
+              <circle cx="150" cy="40" r="15" fill="#A0D4D4" opacity="0.8"/>
+              <circle cx="240" cy="55" r="15" fill="#FFB4BA" opacity="0.8"/>
+              <circle cx="100" cy="100" r="15" fill="#C9A0DC" opacity="0.6"/>
+              <circle cx="200" cy="110" r="15" fill="#B8E6D5" opacity="0.7"/>
+              <!-- Connecting lines -->
+              <line x1="60" y1="50" x2="150" y2="40" stroke="#A0D4D4" stroke-width="2" opacity="0.5"/>
+              <line x1="150" y1="40" x2="240" y2="55" stroke="#FFB4BA" stroke-width="2" opacity="0.5"/>
+              <line x1="100" y1="100" x2="150" y2="40" stroke="#B8E6D5" stroke-width="2" opacity="0.4"/>
+            </svg>
+          </div>
+          <div class="article-content">
+            <div class="article-icon">📝</div>
+            <h4><a href="articles/article-1.html">Urban Resilience & Community Networks</a></h4>
+            <p class="article-meta">Published June 2026</p>
+            <p>Exploring how grassroots initiatives strengthen urban resilience and create alternative systems for social, economic, and environmental well-being.</p>
+            <a href="articles/article-1.html" class="button">Read Article</a>
+          </div>
+        </li>
+
+        <li class="article-card" data-aos="flip-left" data-aos-delay="200" data-aos-duration="900">
+          <div class="article-image">
+            <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+              <!-- Chart visualization -->
+              <rect x="30" y="100" width="30" height="40" fill="#B8E6D5" opacity="0.8"/>
+              <rect x="70" y="70" width="30" height="70" fill="#A0D4D4" opacity="0.8"/>
+              <rect x="110" y="50" width="30" height="90" fill="#FFB4BA" opacity="0.8"/>
+              <rect x="150" y="60" width="30" height="80" fill="#C9A0DC" opacity="0.7"/>
+              <rect x="190" y="80" width="30" height="60" fill="#B8E6D5" opacity="0.8"/>
+              <rect x="230" y="90" width="30" height="50" fill="#A0D4D4" opacity="0.8"/>
+              <!-- Grid line -->
+              <line x1="20" y1="140" x2="280" y2="140" stroke="#2c2c2c" stroke-width="1" opacity="0.3"/>
+            </svg>
+          </div>
+          <div class="article-content">
+            <div class="article-icon">📊</div>
+            <h4><a href="#">Data-Driven Urban Planning</a></h4>
+            <p class="article-meta">Coming Soon</p>
+            <p>How geospatial analysis and open data are transforming the way cities plan for sustainable growth and environmental protection.</p>
+            <a href="#" class="button" style="opacity: 0.6; cursor: not-allowed;">Coming Soon</a>
+          </div>
         </li>
       </ul>
     </section>
 
-    <section id="maps" data-aos="fade-up" data-aos-delay="200">
-      <h3>Map demo (Leaflet)</h3>
-      <p>This is a minimal interactive map. Replace data/sample.geojson with your GeoJSON or a tile layer.</p>
+    <section id="maps" class="maps-section" data-aos="fade-up" data-aos-duration="900">
+      <h3>Interactive Map</h3>
+      <p>Explore spatial data and geographic patterns. This interactive map showcases the kind of geospatial analysis I work with.</p>
       <div id="map" style="height:420px;"></div>
     </section>
 
-    <section id="contact" data-aos="fade-up" data-aos-delay="250">
-      <h3>Get in Touch</h3>
-      <p>Email: <a href="mailto:dragonuic98@gmail.com" class="email-link">dragonuic98@gmail.com</a></p>
-      <div class="contact-illustration">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <rect x="20" y="25" width="60" height="50" rx="5" fill="none" stroke="#9ECDC4" stroke-width="2" opacity="0.7"/>
-          <path d="M 20 25 L 50 50 L 80 25" stroke="#C9A0DC" stroke-width="2" fill="none" opacity="0.7"/>
-          <circle cx="35" cy="70" r="4" fill="#FFB4BA" opacity="0.6"/>
-          <circle cx="50" cy="75" r="4" fill="#FFB4BA" opacity="0.6"/>
-          <circle cx="65" cy="70" r="4" fill="#FFB4BA" opacity="0.6"/>
-        </svg>
+    <section id="contact" class="contact-section" data-aos="zoom-in" data-aos-duration="900">
+      <div class="contact-content">
+        <h3>Let's Connect</h3>
+        <p>Interested in discussing urban systems, geospatial analysis, or community-driven initiatives?</p>
+        <p>Get in touch—I'd love to hear from you.</p>
+        <p class="contact-email">
+          <strong>Email:</strong> <a href="mailto:dragonuic98@gmail.com" class="email-link">dragonuic98@gmail.com</a>
+        </p>
+        <div class="contact-illustration">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- Envelope -->
+            <rect x="40" y="60" width="120" height="80" rx="8" fill="none" stroke="#B8E6D5" stroke-width="3" opacity="0.8"/>
+            <path d="M 40 60 L 100 105 L 160 60" stroke="#A0D4D4" stroke-width="2.5" fill="none" opacity="0.8"/>
+            <!-- Decorative circles -->
+            <circle cx="60" cy="140" r="6" fill="#FFB4BA" opacity="0.7"/>
+            <circle cx="100" cy="150" r="6" fill="#B8E6D5" opacity="0.7"/>
+            <circle cx="140" cy="145" r="6" fill="#A0D4D4" opacity="0.7"/>
+          </svg>
+        </div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container">© 2026 Drago Nuic — City planning & GIS</div>
+    <div class="container">
+      <p>© 2026 Drago Nuic — Urban Systems & Geospatial Analysis</p>
+      <p class="footer-tagline">Mapping cities. Understanding systems. Building resilience.</p>
+    </div>
   </footer>
 
   <!-- Leaflet JS -->
@@ -106,22 +226,28 @@
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 
   <script>
-    // Initialize AOS
+    // Initialize AOS with enhanced settings
     AOS.init({
       duration: 800,
       easing: 'ease-in-out-cubic',
       once: false,
-      mirror: true
+      mirror: true,
+      offset: 100
     });
 
-    // Basic Leaflet map with a sample GeoJSON fetch
-    const map = L.map('map').setView([40.7128, -74.0060], 12);
+    // Refresh AOS on scroll for dynamic content
+    window.addEventListener('load', () => {
+      AOS.refresh();
+    });
+
+    // Basic Leaflet map
+    const map = L.map('map').setView([48.2082, 16.3738], 12);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Try to load a small sample GeoJSON at data/sample.geojson (optional)
+    // Try to load sample GeoJSON
     fetch('data/sample.geojson').then(r => {
       if (!r.ok) throw new Error('No sample GeoJSON');
       return r.json();
@@ -137,7 +263,7 @@
         map.fitBounds(geo.getBounds());
       }
     }).catch(() => {
-      // If no GeoJSON, keep default view
+      // Keep default view if no GeoJSON
     });
   </script>
 </body>
