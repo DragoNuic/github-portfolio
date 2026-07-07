@@ -1,0 +1,44 @@
+﻿<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><title>Mapping & GIS / Drago Nuić</title><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/><link rel="stylesheet" href="assets/css/style.css" /></head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1><a href="home.html">Drago Nuić</a></h1>
+      <nav>
+        <a href="projects.html">Projects</a>
+        <a href="articles.html">Articles</a>
+        <a href="maps.html">Mapping & GIS</a>
+        <a href="about.html">About</a>
+        <a href="cv.html">CV</a>
+      </nav>
+    </div>
+  </header>
+<main class="container">
+  <section class="page-header"><h1>Mapping & GIS</h1><p>Cartographic work and spatial analysis grouped by analytical focus.</p></section>
+  <section id="land-use" class="map-category"><p class="map-category-label">Land-Use Analysis</p><h3>Yolo County Conservation Parcels</h3><div class="map-pair">
+    <article class="map-card"><img src="assets/img/maps/yolo-connectivity.jpg" alt="Yolo County conservation parcels connectivity map" /><div class="map-card-body"><h4>Candidate Conservation Parcels</h4><p class="map-caption">Parcel suitability and conservation designations for nature conservation planning.</p></div></article>
+    <article class="map-card"><img src="assets/img/maps/yolo-parcels.jpg" alt="Yolo County land parcels and terrestrial landscape connectivity map" /><div class="map-card-body"><h4>Connectivity Opportunity Overlay</h4><p class="map-caption">A companion view layering terrestrial landscape connectivity over parcel categories.</p></div></article>
+  </div></section>
+  <section class="map-category"><p class="map-category-label">Spatial Data Analysis & Exploration</p><h3>Environmental Pattern Mapping</h3><div class="map-grid">
+    <article id="murrelet" class="map-card featured"><img src="assets/img/maps/murrelet-nesting.jpg" alt="Potential nesting locations of the Marbled Murrelet in the Navarro River watershed" /><div class="map-card-body"><h4>Marbled Murrelet Nesting Potential</h4><p class="map-caption">Elevation, watershed context, and potential nesting locations in the Navarro River watershed.</p></div></article>
+    <article id="wildfire" class="map-card"><img src="assets/img/maps/wildfire-burn.jpg" alt="Wildfire burn coverage in California by county" /><div class="map-card-body"><h4>California Wildfire Burn Coverage</h4><p class="map-caption">County-level comparison of wildfire burn proportions across California.</p></div></article>
+  </div></section>
+  <section class="map-category"><p class="map-category-label">Interactive Exploration</p><h3>Sample Web Map</h3><p>Explore spatial data and geographic patterns in a Leaflet map interface.</p><div id="map"></div></section>
+</main>
+  <footer class="site-footer">
+    <div class="container">
+      <p>Copyright 2026 Drago Nuić / Urban Systems and Geospatial Analysis</p>
+      <p class="footer-tagline">Mapping cities. Understanding systems. Building resilience.</p>
+    </div>
+  </footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+  const map = L.map('map').setView([48.2082, 16.3738], 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: 'Copyright OpenStreetMap contributors' }).addTo(map);
+  fetch('data/sample.geojson').then(r => r.ok ? r.json() : Promise.reject()).then(geojson => {
+    const geo = L.geoJSON(geojson, { onEachFeature: (f, layer) => { if (f.properties && f.properties.name) layer.bindPopup(f.properties.name); } }).addTo(map);
+    if (geo.getBounds && !geo.getBounds().isEmpty()) map.fitBounds(geo.getBounds());
+  }).catch(() => {});
+</script>
+</body></html>
