@@ -4,9 +4,9 @@
   --muted: #5f6768;
   --paper: #f8f5ef;
   --white: #ffffff;
-  --moroccan-blue: #4563FF;
+  --moroccan-blue: #0049B7;
   --deep-blue: #2E42AA;
-  --mustard: #FFE145;
+  --mustard: #FFF685;
   --ochre: #b86f2b;
   --clay: #c85f3f;
   --mint: #7fb8a6;
@@ -133,6 +133,11 @@ body::after {
   font-weight: 900;
   font-size: 0.82rem;
 }
+.map-category-label {
+  color: var(--ochre);
+  font-size: 1rem;
+  font-weight: 900;
+}
 .splash-card h1 {
   margin: 0;
   font-size: clamp(3rem, 10vw, 7.5rem);
@@ -238,7 +243,7 @@ body::after {
 }
 
 .map-category { margin-top: 2rem; }
-.map-category h4 { margin: 0 0 1rem; font-size: 1.45rem; color: var(--deep-blue); }
+.map-category h4 { margin: 0 0 1rem; font-size: 1.8rem; color: var(--deep-blue); }
 .map-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .map-card img {
   display: block;
