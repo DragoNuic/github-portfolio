@@ -1,0 +1,178 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Drago Nuić / Urban & Geospatial Analysis</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1><a href="home.html">Drago Nuić</a></h1>
+      <nav>
+        <a href="#projects">Projects</a>
+        <a href="#articles">Articles</a>
+        <a href="#maps">Maps</a>
+        <a href="about.html">About</a>
+        <a href="cv.html">CV</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="hero" data-aos="fade-up" data-aos-duration="800">
+      <div class="hero-content">
+        <div class="hero-text">
+          <p class="section-kicker">Urban systems / geospatial analysis / cartography</p>
+          <h2>Exploring urban spaces and environmental systems through maps.</h2>
+          <p>Hi, I'm Drago Nuić. I explore the cities and environments around us, mapping the systems that shape our spaces and understanding how those spaces shape communities and futures.</p>
+          <div class="hero-cta">
+            <a href="#projects" class="button">Explore My Work</a>
+            <a href="#contact" class="button button-secondary">Get in Touch</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="projects-section">
+      <h3 data-aos="fade-right" data-aos-duration="800">Featured Projects</h3>
+      <ul class="project-list">
+        <li class="project-card" data-aos="fade-up" data-aos-duration="800">
+          <div class="project-content">
+            <h4><a href="projects/project-1.html">Vienna Grassroots Atlas</a></h4>
+            <p>Mapping grassroots initiatives that contribute to Vienna's social, economic, and environmental resilience. An interactive exploration of community-led urban transformation.</p>
+            <div class="project-tags">
+              <span class="tag">Mapping</span>
+              <span class="tag">Community</span>
+              <span class="tag">Urban Systems</span>
+            </div>
+            <a href="projects/project-1.html" class="button">View Project</a>
+          </div>
+        </li>
+        <li class="project-card" data-aos="fade-up" data-aos-delay="120" data-aos-duration="800">
+          <div class="project-content">
+            <h4><a href="#maps">Environmental Networks</a></h4>
+            <p>Analysis of green spaces and environmental corridors in cities, examining their role in climate adaptation, ecological connectivity, and urban well-being.</p>
+            <div class="project-tags">
+              <span class="tag">Environment</span>
+              <span class="tag">Networks</span>
+              <span class="tag">Climate</span>
+            </div>
+            <a href="#maps" class="button">View Maps</a>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section id="articles" class="articles-section">
+      <h3 data-aos="fade-left" data-aos-duration="800">Analytical Articles</h3>
+      <ul class="article-list">
+        <li class="article-card" data-aos="fade-up" data-aos-duration="800">
+          <div class="article-content">
+            <h4><a href="articles/article-1.html">Urban Resilience and Community Networks</a></h4>
+            <p class="article-meta">Published June 2026</p>
+            <p>Exploring how grassroots initiatives strengthen urban resilience and create alternative systems for social, economic, and environmental well-being.</p>
+            <a href="articles/article-1.html" class="button">Read Article</a>
+          </div>
+        </li>
+        <li class="article-card" data-aos="fade-up" data-aos-delay="120" data-aos-duration="800">
+          <div class="article-content">
+            <h4><a href="#">Data-Driven Urban Planning</a></h4>
+            <p class="article-meta">Coming Soon</p>
+            <p>How geospatial analysis and open data are transforming the way cities plan for sustainable growth and environmental protection.</p>
+            <a href="#" class="button button-secondary" aria-disabled="true">Coming Soon</a>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section id="maps" class="maps-section" data-aos="fade-up" data-aos-duration="800">
+      <h3>Maps</h3>
+      <p>Selected cartographic work grouped by analytical focus, with the Yolo County land-use maps shown together as a paired study.</p>
+
+      <div class="map-category">
+        <p class="map-category-label">Land-Use Analysis</p>
+        <h4>Yolo County Conservation Parcels</h4>
+        <div class="map-pair">
+          <article class="map-card">
+            <img src="assets/img/maps/yolo-connectivity.jpg" alt="Yolo County conservation parcels connectivity map" />
+            <div class="map-card-body">
+              <h4>Candidate Conservation Parcels</h4>
+              <p class="map-caption">Parcel suitability and conservation designations for nature conservation planning.</p>
+            </div>
+          </article>
+          <article class="map-card">
+            <img src="assets/img/maps/yolo-parcels.jpg" alt="Yolo County land parcels and terrestrial landscape connectivity map" />
+            <div class="map-card-body">
+              <h4>Connectivity Opportunity Overlay</h4>
+              <p class="map-caption">A companion view layering terrestrial landscape connectivity over parcel categories.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="map-category">
+        <p class="map-category-label">Spatial Data Analysis & Exploration</p>
+        <h4>Environmental Pattern Mapping</h4>
+        <div class="map-grid">
+          <article class="map-card featured">
+            <img src="assets/img/maps/murrelet-nesting.jpg" alt="Potential nesting locations of the Marbled Murrelet in the Navarro River watershed" />
+            <div class="map-card-body">
+              <h4>Marbled Murrelet Nesting Potential</h4>
+              <p class="map-caption">Elevation, watershed context, and potential nesting locations in the Navarro River watershed.</p>
+            </div>
+          </article>
+          <article class="map-card">
+            <img src="assets/img/maps/wildfire-burn.jpg" alt="Wildfire burn coverage in California by county" />
+            <div class="map-card-body">
+              <h4>California Wildfire Burn Coverage</h4>
+              <p class="map-caption">County-level comparison of wildfire burn proportions across California.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="map-category">
+        <p class="map-category-label">Interactive Exploration</p>
+        <h4>Sample Web Map</h4>
+        <p>Explore spatial data and geographic patterns in a Leaflet map interface.</p>
+        <div id="map"></div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact-section" data-aos="fade-up" data-aos-duration="800">
+      <div class="contact-content">
+        <h3>Let's Connect</h3>
+        <p>Interested in discussing urban systems, geospatial analysis, or community-driven initiatives? Get in touch. I'd love to hear from you.</p>
+        <div class="contact-methods">
+          <div class="contact-item"><a href="mailto:dragonuic98@gmail.com" class="email-link">dragonuic98@gmail.com</a></div>
+          <div class="contact-item"><a href="https://www.linkedin.com/in/drago-nui%C4%87-ab7ba41a4/" target="_blank" class="email-link">LinkedIn</a></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Copyright 2026 Drago Nuić / Urban Systems and Geospatial Analysis</p>
+      <p class="footer-tagline">Mapping cities. Understanding systems. Building resilience.</p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 80 });
+    const map = L.map('map').setView([48.2082, 16.3738], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: 'Copyright OpenStreetMap contributors' }).addTo(map);
+    fetch('data/sample.geojson').then(r => r.ok ? r.json() : Promise.reject()).then(geojson => {
+      const geo = L.geoJSON(geojson, { onEachFeature: (f, layer) => { if (f.properties && f.properties.name) layer.bindPopup(f.properties.name); } }).addTo(map);
+      if (geo.getBounds && !geo.getBounds().isEmpty()) map.fitBounds(geo.getBounds());
+    }).catch(() => {});
+  </script>
+</body>
+</html>
+
