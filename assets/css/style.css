@@ -1,12 +1,12 @@
 ﻿:root {
   --ink: #17252a;
   --muted: #5f6768;
-  --paper: #f8f5ef;
+  --paper: #FFF6D2;
   --white: #ffffff;
-  --moroccan-blue: #006d8f;
-  --deep-blue: #00465f;
+  --moroccan-blue: #0540F2;
+  --deep-blue: #3D79F2;
   --night: #101820;
-  --mustard: #d6a322;
+  --mustard: #f2b705;
   --ochre: #b86f2b;
   --clay: #c85f3f;
   --mint: #7fb8a6;
@@ -84,7 +84,7 @@ a { color: inherit; }
 .button-secondary { background: var(--white); }
 
 section { margin: 4rem 0; }
-.section-title, .content-section h2 { margin: 0 0 1.4rem; font-size: clamp(1.7rem, 3vw, 2.5rem); line-height: 1.05; color: var(--deep-blue); }
+.section-title, .content-section h2 { margin: 0 0 1.4rem; font-size: clamp(1.7rem, 3vw, 2.5rem); line-height: 1.05; color: var(--moroccan-blue); }
 .hub-grid, .gallery-grid, .feature-list, .map-pair, .map-grid, .skill-grid { display: grid; gap: 1.25rem; }
 .hub-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .gallery-grid, .feature-list { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
@@ -120,7 +120,7 @@ section { margin: 4rem 0; }
 .site-footer p { margin: 0.35rem 0; }
 .footer-tagline { color: #dcecef; }
 
-.page-header { background: var(--deep-blue); }
+.page-header { background: var(--moroccan-blue); }
 .content-section { margin: 2rem 0; }
 .content-section ul { padding-left: 1.25rem; }
 .skill-grid { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
@@ -135,3 +135,9 @@ section { margin: 4rem 0; }
   .hero, .page-header, .contact-section { box-shadow: 8px 8px 0 var(--mustard); }
 }
 @media (max-width: 480px) { .container { width: min(100% - 1rem, var(--max-width)); } .button { width: 100%; } .site-header nav a { padding: 0.35rem 0.45rem; } }
+
+.project-feature { display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; margin: 3rem 0; }
+.project-feature-main, .project-feature-side { background: var(--white); border: 3px solid var(--ink); border-radius: var(--radius); box-shadow: 8px 8px 0 rgba(0,70,95,0.22); padding: 1.35rem; }
+.project-feature-main h2 { color: var(--deep-blue); font-size: clamp(1.7rem, 3vw, 2.7rem); line-height: 1.05; margin: 0 0 1rem; }
+.pdf-preview object { width: 100%; height: 760px; border: 3px solid var(--ink); background: var(--white); }
+@media (max-width: 900px) { .project-feature { grid-template-columns: 1fr; } .pdf-preview object { height: 560px; } }
