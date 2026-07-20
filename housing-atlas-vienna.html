@@ -43,8 +43,15 @@
       <h4>Buildings shown</h4>
       <p class="vmap-count" id="vmap-count">0</p>
       <p class="vmap-units-line">Housing units built: <strong id="vmap-units">0</strong></p>
-      <div class="vmap-unit-chart" id="vmap-unit-bars"></div>
-      <p class="vmap-chart-caption">Units built per decade</p>
+      <p class="vmap-units-line">Vienna population: <strong id="vmap-population">0</strong></p>
+      <div class="vmap-chart-wrap" id="vmap-chart-wrap">
+        <div class="vmap-unit-chart" id="vmap-unit-bars"></div>
+        <svg class="vmap-pop-svg" id="vmap-pop-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <polyline class="vmap-pop-line" id="vmap-pop-polyline"></polyline>
+        </svg>
+        <span class="vmap-pop-dot" id="vmap-pop-dot"></span>
+      </div>
+      <p class="vmap-chart-caption">Units built (bars) · population (line)</p>
     </div>
 
     <div class="vmap-controls">

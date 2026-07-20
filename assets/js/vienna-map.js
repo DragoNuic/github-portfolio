@@ -46,6 +46,30 @@ function parseUnitStatsCsv(text){
   return stats;
 }
 
+// CSV columns: year,population — irregular census years, linearly
+// interpolated to line up with the decade buckets used everywhere else.
+function parsePopulationCsv(text){
+  return text.trim().split('\n').slice(1)
+    .map(line => { const [year, population] = line.split(',').map(Number); return { year, population }; })
+    .sort((a, b) => a.year - b.year);
+}
+function interpolatePopulation(year, points){
+  if (year <= points[0].year) return points[0].population;
+  const last = points[points.length - 1];
+  if (year >= last.year) return last.population;
+  for (let i = 0; i < points.length - 1; i++){
+    const a = points[i], b = points[i + 1];
+    if (year >= a.year && year <= b.year){
+      const t = (year - a.year) / (b.year - a.year);
+      return a.population + (b.population - a.population) * t;
+    }
+  }
+  return last.population;
+}
+function bucketEndYear(bucketIdx){
+  return bucketIdx === 0 ? 1900 : 1900 + bucketIdx * 10;
+}
+
 (async function initViennaMap(){
   const stage = document.getElementById('vmap-stage');
   const svg = d3.select('#vmap-svg');
@@ -61,6 +85,9 @@ function parseUnitStatsCsv(text){
   const ticksEl = document.getElementById('vmap-ticks');
   const unitsEl = document.getElementById('vmap-units');
   const unitBarsEl = document.getElementById('vmap-unit-bars');
+  const populationEl = document.getElementById('vmap-population');
+  const popPolylineEl = document.getElementById('vmap-pop-polyline');
+  const popDotEl = document.getElementById('vmap-pop-dot');
 
   ticksEl.innerHTML = DECADE_BUCKETS.map(l => `<span>${l.replace('–2010','s').replace(/^(\d{4})–\d{4}$/,'$1s')}</span>`).join('');
 
@@ -70,16 +97,33 @@ function parseUnitStatsCsv(text){
   let colorMode = 'single'; // 'single' | 'timeline'
 
   try {
-    const [basemap, housing, unitStatsCsv] = await Promise.all([
+    const [basemap, housing, unitStatsCsv, populationCsv] = await Promise.all([
       fetch('data/base-map-vienna.geojson').then(r => { if(!r.ok) throw new Error('base map fetch failed'); return r.json(); }),
       fetch('data/social-housing-vienna.geojson').then(r => { if(!r.ok) throw new Error('housing fetch failed'); return r.json(); }),
-      fetch('data/vienna-housing-units.csv').then(r => { if(!r.ok) throw new Error('unit stats fetch failed'); return r.text(); })
+      fetch('data/vienna-housing-units.csv').then(r => { if(!r.ok) throw new Error('unit stats fetch failed'); return r.text(); }),
+      fetch('data/vienna-population.csv').then(r => { if(!r.ok) throw new Error('population fetch failed'); return r.text(); })
     ]);
 
     const unitStats = parseUnitStatsCsv(unitStatsCsv);
     const maxUnits = Math.max(...unitStats.map(s => s.units));
     unitBarsEl.innerHTML = DECADE_BUCKETS.map(() => '<span class="vmap-unit-bar"></span>').join('');
     const unitBars = unitBarsEl.querySelectorAll('.vmap-unit-bar');
+
+    // Population line: interpolated onto each bucket's end year, then
+    // plotted in a 0–100 normalised space (x = bucket slot, y = value)
+    // so it overlays the bars regardless of the chart's rendered size.
+    const populationPoints = parsePopulationCsv(populationCsv);
+    const popByBucket = DECADE_BUCKETS.map((_, i) => interpolatePopulation(bucketEndYear(i), populationPoints));
+    const popMin = Math.min(...popByBucket), popMax = Math.max(...popByBucket);
+    const popPadding = 12;
+    function popY(pop){
+      const t = (pop - popMin) / ((popMax - popMin) || 1);
+      return 100 - popPadding - t * (100 - popPadding * 2);
+    }
+    function popX(bucketIdx){
+      return (bucketIdx + 0.5) / DECADE_BUCKETS.length * 100;
+    }
+    popPolylineEl.setAttribute('points', popByBucket.map((p, i) => `${popX(i)},${popY(p)}`).join(' '));
 
     const projection = d3.geoMercator().fitSize([W, H], basemap);
     const path = d3.geoPath(projection);
@@ -120,6 +164,7 @@ function parseUnitStatsCsv(text){
       decadeReadout.textContent = DECADE_BUCKETS[cutoff];
       renderLegend();
       renderUnitChart(cutoff);
+      renderPopulation(cutoff);
     }
 
     function renderUnitChart(cutoff){
@@ -132,6 +177,12 @@ function parseUnitStatsCsv(text){
         bar.classList.toggle('is-active', isBuilt);
       });
       unitsEl.textContent = cumulativeUnits.toLocaleString('en-GB');
+    }
+
+    function renderPopulation(cutoff){
+      popDotEl.style.left = popX(cutoff) + '%';
+      popDotEl.style.top = popY(popByBucket[cutoff]) + '%';
+      populationEl.textContent = Math.round(popByBucket[cutoff]).toLocaleString('en-GB');
     }
 
     function renderLegend(){
