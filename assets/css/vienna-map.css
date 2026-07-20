@@ -21,45 +21,22 @@
   stroke:rgba(245,244,240,0.1);
   stroke-width:0.5;
   vector-effect:non-scaling-stroke;
+  shape-rendering:optimizeSpeed;
 }
 .vmap-house-path{
   stroke:rgba(11,11,10,0.75);
   stroke-width:0.6;
   vector-effect:non-scaling-stroke;
+  shape-rendering:optimizeSpeed;
   transition:fill .35s ease;
   filter:drop-shadow(0 0 1.5px rgba(242,183,5,.75));
 }
-
-#vmap-markers{
-  position:absolute;inset:0;pointer-events:none;transform-origin:0 0;
+/* Timeline mode colours each decade differently — a uniform yellow glow
+   would fight that, so it's only used in single-colour "All Social
+   Housing" mode. */
+#vmap-housing.is-timeline .vmap-house-path{
+  filter:none;
 }
-.vmarker{
-  position:absolute;top:0;left:0;pointer-events:auto;
-  display:flex;flex-direction:column;align-items:center;
-  text-decoration:none;transform-origin:0 0;
-}
-.vmarker-dot{
-  width:9px;height:9px;border-radius:50%;background:var(--geo-accent);
-  box-shadow:0 0 0 3px rgba(242,183,5,.22), 0 0 0 0 rgba(242,183,5,.5);
-  animation:vmarkerPulse 2.4s ease-out infinite;
-}
-@keyframes vmarkerPulse{
-  0%{box-shadow:0 0 0 3px rgba(242,183,5,.22), 0 0 0 0 rgba(242,183,5,.5);}
-  70%{box-shadow:0 0 0 3px rgba(242,183,5,.22), 0 0 0 12px rgba(242,183,5,0);}
-  100%{box-shadow:0 0 0 3px rgba(242,183,5,.22), 0 0 0 0 rgba(242,183,5,0);}
-}
-.vmarker-label{
-  margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.03em;
-  color:var(--geo-ink);background:var(--geo-surface);border:1px solid var(--geo-line);
-  padding:4px 10px;border-radius:2px;white-space:nowrap;
-  opacity:0;transform:translateY(-4px) scale(.96);
-  transition:opacity .18s ease, transform .18s ease;
-}
-.vmarker:hover .vmarker-label,
-.vmarker:focus-visible .vmarker-label{
-  opacity:1;transform:translateY(0) scale(1);
-}
-.vmarker:hover .vmarker-dot{background:#fff;}
 
 .vmap-panel{
   position:absolute;z-index:6;
@@ -151,5 +128,4 @@
     position:static;max-width:none;margin:12px 0;backdrop-filter:none;
   }
   .vmap-controls{position:static;margin-top:12px;}
-  #vmap-markers{display:none;}
 }

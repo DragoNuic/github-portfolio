@@ -2,19 +2,12 @@
    Vienna — Social Housing Atlas interactive map
    D3-rendered SVG map: base map + social housing layer,
    decade scrubber (cumulative growth), colour-mode toggle,
-   zoom/pan, and hover/click markers for notable buildings.
+   zoom/pan.
    ============================================================ */
 
 const DECADE_BUCKETS = [
   'Pre-1900','1900–1910','1910–1920','1920–1930','1930–1940','1940–1950',
   '1950–1960','1960–1970','1970–1980','1980–1990','1990–2000','2000–2010'
-];
-
-const MARKERS = [
-  { name: 'Metzleinstalerhof', lat: 48.181473, lng: 16.349166, url: 'https://www.geschichtewiki.wien.gv.at/Metzleinstaler_Hof' },
-  { name: 'Reumannhof',        lat: 48.182703, lng: 16.348004, url: 'https://www.geschichtewiki.wien.gv.at/Reumannhof' },
-  { name: 'Karl-Marx-Hof',     lat: 48.250184, lng: 16.364238, url: 'https://www.geschichtewiki.wien.gv.at/Karl-Marx-Hof' },
-  { name: 'Wohnhausanlage Sandleiten', lat: 48.222511, lng: 16.305184, url: 'https://www.geschichtewiki.wien.gv.at/Wohnhausanlage_Sandleiten' }
 ];
 
 const YELLOW = '#F2B705';
@@ -59,7 +52,6 @@ function parseUnitStatsCsv(text){
   const g = svg.append('g').attr('id', 'vmap-zoom-layer');
   const baseLayer = g.append('g').attr('id', 'vmap-base');
   const housingLayer = g.append('g').attr('id', 'vmap-housing');
-  const markerLayer = document.getElementById('vmap-markers');
   const loadingEl = document.getElementById('vmap-loading');
   const countEl = document.getElementById('vmap-count');
   const decadeReadout = document.getElementById('vmap-decade-readout');
@@ -76,7 +68,6 @@ function parseUnitStatsCsv(text){
   svg.attr('viewBox', `0 0 ${W} ${H}`);
 
   let colorMode = 'single'; // 'single' | 'timeline'
-  let projection, path;
 
   try {
     const [basemap, housing, unitStatsCsv] = await Promise.all([
@@ -90,35 +81,41 @@ function parseUnitStatsCsv(text){
     unitBarsEl.innerHTML = DECADE_BUCKETS.map(() => '<span class="vmap-unit-bar"></span>').join('');
     const unitBars = unitBarsEl.querySelectorAll('.vmap-unit-bar');
 
-    projection = d3.geoMercator().fitSize([W, H], basemap);
-    path = d3.geoPath(projection);
+    const projection = d3.geoMercator().fitSize([W, H], basemap);
+    const path = d3.geoPath(projection);
 
     // --- base map: thin context lines, near-invisible fill ---
-    baseLayer.selectAll('path')
-      .data(basemap.features)
-      .join('path')
-      .attr('d', path)
-      .attr('class', 'vmap-base-path');
+    // 11k+ features is far too many individual DOM nodes to pan/zoom
+    // smoothly — it's static context with no per-feature styling, so it's
+    // merged into a single <path> (one "d" string with many subpaths).
+    baseLayer.append('path')
+      .attr('class', 'vmap-base-path')
+      .attr('d', basemap.features.map(f => path(f)).filter(Boolean).join(' '));
 
     // --- social housing: the hero layer ---
+    // Buildings are only ever shown/hidden a whole decade-bucket at a time
+    // (the timeline slider), so there's no need for one DOM element per
+    // building — group by bucket and merge each group into one path.
     housing.features.forEach(f => { f._bucket = bucketIndex(f.properties.decade); });
+    const bucketGroups = d3.groups(housing.features, f => f._bucket).sort((a, b) => a[0] - b[0]);
 
     const housingPaths = housingLayer.selectAll('path')
-      .data(housing.features)
+      .data(bucketGroups)
       .join('path')
-      .attr('d', path)
-      .attr('class', 'vmap-house-path');
+      .attr('class', 'vmap-house-path')
+      .attr('d', ([, feats]) => feats.map(f => path(f)).filter(Boolean).join(' '));
 
     function render(){
       const cutoff = +slider.value;
       let visible = 0;
-      housingPaths.each(function(d){
-        const show = d._bucket <= cutoff;
-        if (show) visible++;
+      housingPaths.each(function([bucket, feats]){
+        const show = bucket <= cutoff;
+        if (show) visible += feats.length;
         d3.select(this)
           .style('display', show ? null : 'none')
-          .attr('fill', colorMode === 'timeline' ? timelineColor(d._bucket) : YELLOW);
+          .attr('fill', colorMode === 'timeline' ? timelineColor(bucket) : YELLOW);
       });
+      housingLayer.classed('is-timeline', colorMode === 'timeline');
       countEl.textContent = visible.toLocaleString('en-GB');
       decadeReadout.textContent = DECADE_BUCKETS[cutoff];
       renderLegend();
@@ -160,63 +157,14 @@ function parseUnitStatsCsv(text){
 
     render();
 
-    // --- markers: notable buildings with hover tooltip + click-through link ---
-    MARKERS.forEach(m => {
-      const [x, y] = projection([m.lng, m.lat]);
-      const el = document.createElement('a');
-      el.className = 'vmarker';
-      el.href = m.url;
-      el.target = '_blank';
-      el.rel = 'noopener';
-      el.dataset.x = x;
-      el.dataset.y = y;
-      el.innerHTML = `<span class="vmarker-dot"></span><span class="vmarker-label">${m.name}</span>`;
-      markerLayer.appendChild(el);
-    });
-
-    // The SVG has a fixed viewBox but scales to fill its container with
-    // preserveAspectRatio "meet", which letterboxes it (scales + centers)
-    // whenever the container's aspect ratio doesn't match the viewBox's.
-    // Markers live in a plain HTML layer on top of the SVG, so their pixel
-    // position has to account for that same scale/offset, not just the
-    // raw viewBox coordinates.
-    function svgToPixelBase(){
-      const rect = svg.node().getBoundingClientRect();
-      const scale = Math.min(rect.width / W, rect.height / H);
-      return {
-        scale,
-        offsetX: (rect.width - W * scale) / 2,
-        offsetY: (rect.height - H * scale) / 2
-      };
-    }
-
-    let lastTransform = d3.zoomIdentity;
-    function positionMarkers(transform){
-      lastTransform = transform;
-      const { scale, offsetX, offsetY } = svgToPixelBase();
-      markerLayer.querySelectorAll('.vmarker').forEach(el => {
-        const x = +el.dataset.x, y = +el.dataset.y;
-        const tx = offsetX + transform.applyX(x) * scale;
-        const ty = offsetY + transform.applyY(y) * scale;
-        el.style.transform = `translate(${tx}px, ${ty}px) scale(${1 / transform.k})`;
-      });
-    }
-
     // --- zoom / pan ---
     const zoom = d3.zoom()
       .scaleExtent([1, 16])
       .translateExtent([[0, 0], [W, H]])
       .on('zoom', (event) => {
         g.attr('transform', event.transform);
-        positionMarkers(event.transform);
       });
     svg.call(zoom);
-    positionMarkers(d3.zoomIdentity);
-
-    window.addEventListener('resize', () => positionMarkers(lastTransform));
-    if (window.ResizeObserver){
-      new ResizeObserver(() => positionMarkers(lastTransform)).observe(stage);
-    }
 
     loadingEl.style.display = 'none';
     stage.classList.add('is-ready');
