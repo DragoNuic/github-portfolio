@@ -30,35 +30,37 @@
       <p>Distribution and growth of social &amp; municipal housing across the city, 1900–2010. Drag the timeline below to watch it grow.</p>
     </div>
 
-    <div class="vmap-panel vmap-panel--legend">
-      <h4>Legend</h4>
-      <div id="vmap-legend"></div>
-      <div class="vmap-mode-toggle">
-        <button class="vmap-mode-btn is-active" data-mode="single">All Social Housing</button>
-        <button class="vmap-mode-btn" data-mode="timeline">Timeline</button>
-      </div>
-      <div class="vmap-decade-breakdown">
-        <div class="vmap-decade-breakdown-head">
-          <span>By decade</span>
-          <button type="button" class="vmap-decade-clear" id="vmap-decade-clear">Clear</button>
+    <div class="vmap-side-stack">
+      <div class="vmap-panel vmap-panel--legend">
+        <h4>Legend</h4>
+        <div id="vmap-legend"></div>
+        <div class="vmap-mode-toggle">
+          <button class="vmap-mode-btn is-active" data-mode="single">All Social Housing</button>
+          <button class="vmap-mode-btn" data-mode="timeline">Timeline</button>
         </div>
-        <ul class="vmap-decade-list" id="vmap-decade-list"></ul>
+        <div class="vmap-decade-breakdown">
+          <div class="vmap-decade-breakdown-head">
+            <span>By decade</span>
+            <button type="button" class="vmap-decade-clear" id="vmap-decade-clear">Clear</button>
+          </div>
+          <ul class="vmap-decade-list" id="vmap-decade-list"></ul>
+        </div>
       </div>
-    </div>
 
-    <div class="vmap-panel vmap-panel--stats">
-      <h4>Buildings shown</h4>
-      <p class="vmap-count" id="vmap-count">0</p>
-      <p class="vmap-units-line">Housing units built: <strong id="vmap-units">0</strong></p>
-      <p class="vmap-units-line">Vienna population: <strong id="vmap-population">0</strong></p>
-      <div class="vmap-chart-wrap" id="vmap-chart-wrap">
-        <div class="vmap-unit-chart" id="vmap-unit-bars"></div>
-        <svg class="vmap-pop-svg" id="vmap-pop-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <polyline class="vmap-pop-line" id="vmap-pop-polyline"></polyline>
-        </svg>
-        <span class="vmap-pop-dot" id="vmap-pop-dot"></span>
+      <div class="vmap-panel vmap-panel--stats">
+        <h4>Buildings shown</h4>
+        <p class="vmap-count" id="vmap-count">0</p>
+        <p class="vmap-units-line">Housing units built: <strong id="vmap-units">0</strong></p>
+        <p class="vmap-units-line">Vienna population: <strong id="vmap-population">0</strong></p>
+        <div class="vmap-chart-wrap" id="vmap-chart-wrap">
+          <div class="vmap-unit-chart" id="vmap-unit-bars"></div>
+          <svg class="vmap-pop-svg" id="vmap-pop-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <polyline class="vmap-pop-line" id="vmap-pop-polyline"></polyline>
+          </svg>
+          <span class="vmap-pop-dot" id="vmap-pop-dot"></span>
+        </div>
+        <p class="vmap-chart-caption">Units built (bars) · population (line)</p>
       </div>
-      <p class="vmap-chart-caption">Units built (bars) · population (line)</p>
     </div>
 
     <div class="vmap-controls">

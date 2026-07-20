@@ -58,7 +58,13 @@
 }
 .vmap-panel--title p{font-size:.85rem;color:var(--geo-ink-soft);margin:0;line-height:1.55;}
 
-.vmap-panel--legend{top:26px;right:26px;animation-delay:.08s;}
+.vmap-side-stack{
+  position:absolute;top:26px;right:26px;bottom:132px;z-index:6;
+  display:flex;flex-direction:column;gap:16px;max-width:280px;overflow-y:auto;
+}
+.vmap-side-stack .vmap-panel{position:static;max-width:none;flex:none;}
+
+.vmap-panel--legend{animation-delay:.08s;}
 .vmap-legend-row{display:flex;align-items:center;gap:9px;font-size:.85rem;}
 .vmap-swatch{width:13px;height:13px;border-radius:2px;flex:none;}
 .vmap-gradient{height:10px;border-radius:2px;}
@@ -102,7 +108,7 @@
 .vmap-decade-list.has-isolation .vmap-decade-chip:not(.is-isolated){opacity:.4;}
 .vmap-decade-swatch{width:9px;height:9px;border-radius:2px;flex:none;}
 
-.vmap-panel--stats{bottom:118px;right:26px;animation-delay:.16s;}
+.vmap-panel--stats{animation-delay:.16s;}
 .vmap-panel--stats p{font-size:.82rem;color:var(--geo-ink-soft);line-height:1.6;margin:0;}
 .vmap-count{font-family:'Archivo',sans-serif;font-weight:800;font-size:1.6rem;color:var(--geo-ink);}
 .vmap-units-line{margin-top:10px !important;color:var(--geo-ink-soft);}
@@ -167,8 +173,10 @@
 @media (max-width:900px){
   .vmap-stage{height:auto;min-height:auto;}
   .vmap-stage svg{position:static;height:60vh;}
-  .vmap-panel--title,.vmap-panel--legend,.vmap-panel--stats{
+  .vmap-panel--title,.vmap-side-stack{
     position:static;max-width:none;margin:12px 0;backdrop-filter:none;
   }
+  .vmap-side-stack{bottom:auto;overflow-y:visible;max-height:none;}
+  .vmap-side-stack .vmap-panel{backdrop-filter:none;}
   .vmap-controls{position:static;margin-top:12px;}
 }
