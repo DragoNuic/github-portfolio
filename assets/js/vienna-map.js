@@ -69,6 +69,9 @@ function interpolatePopulation(year, points){
 function bucketEndYear(bucketIdx){
   return bucketIdx === 0 ? 1900 : 1900 + bucketIdx * 10;
 }
+function shortDecadeLabel(l){
+  return l.replace('–2010', 's').replace(/^(\d{4})–\d{4}$/, '$1s');
+}
 
 (async function initViennaMap(){
   const stage = document.getElementById('vmap-stage');
@@ -88,13 +91,22 @@ function bucketEndYear(bucketIdx){
   const populationEl = document.getElementById('vmap-population');
   const popPolylineEl = document.getElementById('vmap-pop-polyline');
   const popDotEl = document.getElementById('vmap-pop-dot');
+  const decadeListEl = document.getElementById('vmap-decade-list');
+  const decadeClearBtn = document.getElementById('vmap-decade-clear');
 
-  ticksEl.innerHTML = DECADE_BUCKETS.map(l => `<span>${l.replace('–2010','s').replace(/^(\d{4})–\d{4}$/,'$1s')}</span>`).join('');
+  ticksEl.innerHTML = DECADE_BUCKETS.map(l => `<span>${shortDecadeLabel(l)}</span>`).join('');
+
+  decadeListEl.innerHTML = DECADE_BUCKETS.map((l, i) => `
+    <li><button type="button" class="vmap-decade-chip" data-bucket="${i}">
+      <span class="vmap-decade-swatch"></span><span>${shortDecadeLabel(l)}</span>
+    </button></li>`).join('');
+  const decadeChips = decadeListEl.querySelectorAll('.vmap-decade-chip');
 
   const W = 1000, H = 720;
   svg.attr('viewBox', `0 0 ${W} ${H}`);
 
   let colorMode = 'single'; // 'single' | 'timeline'
+  let isolatedBuckets = new Set(); // when non-empty, only these buckets show, overriding the slider
 
   try {
     const [basemap, housing, unitStatsCsv, populationCsv] = await Promise.all([
@@ -151,9 +163,10 @@ function bucketEndYear(bucketIdx){
 
     function render(){
       const cutoff = +slider.value;
+      const isolating = isolatedBuckets.size > 0;
       let visible = 0;
       housingPaths.each(function([bucket, feats]){
-        const show = bucket <= cutoff;
+        const show = isolating ? isolatedBuckets.has(bucket) : bucket <= cutoff;
         if (show) visible += feats.length;
         d3.select(this)
           .style('display', show ? null : 'none')
@@ -161,10 +174,24 @@ function bucketEndYear(bucketIdx){
       });
       housingLayer.classed('is-timeline', colorMode === 'timeline');
       countEl.textContent = visible.toLocaleString('en-GB');
-      decadeReadout.textContent = DECADE_BUCKETS[cutoff];
+      decadeReadout.textContent = isolating
+        ? `${isolatedBuckets.size} decade${isolatedBuckets.size > 1 ? 's' : ''} isolated`
+        : DECADE_BUCKETS[cutoff];
       renderLegend();
       renderUnitChart(cutoff);
       renderPopulation(cutoff);
+      renderDecadeChips();
+    }
+
+    function renderDecadeChips(){
+      decadeChips.forEach(chip => {
+        const bucket = +chip.dataset.bucket;
+        chip.querySelector('.vmap-decade-swatch').style.background =
+          colorMode === 'timeline' ? timelineColor(bucket) : YELLOW;
+        chip.classList.toggle('is-isolated', isolatedBuckets.has(bucket));
+      });
+      decadeListEl.classList.toggle('has-isolation', isolatedBuckets.size > 0);
+      decadeClearBtn.classList.toggle('is-visible', isolatedBuckets.size > 0);
     }
 
     function renderUnitChart(cutoff){
@@ -196,7 +223,10 @@ function bucketEndYear(bucketIdx){
       }
     }
 
-    slider.addEventListener('input', render);
+    slider.addEventListener('input', () => {
+      isolatedBuckets.clear(); // dragging the timeline always returns to cumulative mode
+      render();
+    });
     modeButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         modeButtons.forEach(b => b.classList.remove('is-active'));
@@ -204,6 +234,18 @@ function bucketEndYear(bucketIdx){
         colorMode = btn.dataset.mode;
         render();
       });
+    });
+    decadeChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const bucket = +chip.dataset.bucket;
+        if (isolatedBuckets.has(bucket)) isolatedBuckets.delete(bucket);
+        else isolatedBuckets.add(bucket);
+        render();
+      });
+    });
+    decadeClearBtn.addEventListener('click', () => {
+      isolatedBuckets.clear();
+      render();
     });
 
     render();

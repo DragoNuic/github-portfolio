@@ -216,6 +216,24 @@
 
 .geo-desc p{font-size:.94rem;line-height:1.65;color:var(--geo-ink-soft);margin:0;}
 
+.geo-content-sections{display:flex;flex-direction:column;gap:28px;margin:36px 0;}
+.geo-content-block{padding:32px;}
+.geo-content-block .geo-eyebrow{margin:0 0 10px;}
+.geo-content-block h2{
+  font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(1.5rem,3vw,2rem);
+  margin:0 0 18px;letter-spacing:-.01em;color:var(--geo-ink);
+}
+.geo-content-image{width:100%;border-radius:2px;margin-bottom:18px;display:block;}
+.geo-content-image-placeholder{
+  width:100%;min-height:220px;border:1px dashed var(--geo-line);border-radius:2px;
+  display:flex;align-items:center;justify-content:center;margin-bottom:18px;
+  font-family:'IBM Plex Mono',monospace;font-size:.75rem;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--geo-ink-soft);
+  background:color-mix(in srgb, var(--geo-ink) 3%, transparent);
+}
+.geo-content-block p{font-size:.95rem;line-height:1.7;color:var(--geo-ink-soft);margin:0 0 14px;}
+.geo-content-block p:last-child{margin-bottom:0;}
+
 .geo-btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px;}
 .geo-btn{
   font-family:'IBM Plex Mono',monospace;font-size:.8rem;letter-spacing:.03em;text-decoration:none;
