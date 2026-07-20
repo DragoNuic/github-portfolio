@@ -137,7 +137,22 @@ function shortDecadeLabel(l){
     }
     popPolylineEl.setAttribute('points', popByBucket.map((p, i) => `${popX(i)},${popY(p)}`).join(' '));
 
-    const projection = d3.geoMercator().fitSize([W, H], basemap);
+    // The timeline controls float over the bottom of the map (desktop
+    // layout only — on the mobile breakpoint they sit below it in normal
+    // flow) — reserve a matching strip at the bottom of the projection so
+    // the city itself renders above the panel instead of disappearing
+    // underneath it.
+    const controlsEl = document.querySelector('.vmap-controls');
+    let reserveUnits = 0;
+    if (getComputedStyle(controlsEl).position === 'absolute'){
+      const stageRect = stage.getBoundingClientRect();
+      const controlsRect = controlsEl.getBoundingClientRect();
+      const reservePx = Math.max(0, stageRect.bottom - controlsRect.top + 16);
+      reserveUnits = stageRect.height ? H * (reservePx / stageRect.height) : 0;
+    }
+    const mapH = Math.max(H * 0.5, H - reserveUnits);
+
+    const projection = d3.geoMercator().fitExtent([[0, 0], [W, mapH]], basemap);
     const path = d3.geoPath(projection);
 
     // --- base map: thin context lines, near-invisible fill ---
