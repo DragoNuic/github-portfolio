@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Social Housing Atlas / Drago Nuić</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/geospatial.css" />
+</head>
+<body class="geo-body geo-dark">
+  <header class="geo-topbar">
+    <a class="geo-brand" href="geospatial.html">Drago Nuić <span>/ Geospatial Analyses</span></a>
+    <a class="geo-back" href="geospatial.html">← Categories</a>
+  </header>
+
+  <section class="geo-globe-stage">
+    <div id="globeViz"></div>
+
+    <div class="geo-globe-caption">
+      <p class="geo-eyebrow">Social Housing Atlas</p>
+      <h1>Cities under study</h1>
+      <p>Every marker is a completed analysis. Drag the globe to explore, and select a city to open its map.</p>
+    </div>
+
+    <p class="geo-globe-hint">Drag to rotate · Scroll to zoom<br>Click a marker to explore</p>
+  </section>
+
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three-globe@2.31.0/dist/three-globe.min.js"></script>
+  <script src="https://unpkg.com/globe.gl@2.31.0/dist/globe.gl.min.js"></script>
+  <script>
+    const stage = document.getElementById('globeViz');
+
+    const cities = [
+      { lat: 48.2082, lng: 16.3738, name: 'Vienna, Austria', href: 'housing-atlas-vienna.html', vt: 'vienna-thumb' }
+    ];
+
+    const globe = Globe()(stage)
+      .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-night.jpg')
+      .backgroundColor('rgba(0,0,0,0)')
+      .showAtmosphere(true)
+      .atmosphereColor('#F2B705')
+      .atmosphereAltitude(0.18)
+      .htmlElementsData(cities)
+      .htmlElement(d => {
+        const el = document.createElement('div');
+        el.className = 'globe-marker';
+        el.style.viewTransitionName = d.vt;
+        el.innerHTML = `<span class="globe-dot"></span><span class="globe-label">${d.name}</span>`;
+        el.onclick = () => { window.location.href = d.href; };
+        return el;
+      })
+      .width(stage.clientWidth)
+      .height(stage.clientHeight);
+
+    globe.pointOfView({ lat: 42, lng: 10, altitude: 2.3 }, 0);
+    globe.controls().autoRotate = true;
+    globe.controls().autoRotateSpeed = 0.55;
+    globe.controls().enableDamping = true;
+
+    window.addEventListener('resize', () => {
+      globe.width(stage.clientWidth).height(stage.clientHeight);
+    });
+  </script>
+</body>
+</html>

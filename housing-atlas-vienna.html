@@ -3,69 +3,63 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Social Housing Atlas — Vienna / Drago Nuić</title>
+<title>Vienna — Social Housing Atlas / Drago Nuić</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/geospatial.css" />
 </head>
-<body class="geo-body">
+<body class="geo-body geo-dark">
   <header class="geo-topbar">
-    <a class="geo-brand" href="geospatial.html">Drago Nuić <span>/ Geospatial</span></a>
-    <a class="geo-back" href="home.html">← Portfolio</a>
+    <a class="geo-brand" href="geospatial.html">Drago Nuić <span>/ Geospatial Analyses</span></a>
+    <a class="geo-back" href="social-housing-atlas.html">← Atlas</a>
   </header>
 
   <main class="geo-wrap">
-    <p class="geo-crumb"><a href="geospatial.html">Geospatial Analysis &amp; GIS Mapping</a> / <a href="geospatial.html">Social Housing Atlas</a> / Vienna</p>
+    <p class="geo-crumb"><a href="geospatial.html">Geospatial Analyses</a> / <a href="social-housing-atlas.html">Social Housing Atlas</a> / Vienna</p>
 
     <div class="geo-title-row">
-      <h1>Vienna: Social Housing Distribution</h1>
+      <h1>Vienna</h1>
       <p class="geo-coord">48.2082° N, 16.3738° E</p>
     </div>
 
     <div class="geo-analysis-grid">
-      <div class="geo-panel geo-map-panel">
-        <svg viewBox="0 0 640 480" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="120,60 420,40 520,160 480,300 300,420 140,380 60,220" fill="none" stroke="#17160F" stroke-width="1.5"/>
-          <polygon id="geo-district-a" points="120,60 300,50 320,180 180,200" fill="#9C7A3C" fill-opacity="0.55" stroke="#17160F" stroke-width="1"/>
-          <polygon id="geo-district-b" points="320,180 420,40 520,160 400,260" fill="#9C7A3C" fill-opacity="0.3" stroke="#17160F" stroke-width="1"/>
-          <polygon id="geo-district-c" points="180,200 400,260 480,300 300,420 200,340" fill="#9C7A3C" fill-opacity="0.75" stroke="#17160F" stroke-width="1"/>
-          <polygon id="geo-district-d" points="60,220 180,200 200,340 140,380" fill="#9C7A3C" fill-opacity="0.15" stroke="#17160F" stroke-width="1"/>
-          <circle cx="320" cy="220" r="3" fill="#17160F"/>
-          <text x="330" y="224" font-family="IBM Plex Mono" font-size="11" fill="#17160F">City centre</text>
+      <div class="geo-panel geo-map-bleed" style="grid-column:1/-1;">
+        <svg viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg" style="view-transition-name:vienna-thumb;">
+          <polygon points="170,90 590,60 730,230 680,420 420,540 190,480 90,300" fill="none" stroke="#F5F4F0" stroke-opacity="0.5" stroke-width="1.5"/>
+          <polygon id="geo-district-a" points="170,90 420,75 450,250 260,280" fill="#F2B705" fill-opacity="0.55" stroke="#F5F4F0" stroke-opacity="0.4" stroke-width="1"/>
+          <polygon id="geo-district-b" points="450,250 590,60 730,230 560,360" fill="#F2B705" fill-opacity="0.3" stroke="#F5F4F0" stroke-opacity="0.4" stroke-width="1"/>
+          <polygon id="geo-district-c" points="260,280 560,360 680,420 420,540 300,470" fill="#F2B705" fill-opacity="0.8" stroke="#F5F4F0" stroke-opacity="0.4" stroke-width="1"/>
+          <polygon id="geo-district-d" points="90,300 260,280 300,470 190,480" fill="#F2B705" fill-opacity="0.15" stroke="#F5F4F0" stroke-opacity="0.4" stroke-width="1"/>
+          <circle cx="450" cy="260" r="4" fill="#F5F4F0"/>
+          <text x="464" y="265" font-family="IBM Plex Mono" font-size="13" fill="#F5F4F0">City centre</text>
         </svg>
-        <p class="geo-map-caption">Placeholder vector — district boundaries and housing-density fill to be replaced with the final dataset.</p>
-      </div>
-
-      <div class="geo-side-stack">
-        <div class="geo-panel">
-          <h4>Legend — housing density</h4>
-          <ul class="geo-legend-list">
-            <li><span class="geo-swatch" style="background:#9C7A3C;opacity:.15"></span> Low (0–10%)</li>
-            <li><span class="geo-swatch" style="background:#9C7A3C;opacity:.3"></span> Moderate (10–25%)</li>
-            <li><span class="geo-swatch" style="background:#9C7A3C;opacity:.55"></span> High (25–40%)</li>
-            <li><span class="geo-swatch" style="background:#9C7A3C;opacity:.75"></span> Very high (40%+)</li>
-          </ul>
-        </div>
-
-        <div class="geo-panel">
-          <h4>Stock by district (sample)</h4>
-          <svg viewBox="0 0 260 130" width="100%">
-            <rect x="0"   y="90" width="28" height="40" fill="#9C7A3C" opacity=".3"/>
-            <rect x="40"  y="60" width="28" height="70" fill="#9C7A3C" opacity=".55"/>
-            <rect x="80"  y="20" width="28" height="110" fill="#9C7A3C" opacity=".85"/>
-            <rect x="120" y="75" width="28" height="55" fill="#9C7A3C" opacity=".4"/>
-            <rect x="160" y="100" width="28" height="30" fill="#9C7A3C" opacity=".2"/>
-            <rect x="200" y="50" width="28" height="80" fill="#9C7A3C" opacity=".65"/>
-            <line x1="0" y1="130" x2="240" y2="130" stroke="#DCD6C8"/>
-          </svg>
-        </div>
+        <p class="geo-map-caption">Placeholder vector — district boundaries and housing-density fill to be replaced with the final QGIS layers.</p>
       </div>
     </div>
 
     <div class="geo-analysis-grid">
-      <div class="geo-panel geo-desc">
-        <h4>About this analysis</h4>
-        <p>This view maps the distribution and scale of social and municipal housing (Gemeindebau and cooperative stock) across Vienna's districts, tracing how the city's housing model has evolved and where new development is concentrated. Full methodology and data sources will be published alongside the final dataset.</p>
+      <div class="geo-side-stack" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+        <div class="geo-panel">
+          <h4>Legend — housing density</h4>
+          <ul class="geo-legend-list">
+            <li><span class="geo-swatch" style="background:#F2B705;opacity:.15"></span> Low (0–10%)</li>
+            <li><span class="geo-swatch" style="background:#F2B705;opacity:.3"></span> Moderate (10–25%)</li>
+            <li><span class="geo-swatch" style="background:#F2B705;opacity:.55"></span> High (25–40%)</li>
+            <li><span class="geo-swatch" style="background:#F2B705;opacity:.8"></span> Very high (40%+)</li>
+          </ul>
+        </div>
+        <div class="geo-panel">
+          <h4>Stock by district (sample)</h4>
+          <svg viewBox="0 0 260 130" width="100%">
+            <rect x="0"   y="90" width="28" height="40" fill="#F2B705" opacity=".3"/>
+            <rect x="40"  y="60" width="28" height="70" fill="#F2B705" opacity=".55"/>
+            <rect x="80"  y="20" width="28" height="110" fill="#F2B705" opacity=".85"/>
+            <rect x="120" y="75" width="28" height="55" fill="#F2B705" opacity=".4"/>
+            <rect x="160" y="100" width="28" height="30" fill="#F2B705" opacity=".2"/>
+            <rect x="200" y="50" width="28" height="80" fill="#F2B705" opacity=".65"/>
+            <line x1="0" y1="130" x2="240" y2="130" stroke="#2B2B27"/>
+          </svg>
+        </div>
       </div>
 
       <div class="geo-panel">
@@ -78,10 +72,14 @@
       </div>
     </div>
 
+    <div class="geo-panel geo-desc" style="margin-bottom:24px;">
+      <h4>About this analysis</h4>
+      <p>This view maps the distribution and scale of social and municipal housing (Gemeindebau and cooperative stock) across Vienna's districts, tracing how the city's housing model has evolved and where new development is concentrated. Layers, decade filtering, and building-level detail are being built out next.</p>
+    </div>
+
     <div class="geo-btn-row">
-      <a class="geo-btn geo-btn-primary" href="grassroots-atlas.html">Read full write-up</a>
-      <a class="geo-btn geo-btn-ghost" href="#">Methodology (coming soon)</a>
-      <a class="geo-btn geo-btn-ghost" href="geospatial.html">Back to categories</a>
+      <a class="geo-btn geo-btn-primary" href="grassroots-atlas.html">Detailed Analysis</a>
+      <a class="geo-btn geo-btn-ghost" href="social-housing-atlas.html">Back to atlas</a>
     </div>
 
     <footer class="geo-footer">
