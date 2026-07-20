@@ -1,0 +1,140 @@
+/* ============================================================
+   Vienna interactive map — floating-panel dashboard layout
+   Map is full-bleed and transparent; panels float on top.
+   ============================================================ */
+
+.vmap-stage{
+  position:relative;
+  height:calc(100vh - 73px);
+  min-height:560px;
+  overflow:hidden;
+  background:var(--geo-bg);
+}
+.vmap-stage svg{
+  position:absolute;inset:0;width:100%;height:100%;display:block;
+  opacity:0;transition:opacity .6s ease;
+}
+.vmap-stage.is-ready svg{opacity:1;}
+
+.vmap-base-path{
+  fill:rgba(245,244,240,0.035);
+  stroke:rgba(245,244,240,0.22);
+  stroke-width:0.6;
+  vector-effect:non-scaling-stroke;
+}
+.vmap-house-path{
+  stroke:rgba(11,11,10,0.55);
+  stroke-width:0.4;
+  vector-effect:non-scaling-stroke;
+  transition:fill .35s ease;
+}
+
+#vmap-markers{
+  position:absolute;inset:0;pointer-events:none;transform-origin:0 0;
+}
+.vmarker{
+  position:absolute;top:0;left:0;pointer-events:auto;
+  display:flex;flex-direction:column;align-items:center;
+  text-decoration:none;transform-origin:0 0;
+}
+.vmarker-dot{
+  width:9px;height:9px;border-radius:50%;background:var(--geo-accent);
+  box-shadow:0 0 0 3px rgba(242,183,5,.22), 0 0 0 0 rgba(242,183,5,.5);
+  animation:vmarkerPulse 2.4s ease-out infinite;
+}
+@keyframes vmarkerPulse{
+  0%{box-shadow:0 0 0 3px rgba(242,183,5,.22), 0 0 0 0 rgba(242,183,5,.5);}
+  70%{box-shadow:0 0 0 3px rgba(242,183,5,.22), 0 0 0 12px rgba(242,183,5,0);}
+  100%{box-shadow:0 0 0 3px rgba(242,183,5,.22), 0 0 0 0 rgba(242,183,5,0);}
+}
+.vmarker-label{
+  margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.03em;
+  color:var(--geo-ink);background:var(--geo-surface);border:1px solid var(--geo-line);
+  padding:4px 10px;border-radius:2px;white-space:nowrap;
+  opacity:0;transform:translateY(-4px) scale(.96);
+  transition:opacity .18s ease, transform .18s ease;
+}
+.vmarker:hover .vmarker-label,
+.vmarker:focus-visible .vmarker-label{
+  opacity:1;transform:translateY(0) scale(1);
+}
+.vmarker:hover .vmarker-dot{background:#fff;}
+
+.vmap-panel{
+  position:absolute;z-index:6;
+  background:color-mix(in srgb, var(--geo-surface) 88%, transparent);
+  border:1px solid var(--geo-line);backdrop-filter:blur(10px);
+  padding:20px 22px;max-width:280px;
+  animation:geoFadeUp .6s cubic-bezier(.2,.7,.2,1) both;
+}
+.vmap-panel h4{
+  font-family:'IBM Plex Mono',monospace;font-size:.72rem;text-transform:uppercase;
+  letter-spacing:.08em;color:var(--geo-ink-soft);margin:0 0 14px;
+}
+
+.vmap-panel--title{top:26px;left:26px;max-width:340px;}
+.vmap-panel--title .geo-eyebrow{margin:0 0 8px;}
+.vmap-panel--title h1{
+  font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(1.8rem,3.2vw,2.5rem);
+  margin:0 0 8px;
+}
+.vmap-panel--title p{font-size:.85rem;color:var(--geo-ink-soft);margin:0;line-height:1.55;}
+
+.vmap-panel--legend{top:26px;right:26px;animation-delay:.08s;}
+.vmap-legend-row{display:flex;align-items:center;gap:9px;font-size:.85rem;}
+.vmap-swatch{width:13px;height:13px;border-radius:2px;flex:none;}
+.vmap-gradient{height:10px;border-radius:2px;}
+.vmap-gradient-labels{display:flex;justify-content:space-between;margin-top:6px;font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--geo-ink-soft);}
+.vmap-mode-toggle{display:flex;gap:6px;margin-top:16px;}
+.vmap-mode-btn{
+  font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.02em;
+  background:transparent;border:1px solid var(--geo-line);color:var(--geo-ink-soft);
+  padding:6px 12px;border-radius:2px;cursor:pointer;transition:.18s;
+}
+.vmap-mode-btn.is-active{border-color:var(--geo-accent);color:var(--geo-accent);}
+.vmap-mode-btn:hover{color:var(--geo-ink);}
+
+.vmap-panel--stats{bottom:118px;right:26px;animation-delay:.16s;}
+.vmap-panel--stats p{font-size:.82rem;color:var(--geo-ink-soft);line-height:1.6;margin:0;}
+.vmap-count{font-family:'Archivo',sans-serif;font-weight:800;font-size:1.6rem;color:var(--geo-ink);}
+
+.vmap-controls{
+  position:absolute;left:26px;right:26px;bottom:26px;z-index:6;
+  background:color-mix(in srgb, var(--geo-surface) 88%, transparent);
+  border:1px solid var(--geo-line);backdrop-filter:blur(10px);
+  padding:16px 24px 14px;
+  animation:geoFadeUp .6s cubic-bezier(.2,.7,.2,1) .1s both;
+}
+.vmap-controls-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+.vmap-controls-top .vmap-decade-label{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--geo-ink-soft);text-transform:uppercase;letter-spacing:.08em;}
+#vmap-decade-readout{font-family:'Archivo',sans-serif;font-weight:800;color:var(--geo-accent);}
+#vmap-slider{
+  width:100%;appearance:none;height:2px;background:var(--geo-line);outline:none;margin:6px 0 6px;
+}
+#vmap-slider::-webkit-slider-thumb{
+  appearance:none;width:15px;height:15px;border-radius:50%;background:var(--geo-accent);cursor:pointer;
+  border:3px solid var(--geo-surface);box-shadow:0 0 0 1px var(--geo-accent);
+}
+.vmap-tick-labels{
+  display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:.6rem;
+  color:var(--geo-ink-soft);letter-spacing:.01em;
+}
+.vmap-tick-labels span{flex:1;text-align:center;}
+.vmap-tick-labels span:first-child{text-align:left;}
+.vmap-tick-labels span:last-child{text-align:right;}
+
+.vmap-loading{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'IBM Plex Mono',monospace;font-size:.85rem;color:var(--geo-ink-soft);
+  text-align:center;padding:40px;z-index:8;
+}
+
+@media (max-width:900px){
+  .vmap-stage{height:auto;min-height:auto;}
+  .vmap-stage svg{position:static;height:60vh;}
+  .vmap-panel--title,.vmap-panel--legend,.vmap-panel--stats{
+    position:static;max-width:none;margin:12px 0;backdrop-filter:none;
+  }
+  .vmap-controls{position:static;margin-top:12px;}
+  #vmap-markers{display:none;}
+}

@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/geospatial.css" />
+<link rel="stylesheet" href="assets/css/vienna-map.css" />
 </head>
 <body class="geo-body geo-dark">
   <header class="geo-topbar">
@@ -14,67 +15,51 @@
     <a class="geo-back" href="social-housing-atlas.html">← Atlas</a>
   </header>
 
-  <main class="geo-wrap">
-    <p class="geo-crumb"><a href="geospatial.html">Geospatial Analyses</a> / <a href="social-housing-atlas.html">Social Housing Atlas</a> / Vienna</p>
+  <p class="geo-crumb" style="padding-bottom:10px;">
+    <a href="geospatial.html">Geospatial Analyses</a> / <a href="social-housing-atlas.html">Social Housing Atlas</a> / Vienna
+  </p>
 
-    <div class="geo-title-row">
+  <section class="vmap-stage" id="vmap-stage">
+    <p class="vmap-loading" id="vmap-loading">Loading map layers…</p>
+
+    <svg id="vmap-svg" style="view-transition-name:vienna-thumb;"></svg>
+    <div id="vmap-markers"></div>
+
+    <div class="vmap-panel vmap-panel--title">
+      <p class="geo-eyebrow">Social Housing Atlas</p>
       <h1>Vienna</h1>
-      <p class="geo-coord">48.2082° N, 16.3738° E</p>
+      <p>Distribution and growth of social &amp; municipal housing across the city, 1900–2010. Drag the timeline below to watch it grow.</p>
     </div>
 
-    <div class="geo-analysis-grid">
-      <div class="geo-panel geo-map-bleed" style="grid-column:1/-1;">
-        <svg viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg" style="view-transition-name:vienna-thumb;">
-          <polygon points="170,90 590,60 730,230 680,420 420,540 190,480 90,300" fill="none" stroke="#F5F4F0" stroke-opacity="0.5" stroke-width="1.5"/>
-          <polygon id="geo-district-a" points="170,90 420,75 450,250 260,280" fill="#F2B705" fill-opacity="0.55" stroke="#F5F4F0" stroke-opacity="0.4" stroke-width="1"/>
-          <polygon id="geo-district-b" points="450,250 590,60 730,230 560,360" fill="#F2B705" fill-opacity="0.3" stroke="#F5F4F0" stroke-opacity="0.4" stroke-width="1"/>
-          <polygon id="geo-district-c" points="260,280 560,360 680,420 420,540 300,470" fill="#F2B705" fill-opacity="0.8" stroke="#F5F4F0" stroke-opacity="0.4" stroke-width="1"/>
-          <polygon id="geo-district-d" points="90,300 260,280 300,470 190,480" fill="#F2B705" fill-opacity="0.15" stroke="#F5F4F0" stroke-opacity="0.4" stroke-width="1"/>
-          <circle cx="450" cy="260" r="4" fill="#F5F4F0"/>
-          <text x="464" y="265" font-family="IBM Plex Mono" font-size="13" fill="#F5F4F0">City centre</text>
-        </svg>
-        <p class="geo-map-caption">Placeholder vector — district boundaries and housing-density fill to be replaced with the final QGIS layers.</p>
+    <div class="vmap-panel vmap-panel--legend">
+      <h4>Colour coding</h4>
+      <div id="vmap-legend"></div>
+      <div class="vmap-mode-toggle">
+        <button class="vmap-mode-btn is-active" data-mode="single">Social Housing</button>
+        <button class="vmap-mode-btn" data-mode="timeline">Timeline</button>
       </div>
     </div>
 
-    <div class="geo-analysis-grid">
-      <div class="geo-side-stack" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
-        <div class="geo-panel">
-          <h4>Legend — housing density</h4>
-          <ul class="geo-legend-list">
-            <li><span class="geo-swatch" style="background:#F2B705;opacity:.15"></span> Low (0–10%)</li>
-            <li><span class="geo-swatch" style="background:#F2B705;opacity:.3"></span> Moderate (10–25%)</li>
-            <li><span class="geo-swatch" style="background:#F2B705;opacity:.55"></span> High (25–40%)</li>
-            <li><span class="geo-swatch" style="background:#F2B705;opacity:.8"></span> Very high (40%+)</li>
-          </ul>
-        </div>
-        <div class="geo-panel">
-          <h4>Stock by district (sample)</h4>
-          <svg viewBox="0 0 260 130" width="100%">
-            <rect x="0"   y="90" width="28" height="40" fill="#F2B705" opacity=".3"/>
-            <rect x="40"  y="60" width="28" height="70" fill="#F2B705" opacity=".55"/>
-            <rect x="80"  y="20" width="28" height="110" fill="#F2B705" opacity=".85"/>
-            <rect x="120" y="75" width="28" height="55" fill="#F2B705" opacity=".4"/>
-            <rect x="160" y="100" width="28" height="30" fill="#F2B705" opacity=".2"/>
-            <rect x="200" y="50" width="28" height="80" fill="#F2B705" opacity=".65"/>
-            <line x1="0" y1="130" x2="240" y2="130" stroke="#2B2B27"/>
-          </svg>
-        </div>
-      </div>
-
-      <div class="geo-panel">
-        <h4>Timeline</h4>
-        <div class="geo-timeline">
-          <p class="geo-timeline-year" id="geo-year">2026</p>
-          <input type="range" min="2015" max="2026" value="2026" step="1" id="geo-slider" oninput="document.getElementById('geo-year').textContent=this.value" />
-          <div class="geo-timeline-labels"><span>2015</span><span>2026</span></div>
-        </div>
-      </div>
+    <div class="vmap-panel vmap-panel--stats">
+      <h4>Buildings shown</h4>
+      <p class="vmap-count" id="vmap-count">0</p>
+      <p>Unit &amp; population figures will connect here once the dataset is in.</p>
     </div>
 
-    <div class="geo-panel geo-desc" style="margin-bottom:24px;">
+    <div class="vmap-controls">
+      <div class="vmap-controls-top">
+        <span class="vmap-decade-label">Built by</span>
+        <span id="vmap-decade-readout">2000–2010</span>
+      </div>
+      <input type="range" id="vmap-slider" min="0" max="11" step="1" value="11" />
+      <div class="vmap-tick-labels" id="vmap-ticks"></div>
+    </div>
+  </section>
+
+  <main class="geo-wrap">
+    <div class="geo-panel geo-desc" style="margin-top:36px;">
       <h4>About this analysis</h4>
-      <p>This view maps the distribution and scale of social and municipal housing (Gemeindebau and cooperative stock) across Vienna's districts, tracing how the city's housing model has evolved and where new development is concentrated. Layers, decade filtering, and building-level detail are being built out next.</p>
+      <p>This view maps the distribution and scale of social and municipal housing (Gemeindebau and cooperative stock) across Vienna's districts, tracing how the city's housing model has evolved and where new development is concentrated. Base map and housing footprints are drawn from QGIS-exported GIS layers; four landmark estates are clickable through to further reading.</p>
     </div>
 
     <div class="geo-btn-row">
@@ -87,5 +72,8 @@
       <span>Social Housing Atlas — Vienna</span>
     </footer>
   </main>
+
+  <script src="https://unpkg.com/d3@7/dist/d3.min.js"></script>
+  <script src="assets/js/vienna-map.js"></script>
 </body>
 </html>
