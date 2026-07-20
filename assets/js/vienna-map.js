@@ -43,6 +43,16 @@ function bucketIndex(decade){
   return Math.min(11, Math.floor((decade - 1900) / 10) + 1);
 }
 
+// CSV columns: decade,buildings,units — one row per decade bucket start year.
+function parseUnitStatsCsv(text){
+  const stats = DECADE_BUCKETS.map(() => ({ buildings: 0, units: 0 }));
+  text.trim().split('\n').slice(1).forEach(line => {
+    const [decade, buildings, units] = line.split(',').map(Number);
+    stats[bucketIndex(decade)] = { buildings, units };
+  });
+  return stats;
+}
+
 (async function initViennaMap(){
   const stage = document.getElementById('vmap-stage');
   const svg = d3.select('#vmap-svg');
@@ -57,6 +67,8 @@ function bucketIndex(decade){
   const legendEl = document.getElementById('vmap-legend');
   const modeButtons = document.querySelectorAll('.vmap-mode-btn');
   const ticksEl = document.getElementById('vmap-ticks');
+  const unitsEl = document.getElementById('vmap-units');
+  const unitBarsEl = document.getElementById('vmap-unit-bars');
 
   ticksEl.innerHTML = DECADE_BUCKETS.map(l => `<span>${l.replace('–2010','s').replace(/^(\d{4})–\d{4}$/,'$1s')}</span>`).join('');
 
@@ -67,10 +79,16 @@ function bucketIndex(decade){
   let projection, path;
 
   try {
-    const [basemap, housing] = await Promise.all([
+    const [basemap, housing, unitStatsCsv] = await Promise.all([
       fetch('data/base-map-vienna.geojson').then(r => { if(!r.ok) throw new Error('base map fetch failed'); return r.json(); }),
-      fetch('data/social-housing-vienna.geojson').then(r => { if(!r.ok) throw new Error('housing fetch failed'); return r.json(); })
+      fetch('data/social-housing-vienna.geojson').then(r => { if(!r.ok) throw new Error('housing fetch failed'); return r.json(); }),
+      fetch('data/vienna-housing-units.csv').then(r => { if(!r.ok) throw new Error('unit stats fetch failed'); return r.text(); })
     ]);
+
+    const unitStats = parseUnitStatsCsv(unitStatsCsv);
+    const maxUnits = Math.max(...unitStats.map(s => s.units));
+    unitBarsEl.innerHTML = DECADE_BUCKETS.map(() => '<span class="vmap-unit-bar"></span>').join('');
+    const unitBars = unitBarsEl.querySelectorAll('.vmap-unit-bar');
 
     projection = d3.geoMercator().fitSize([W, H], basemap);
     path = d3.geoPath(projection);
@@ -104,12 +122,25 @@ function bucketIndex(decade){
       countEl.textContent = visible.toLocaleString('en-GB');
       decadeReadout.textContent = DECADE_BUCKETS[cutoff];
       renderLegend();
+      renderUnitChart(cutoff);
+    }
+
+    function renderUnitChart(cutoff){
+      let cumulativeUnits = 0;
+      unitBars.forEach((bar, idx) => {
+        const isBuilt = idx <= cutoff;
+        if (isBuilt) cumulativeUnits += unitStats[idx].units;
+        const h = maxUnits ? Math.max(3, Math.round((unitStats[idx].units / maxUnits) * 100)) : 3;
+        bar.style.height = h + '%';
+        bar.classList.toggle('is-active', isBuilt);
+      });
+      unitsEl.textContent = cumulativeUnits.toLocaleString('en-GB');
     }
 
     function renderLegend(){
       if (colorMode === 'single'){
         legendEl.innerHTML = `
-          <div class="vmap-legend-row"><span class="vmap-swatch" style="background:${YELLOW}"></span> Social housing, built by ${DECADE_BUCKETS[+slider.value]}</div>`;
+          <div class="vmap-legend-row"><span class="vmap-swatch" style="background:${YELLOW}"></span> City of Vienna Gemeindebau</div>`;
       } else {
         legendEl.innerHTML = `
           <div class="vmap-gradient" style="background:linear-gradient(90deg, ${TIMELINE_STOPS.join(',')})"></div>
@@ -143,10 +174,30 @@ function bucketIndex(decade){
       markerLayer.appendChild(el);
     });
 
+    // The SVG has a fixed viewBox but scales to fill its container with
+    // preserveAspectRatio "meet", which letterboxes it (scales + centers)
+    // whenever the container's aspect ratio doesn't match the viewBox's.
+    // Markers live in a plain HTML layer on top of the SVG, so their pixel
+    // position has to account for that same scale/offset, not just the
+    // raw viewBox coordinates.
+    function svgToPixelBase(){
+      const rect = svg.node().getBoundingClientRect();
+      const scale = Math.min(rect.width / W, rect.height / H);
+      return {
+        scale,
+        offsetX: (rect.width - W * scale) / 2,
+        offsetY: (rect.height - H * scale) / 2
+      };
+    }
+
+    let lastTransform = d3.zoomIdentity;
     function positionMarkers(transform){
+      lastTransform = transform;
+      const { scale, offsetX, offsetY } = svgToPixelBase();
       markerLayer.querySelectorAll('.vmarker').forEach(el => {
         const x = +el.dataset.x, y = +el.dataset.y;
-        const tx = transform.applyX(x), ty = transform.applyY(y);
+        const tx = offsetX + transform.applyX(x) * scale;
+        const ty = offsetY + transform.applyY(y) * scale;
         el.style.transform = `translate(${tx}px, ${ty}px) scale(${1 / transform.k})`;
       });
     }
@@ -161,6 +212,11 @@ function bucketIndex(decade){
       });
     svg.call(zoom);
     positionMarkers(d3.zoomIdentity);
+
+    window.addEventListener('resize', () => positionMarkers(lastTransform));
+    if (window.ResizeObserver){
+      new ResizeObserver(() => positionMarkers(lastTransform)).observe(stage);
+    }
 
     loadingEl.style.display = 'none';
     stage.classList.add('is-ready');

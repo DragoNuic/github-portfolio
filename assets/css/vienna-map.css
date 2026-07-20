@@ -17,16 +17,17 @@
 .vmap-stage.is-ready svg{opacity:1;}
 
 .vmap-base-path{
-  fill:rgba(245,244,240,0.035);
-  stroke:rgba(245,244,240,0.22);
-  stroke-width:0.6;
+  fill:rgba(245,244,240,0.015);
+  stroke:rgba(245,244,240,0.1);
+  stroke-width:0.5;
   vector-effect:non-scaling-stroke;
 }
 .vmap-house-path{
-  stroke:rgba(11,11,10,0.55);
-  stroke-width:0.4;
+  stroke:rgba(11,11,10,0.75);
+  stroke-width:0.6;
   vector-effect:non-scaling-stroke;
   transition:fill .35s ease;
+  filter:drop-shadow(0 0 1.5px rgba(242,183,5,.75));
 }
 
 #vmap-markers{
@@ -97,6 +98,20 @@
 .vmap-panel--stats{bottom:118px;right:26px;animation-delay:.16s;}
 .vmap-panel--stats p{font-size:.82rem;color:var(--geo-ink-soft);line-height:1.6;margin:0;}
 .vmap-count{font-family:'Archivo',sans-serif;font-weight:800;font-size:1.6rem;color:var(--geo-ink);}
+.vmap-units-line{margin-top:10px !important;color:var(--geo-ink-soft);}
+.vmap-units-line strong{color:var(--geo-ink);font-weight:700;}
+.vmap-unit-chart{
+  display:flex;align-items:flex-end;gap:3px;height:44px;margin-top:12px;
+}
+.vmap-unit-bar{
+  flex:1;background:var(--geo-line);border-radius:1px;min-height:3px;
+  transition:height .35s ease, background .35s ease;
+}
+.vmap-unit-bar.is-active{background:var(--geo-accent);}
+.vmap-chart-caption{
+  margin-top:6px !important;font-family:'IBM Plex Mono',monospace;font-size:.65rem !important;
+  text-transform:uppercase;letter-spacing:.06em;color:var(--geo-ink-soft);
+}
 
 .vmap-controls{
   position:absolute;left:26px;right:26px;bottom:26px;z-index:6;

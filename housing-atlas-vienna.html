@@ -32,10 +32,10 @@
     </div>
 
     <div class="vmap-panel vmap-panel--legend">
-      <h4>Colour coding</h4>
+      <h4>Legend</h4>
       <div id="vmap-legend"></div>
       <div class="vmap-mode-toggle">
-        <button class="vmap-mode-btn is-active" data-mode="single">Social Housing</button>
+        <button class="vmap-mode-btn is-active" data-mode="single">All Social Housing</button>
         <button class="vmap-mode-btn" data-mode="timeline">Timeline</button>
       </div>
     </div>
@@ -43,7 +43,9 @@
     <div class="vmap-panel vmap-panel--stats">
       <h4>Buildings shown</h4>
       <p class="vmap-count" id="vmap-count">0</p>
-      <p>Unit &amp; population figures will connect here once the dataset is in.</p>
+      <p class="vmap-units-line">Housing units built: <strong id="vmap-units">0</strong></p>
+      <div class="vmap-unit-chart" id="vmap-unit-bars"></div>
+      <p class="vmap-chart-caption">Units built per decade</p>
     </div>
 
     <div class="vmap-controls">
