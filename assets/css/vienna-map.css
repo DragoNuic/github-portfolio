@@ -115,6 +115,9 @@
 .vmap-mode-btn:hover{color:var(--geo-ink);}
 
 .vmap-decade-breakdown{margin-top:16px;padding-top:14px;border-top:1px solid var(--geo-line);}
+.vmap-decade-hint{
+  font-size:.74rem;line-height:1.5;color:var(--geo-ink-soft);margin:0 0 10px;
+}
 .vmap-decade-breakdown-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
 .vmap-decade-breakdown-head span{
   font-family:'IBM Plex Mono',monospace;font-size:.7rem;text-transform:uppercase;
@@ -146,7 +149,6 @@
 
 .vmap-panel--stats{animation-delay:.16s;}
 .vmap-panel--stats p{font-size:.82rem;color:var(--geo-ink-soft);line-height:1.6;margin:0;}
-.vmap-count{font-family:'Archivo',sans-serif;font-weight:800;font-size:1.6rem;color:var(--geo-ink);}
 .vmap-units-line{margin-top:10px !important;color:var(--geo-ink-soft);}
 .vmap-units-line strong{color:var(--geo-ink);font-weight:700;}
 .vmap-chart-wrap{position:relative;height:44px;margin-top:12px;}

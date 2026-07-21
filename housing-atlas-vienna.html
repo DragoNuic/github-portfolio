@@ -48,13 +48,13 @@
             <span>By decade</span>
             <button type="button" class="vmap-decade-clear" id="vmap-decade-clear">Clear</button>
           </div>
+          <p class="vmap-decade-hint">Click a decade to isolate it on the map — click more to compare several, or Clear to go back to the timeline slider below.</p>
           <ul class="vmap-decade-list" id="vmap-decade-list"></ul>
         </div>
       </div>
 
       <div class="vmap-panel vmap-panel--stats">
-        <h4>Buildings shown</h4>
-        <p class="vmap-count" id="vmap-count">0</p>
+        <h4>Statistics</h4>
         <p class="vmap-units-line">Housing units built: <strong id="vmap-units">0</strong></p>
         <p class="vmap-units-line">Vienna population: <strong id="vmap-population">0</strong></p>
         <div class="vmap-chart-wrap" id="vmap-chart-wrap">
@@ -88,40 +88,63 @@
       <article class="geo-panel geo-desc geo-content-block" id="history">
         <p class="geo-eyebrow">01</p>
         <h2>History</h2>
-        <!-- Replace with: <img class="geo-content-image" src="assets/img/....jpg" alt="..."> -->
-        <div class="geo-content-image-placeholder"><span>Add image</span></div>
+
+        <div class="geo-hist-timeline">
+          <div class="geo-hist-track"></div>
+          <div class="geo-hist-event" style="left:16.4%">
+            <span class="geo-hist-dot"></span>
+            <div class="geo-hist-label"><strong>1918</strong>Birth of the Austrian Republic</div>
+          </div>
+          <div class="geo-hist-event is-below" style="left:18.2%">
+            <span class="geo-hist-dot"></span>
+            <div class="geo-hist-label"><strong>1920</strong>First municipal housing block constructed</div>
+          </div>
+          <div class="geo-hist-event" style="left:30.9%">
+            <span class="geo-hist-dot"></span>
+            <div class="geo-hist-label"><strong>1934</strong>Austrian Civil War</div>
+          </div>
+          <div class="geo-hist-event is-below" style="left:35.5%">
+            <span class="geo-hist-dot"></span>
+            <div class="geo-hist-label"><strong>1939</strong>World War II begins</div>
+          </div>
+          <div class="geo-hist-event" style="left:40.9%">
+            <span class="geo-hist-dot"></span>
+            <div class="geo-hist-label"><strong>1945</strong>Post-war reconstruction begins</div>
+          </div>
+          <div class="geo-hist-event is-below" style="left:83.6%">
+            <span class="geo-hist-dot"></span>
+            <div class="geo-hist-label"><strong>1990s</strong>Municipal construction slows, shift to public–private partnerships</div>
+          </div>
+          <div class="geo-hist-event" style="left:94.5%">
+            <span class="geo-hist-dot"></span>
+            <div class="geo-hist-label"><strong>2004</strong>End of large-scale municipal housing construction</div>
+          </div>
+        </div>
+
         <p>History Test...</p>
       </article>
 
       <article class="geo-panel geo-desc geo-content-block" id="current-state">
         <p class="geo-eyebrow">02</p>
         <h2>Current State</h2>
-        <!-- Replace with: <img class="geo-content-image" src="assets/img/....jpg" alt="..."> -->
-        <div class="geo-content-image-placeholder"><span>Add image</span></div>
         <p>Add your text here.</p>
       </article>
 	  
 	  <article class="geo-panel geo-desc geo-content-block" id="systems-analysis">
         <p class="geo-eyebrow">03</p>
         <h2>Governance & System Analysis</h2>
-        <!-- Replace with: <img class="geo-content-image" src="assets/img/....jpg" alt="..."> -->
-        <div class="geo-content-image-placeholder"><span>Add image</span></div>
         <p>Add your text here.</p>
       </article>
 
       <article class="geo-panel geo-desc geo-content-block" id="challenges">
         <p class="geo-eyebrow">04</p>
         <h2>Challenges</h2>
-        <!-- Replace with: <img class="geo-content-image" src="assets/img/....jpg" alt="..."> -->
-        <div class="geo-content-image-placeholder"><span>Add image</span></div>
         <p>Add your text here.</p>
       </article>
 
       <article class="geo-panel geo-desc geo-content-block" id="future">
         <p class="geo-eyebrow">05</p>
         <h2>Future</h2>
-        <!-- Replace with: <img class="geo-content-image" src="assets/img/....jpg" alt="..."> -->
-        <div class="geo-content-image-placeholder"><span>Add image</span></div>
         <p>Add your text here.</p>
       </article>
     </section>

@@ -92,7 +92,6 @@ const POI_NOTES = {
   const baseLayer = g.append('g').attr('id', 'vmap-base');
   const housingLayer = g.append('g').attr('id', 'vmap-housing');
   const loadingEl = document.getElementById('vmap-loading');
-  const countEl = document.getElementById('vmap-count');
   const decadeReadout = document.getElementById('vmap-decade-readout');
   const slider = document.getElementById('vmap-slider');
   const legendEl = document.getElementById('vmap-legend');
@@ -254,17 +253,14 @@ const POI_NOTES = {
     function render(){
       const cutoff = +slider.value;
       const isolating = isolatedBuckets.size > 0;
-      let visible = 0;
-      housingPaths.each(function([bucket, feats]){
+      housingPaths.each(function([bucket]){
         const show = isolating ? isolatedBuckets.has(bucket) : bucket <= cutoff;
-        if (show) visible += feats.length;
         const color = colorMode === 'timeline' ? timelineColor(bucket) : YELLOW;
         d3.select(this)
           .style('display', show ? null : 'none')
           .attr('fill', color)
           .style('filter', show ? `drop-shadow(0 0 2.5px ${color})` : null);
       });
-      countEl.textContent = visible.toLocaleString('en-GB');
       decadeReadout.textContent = isolating
         ? `${isolatedBuckets.size} decade${isolatedBuckets.size > 1 ? 's' : ''} isolated`
         : DECADE_BUCKETS[cutoff];
@@ -309,7 +305,7 @@ const POI_NOTES = {
     function renderLegend(){
       if (colorMode === 'single'){
         legendEl.innerHTML = `
-          <div class="vmap-legend-row"><span class="vmap-swatch" style="background:${YELLOW}"></span> City of Vienna Gemeindebau</div>`;
+          <div class="vmap-legend-row"><span class="vmap-swatch" style="background:${YELLOW}"></span> Municipal Housing</div>`;
       } else {
         legendEl.innerHTML = `
           <div class="vmap-gradient" style="background:linear-gradient(90deg, ${TIMELINE_STOPS.join(',')})"></div>
