@@ -23,12 +23,17 @@
     <p class="vmap-loading" id="vmap-loading">Loading map layers…</p>
 
     <svg id="vmap-svg" style="view-transition-name:vienna-thumb;"></svg>
+    <div id="vmap-markers"></div>
 
     <div class="vmap-panel vmap-panel--title">
       <p class="geo-eyebrow">Social Housing Atlas</p>
       <h1>Vienna</h1>
+      <p class="vmap-subtitle">From Red Vienna to today and beyond</p>
+      <p class="geo-coord">48.2082° N, 16.3738° E</p>
       <p>Distribution and growth of social &amp; municipal housing across the city, 1900–2010. Drag the timeline below to watch it grow.</p>
     </div>
+
+    <div class="vmap-tooltip" id="vmap-poi-tooltip"></div>
 
     <div class="vmap-side-stack">
       <div class="vmap-panel vmap-panel--legend">
@@ -120,6 +125,12 @@
         <p>Add your text here.</p>
       </article>
     </section>
+
+    <div class="geo-panel geo-desc geo-sources">
+      <h4>Data sources</h4>
+      <p>Vienna Municipal Housing — Stadt Wien</p>
+      <p>Vienna population — Statistics Austria</p>
+    </div>
 
     <div class="geo-btn-row">
       <a class="geo-btn geo-btn-ghost" href="social-housing-atlas.html">Back to atlas</a>

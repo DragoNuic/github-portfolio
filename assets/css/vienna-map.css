@@ -10,11 +10,11 @@
   overflow:hidden;
   background:var(--geo-bg);
 }
-.vmap-stage svg{
+#vmap-svg{
   position:absolute;inset:0;width:100%;height:100%;display:block;
   opacity:0;transition:opacity .6s ease;
 }
-.vmap-stage.is-ready svg{opacity:1;}
+.vmap-stage.is-ready #vmap-svg{opacity:1;}
 
 .vmap-base-path{
   fill:rgba(245,244,240,0.015);
@@ -29,13 +29,7 @@
   vector-effect:non-scaling-stroke;
   shape-rendering:optimizeSpeed;
   transition:fill .35s ease;
-  filter:drop-shadow(0 0 1.5px rgba(242,183,5,.75));
-}
-/* Timeline mode colours each decade differently — a uniform yellow glow
-   would fight that, so it's only used in single-colour "All Social
-   Housing" mode. */
-#vmap-housing.is-timeline .vmap-house-path{
-  filter:none;
+  /* glow colour is set per-decade in JS to match each path's own fill */
 }
 
 .vmap-panel{
@@ -57,6 +51,48 @@
   margin:0 0 8px;
 }
 .vmap-panel--title p{font-size:.85rem;color:var(--geo-ink-soft);margin:0;line-height:1.55;}
+.vmap-panel--title .vmap-subtitle{
+  font-family:'IBM Plex Mono',monospace;font-size:.82rem;color:var(--geo-accent);
+  margin:0 0 6px;font-style:italic;
+}
+.vmap-panel--title .geo-coord{
+  font-family:'IBM Plex Mono',monospace;font-size:.75rem;color:var(--geo-ink-soft);
+  margin:0 0 12px;
+}
+
+.vmap-tooltip{
+  position:absolute;top:0;left:0;z-index:9;max-width:240px;pointer-events:none;
+  background:color-mix(in srgb, var(--geo-surface) 94%, transparent);
+  border:1px solid var(--geo-accent);border-radius:2px;padding:10px 12px;
+  opacity:0;transform:translate(-50%,-100%) translateY(-10px);
+  transition:opacity .18s ease, transform .18s ease;
+}
+.vmap-tooltip.is-visible{opacity:1;transform:translate(-50%,-100%) translateY(-16px);}
+.vmap-tooltip h5{
+  margin:0 0 4px;font-family:'Archivo',sans-serif;font-weight:800;font-size:.9rem;color:var(--geo-ink);
+}
+.vmap-tooltip .vmap-tooltip-year{
+  font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--geo-accent);margin:0 0 6px;
+}
+.vmap-tooltip p{font-size:.78rem;line-height:1.45;color:var(--geo-ink-soft);margin:0;}
+
+#vmap-markers{position:absolute;inset:0;pointer-events:none;transform-origin:0 0;z-index:7;}
+.vmarker{
+  position:absolute;top:0;left:0;pointer-events:auto;transform-origin:0 0;
+  width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;
+  background:var(--geo-accent);cursor:pointer;
+  box-shadow:0 0 0 3px rgba(242,183,5,.22);
+  animation:vmarkerPulse 2.4s ease-out infinite;
+}
+@keyframes vmarkerPulse{
+  0%{box-shadow:0 0 0 3px rgba(242,183,5,.22), 0 0 0 0 rgba(242,183,5,.5);}
+  70%{box-shadow:0 0 0 3px rgba(242,183,5,.22), 0 0 0 12px rgba(242,183,5,0);}
+  100%{box-shadow:0 0 0 3px rgba(242,183,5,.22), 0 0 0 0 rgba(242,183,5,0);}
+}
+.vmarker:hover{background:#fff;}
+
+.geo-sources p{margin:0 0 6px;}
+.geo-sources p:last-child{margin-bottom:0;}
 
 .vmap-side-stack{
   position:absolute;top:26px;right:26px;bottom:132px;z-index:6;
@@ -172,11 +208,15 @@
 
 @media (max-width:900px){
   .vmap-stage{height:auto;min-height:auto;}
-  .vmap-stage svg{position:static;height:60vh;}
+  #vmap-svg{position:static;height:60vh;}
   .vmap-panel--title,.vmap-side-stack{
     position:static;max-width:none;margin:12px 0;backdrop-filter:none;
   }
   .vmap-side-stack{bottom:auto;overflow-y:visible;max-height:none;}
   .vmap-side-stack .vmap-panel{backdrop-filter:none;}
   .vmap-controls{position:static;margin-top:12px;}
+  /* basemap context lines otherwise compete with the housing polygons on
+     small, low-DPI screens — fade it back further and let the glow do
+     the work of separating buildings from the street grid */
+  .vmap-base-path{fill:rgba(245,244,240,0.008);stroke:rgba(245,244,240,0.05);stroke-width:0.35;}
 }

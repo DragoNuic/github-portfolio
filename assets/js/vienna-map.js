@@ -73,6 +73,18 @@ function shortDecadeLabel(l){
   return l.replace('–2010', 's').replace(/^(\d{4})–\d{4}$/, '$1s');
 }
 
+// Points of interest: geometry is the building's own footprint (MultiPolygon),
+// not a lat/lng — the marker sits at its projected centroid. The source data
+// has no "why it's notable" field, so that's supplied here by hand.
+const POI_NAME_OVERRIDES = { 'SANDLEITENGASSE 45': 'Wohnhausanlage Sandleiten' };
+const POI_NOTES = {
+  'Metzleinstalerhof': 'One of Vienna’s earliest municipal housing blocks, a precursor to the "Red Vienna" building boom of the 1920s.',
+  'Großfeldsiedlung': 'One of Vienna’s largest post-war housing estates, emblematic of large-scale modernist social housing.',
+  'Reumannhof': 'A flagship early Red Vienna Gemeindebau, named after Jakob Reumann, Vienna’s first Social Democratic mayor.',
+  'Karl-Marx-Hof': 'Vienna’s most iconic Gemeindebau — over 1km long, a symbol of interwar municipal socialism.',
+  'Wohnhausanlage Sandleiten': 'One of the largest interwar estates, a model self-contained "garden city" complex.'
+};
+
 (async function initViennaMap(){
   const stage = document.getElementById('vmap-stage');
   const svg = d3.select('#vmap-svg');
@@ -93,6 +105,8 @@ function shortDecadeLabel(l){
   const popDotEl = document.getElementById('vmap-pop-dot');
   const decadeListEl = document.getElementById('vmap-decade-list');
   const decadeClearBtn = document.getElementById('vmap-decade-clear');
+  const markerLayer = document.getElementById('vmap-markers');
+  const tooltipEl = document.getElementById('vmap-poi-tooltip');
 
   ticksEl.innerHTML = DECADE_BUCKETS.map(l => `<span>${shortDecadeLabel(l)}</span>`).join('');
 
@@ -109,11 +123,12 @@ function shortDecadeLabel(l){
   let isolatedBuckets = new Set(); // when non-empty, only these buckets show, overriding the slider
 
   try {
-    const [basemap, housing, unitStatsCsv, populationCsv] = await Promise.all([
+    const [basemap, housing, unitStatsCsv, populationCsv, poi] = await Promise.all([
       fetch('data/base-map-vienna.geojson').then(r => { if(!r.ok) throw new Error('base map fetch failed'); return r.json(); }),
       fetch('data/social-housing-vienna.geojson').then(r => { if(!r.ok) throw new Error('housing fetch failed'); return r.json(); }),
       fetch('data/vienna-housing-units.csv').then(r => { if(!r.ok) throw new Error('unit stats fetch failed'); return r.text(); }),
-      fetch('data/vienna-population.csv').then(r => { if(!r.ok) throw new Error('population fetch failed'); return r.text(); })
+      fetch('data/vienna-population.csv').then(r => { if(!r.ok) throw new Error('population fetch failed'); return r.text(); }),
+      fetch('data/PointsOfInterestVienna.geojson').then(r => { if(!r.ok) throw new Error('poi fetch failed'); return r.json(); })
     ]);
 
     const unitStats = parseUnitStatsCsv(unitStatsCsv);
@@ -122,20 +137,29 @@ function shortDecadeLabel(l){
     const unitBars = unitBarsEl.querySelectorAll('.vmap-unit-bar');
 
     // Population line: interpolated onto each bucket's end year, then
-    // plotted in a 0–100 normalised space (x = bucket slot, y = value)
-    // so it overlays the bars regardless of the chart's rendered size.
+    // plotted in real pixel coordinates (not a percentage/viewBox trick —
+    // that stretching didn't resolve reliably on mobile Safari) so it
+    // always lines up with the bars regardless of chart width.
     const populationPoints = parsePopulationCsv(populationCsv);
     const popByBucket = DECADE_BUCKETS.map((_, i) => interpolatePopulation(bucketEndYear(i), populationPoints));
     const popMin = Math.min(...popByBucket), popMax = Math.max(...popByBucket);
-    const popPadding = 12;
-    function popY(pop){
+    const chartWrapEl = document.getElementById('vmap-chart-wrap');
+    const popSvgEl = document.getElementById('vmap-pop-svg');
+    function popXpx(bucketIdx, w){
+      return (bucketIdx + 0.5) / DECADE_BUCKETS.length * w;
+    }
+    function popYpx(pop, h){
+      const pad = h * 0.14;
       const t = (pop - popMin) / ((popMax - popMin) || 1);
-      return 100 - popPadding - t * (100 - popPadding * 2);
+      return h - pad - t * (h - pad * 2);
     }
-    function popX(bucketIdx){
-      return (bucketIdx + 0.5) / DECADE_BUCKETS.length * 100;
+    function layoutPopChart(){
+      const w = chartWrapEl.clientWidth, h = chartWrapEl.clientHeight;
+      if (!w || !h) return;
+      popSvgEl.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      popPolylineEl.setAttribute('points', popByBucket.map((p, i) => `${popXpx(i, w)},${popYpx(p, h)}`).join(' '));
+      renderPopulation(+slider.value);
     }
-    popPolylineEl.setAttribute('points', popByBucket.map((p, i) => `${popX(i)},${popY(p)}`).join(' '));
 
     // The timeline controls float over the bottom of the map (desktop
     // layout only — on the mobile breakpoint they sit below it in normal
@@ -176,6 +200,57 @@ function shortDecadeLabel(l){
       .attr('class', 'vmap-house-path')
       .attr('d', ([, feats]) => feats.map(f => path(f)).filter(Boolean).join(' '));
 
+    // --- points of interest: landmark buildings, hover for details ---
+    // Geometry is each building's own footprint, so the marker sits at its
+    // projected centroid — same projection/path used everywhere else, so
+    // it's guaranteed to line up with the map underneath it.
+    poi.features.forEach(f => {
+      const [x, y] = path.centroid(f);
+      if (Number.isNaN(x) || Number.isNaN(y)) return;
+      const rawName = f.properties.HOFNAME || '';
+      const name = POI_NAME_OVERRIDES[rawName] || rawName;
+      const el = document.createElement('a');
+      el.className = 'vmarker';
+      el.href = f.properties.info_url || '#';
+      el.target = '_blank';
+      el.rel = 'noopener';
+      el.dataset.x = x;
+      el.dataset.y = y;
+      el.addEventListener('mouseenter', () => showPoiTooltip(el, name, f.properties.BAUJAHR));
+      el.addEventListener('focus', () => showPoiTooltip(el, name, f.properties.BAUJAHR));
+      el.addEventListener('mouseleave', hidePoiTooltip);
+      el.addEventListener('blur', hidePoiTooltip);
+      markerLayer.appendChild(el);
+    });
+
+    function showPoiTooltip(el, name, year){
+      const stageRect = stage.getBoundingClientRect();
+      const markerRect = el.getBoundingClientRect();
+      tooltipEl.innerHTML = `
+        <h5>${name}</h5>
+        <p class="vmap-tooltip-year">${year ? 'Built ' + year : ''}</p>
+        <p>${POI_NOTES[name] || ''}</p>`;
+      tooltipEl.style.left = (markerRect.left - stageRect.left + markerRect.width / 2) + 'px';
+      tooltipEl.style.top = (markerRect.top - stageRect.top) + 'px';
+      tooltipEl.classList.add('is-visible');
+    }
+    function hidePoiTooltip(){
+      tooltipEl.classList.remove('is-visible');
+    }
+
+    function positionMarkers(transform){
+      const svgRect = svg.node().getBoundingClientRect();
+      const scale = Math.min(svgRect.width / W, svgRect.height / H);
+      const offsetX = (svgRect.width - W * scale) / 2;
+      const offsetY = (svgRect.height - H * scale) / 2;
+      markerLayer.querySelectorAll('.vmarker').forEach(el => {
+        const x = +el.dataset.x, y = +el.dataset.y;
+        const tx = offsetX + transform.applyX(x) * scale;
+        const ty = offsetY + transform.applyY(y) * scale;
+        el.style.transform = `translate(${tx}px, ${ty}px) scale(${1 / transform.k})`;
+      });
+    }
+
     function render(){
       const cutoff = +slider.value;
       const isolating = isolatedBuckets.size > 0;
@@ -183,11 +258,12 @@ function shortDecadeLabel(l){
       housingPaths.each(function([bucket, feats]){
         const show = isolating ? isolatedBuckets.has(bucket) : bucket <= cutoff;
         if (show) visible += feats.length;
+        const color = colorMode === 'timeline' ? timelineColor(bucket) : YELLOW;
         d3.select(this)
           .style('display', show ? null : 'none')
-          .attr('fill', colorMode === 'timeline' ? timelineColor(bucket) : YELLOW);
+          .attr('fill', color)
+          .style('filter', show ? `drop-shadow(0 0 2.5px ${color})` : null);
       });
-      housingLayer.classed('is-timeline', colorMode === 'timeline');
       countEl.textContent = visible.toLocaleString('en-GB');
       decadeReadout.textContent = isolating
         ? `${isolatedBuckets.size} decade${isolatedBuckets.size > 1 ? 's' : ''} isolated`
@@ -222,8 +298,11 @@ function shortDecadeLabel(l){
     }
 
     function renderPopulation(cutoff){
-      popDotEl.style.left = popX(cutoff) + '%';
-      popDotEl.style.top = popY(popByBucket[cutoff]) + '%';
+      const w = chartWrapEl.clientWidth, h = chartWrapEl.clientHeight;
+      if (w && h){
+        popDotEl.style.left = popXpx(cutoff, w) + 'px';
+        popDotEl.style.top = popYpx(popByBucket[cutoff], h) + 'px';
+      }
       populationEl.textContent = Math.round(popByBucket[cutoff]).toLocaleString('en-GB');
     }
 
@@ -263,16 +342,22 @@ function shortDecadeLabel(l){
       render();
     });
 
+    layoutPopChart();
     render();
 
     // --- zoom / pan ---
+    let lastTransform = d3.zoomIdentity;
     const zoom = d3.zoom()
       .scaleExtent([1, 16])
       .translateExtent([[0, 0], [W, H]])
       .on('zoom', (event) => {
+        lastTransform = event.transform;
         g.attr('transform', event.transform);
+        positionMarkers(event.transform);
       });
     svg.call(zoom);
+    positionMarkers(d3.zoomIdentity);
+    window.addEventListener('resize', () => positionMarkers(lastTransform));
 
     loadingEl.style.display = 'none';
     stage.classList.add('is-ready');

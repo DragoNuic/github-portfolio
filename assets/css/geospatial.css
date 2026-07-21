@@ -30,6 +30,17 @@
   --geo-accent-ink:#0B0B0A;
 }
 
+/* Thermal / infrared mode — used by the Vulnerable Cities atlas */
+.geo-thermal{
+  --geo-bg:        #05010A;
+  --geo-surface:   #12061C;
+  --geo-ink:       #FFF2E6;
+  --geo-ink-soft:  #C9A8C2;
+  --geo-line:      #3A1140;
+  --geo-accent:    #FF6A1A;
+  --geo-accent-ink:#05010A;
+}
+
 *{box-sizing:border-box;}
 
 .geo-body{
@@ -95,7 +106,7 @@
 .geo-grid .geo-card:nth-child(1){animation-delay:.05s;}
 .geo-grid .geo-card:nth-child(2){animation-delay:.12s;}
 .geo-grid .geo-card:nth-child(3){animation-delay:.19s;}
-.geo-card:hover{background:#F8F5EE;transform:translateY(-3px);box-shadow:0 14px 30px -18px rgba(23,22,15,.35);}
+.geo-card:hover{background:color-mix(in srgb, var(--geo-ink) 6%, var(--geo-surface));transform:translateY(-3px);box-shadow:0 14px 30px -18px rgba(23,22,15,.35);}
 .geo-card .geo-coord{
   font-family:'IBM Plex Mono',monospace;font-size:.75rem;color:var(--geo-accent-ink,var(--geo-accent));
   letter-spacing:.03em;margin:0 0 20px;
@@ -114,6 +125,42 @@
 .geo-card.geo-soon:hover{background:var(--geo-surface);transform:none;box-shadow:none;}
 .geo-card.geo-soon h3{color:var(--geo-ink-soft);}
 .geo-card.geo-soon .geo-coord{color:var(--geo-ink-soft);}
+
+/* Category grid: centred square cards, blank backdrop */
+.geo-grid--square{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:24px;
+  padding:48px 32px;margin:48px 0 60px;
+}
+.geo-card--square{
+  width:280px;aspect-ratio:1/1;justify-content:center;text-align:center;align-items:center;gap:10px;
+  border:1px solid var(--geo-line);
+}
+.geo-card--square .geo-arrow{margin-top:10px;}
+.geo-card--alterlaa{
+  background:
+    linear-gradient(180deg, rgba(10,10,10,.2), rgba(10,10,10,.62)),
+    url('../img/AltErlaa.jpg') center/cover no-repeat;
+  border-color:#DCD6C8;color:#fff;
+}
+.geo-card--alterlaa h3{color:#fff;}
+.geo-card--alterlaa p{color:#eef1f5;}
+.geo-card--alterlaa .geo-arrow{color:#F2B705;}
+.geo-card--alterlaa:hover{transform:translateY(-3px);box-shadow:0 14px 30px -18px rgba(0,0,0,.6);}
+.geo-card--heatmap{
+  background-blend-mode:normal;
+  background:
+    linear-gradient(180deg, rgba(10,0,10,.35), rgba(10,0,10,.78)),
+    url('../img/HeatMap.jpg') center/cover no-repeat;
+  border-color:#3a1140;color:#fff1e8;
+}
+.geo-card--heatmap h3{color:#fff1e8;}
+.geo-card--heatmap p{color:#e7c9e0;}
+.geo-card--heatmap .geo-arrow{color:#ff9d4d;}
+.geo-card--heatmap:hover{transform:translateY(-3px);box-shadow:0 14px 30px -18px rgba(0,0,0,.6);}
+@media (max-width:640px){
+  .geo-grid--square{padding:32px 16px;}
+  .geo-card--square{width:100%;max-width:320px;}
+}
 
 /* ---------- Globe / atlas landing page ---------- */
 .geo-globe-stage{
