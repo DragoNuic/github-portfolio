@@ -19,8 +19,8 @@ const ERA_BANDS = [
   { name: 'Red Vienna', color: '#C0392B', from: 3, to: 4 },
   { name: 'Austro-Fascism, National Socialism & WWII', color: '#4A3728', from: 5, to: 5 },
   { name: 'Post-War Reconstruction & Revival', color: '#3E7C87', from: 6, to: 8 },
-  { name: 'Shift to Subsidised Housing', color: '#5C9E6F', from: 9, to: 11 },
-  { name: 'New Municipal Renaissance', color: '#F2B705', from: 12, to: 12 }
+  { name: 'Shift to Subsidised Housing', color: '#F2B705', from: 9, to: 11 },
+  { name: 'New Municipal Renaissance', color: '#5C9E6F', from: 12, to: 12 }
 ];
 function timelineColor(bucketIdx){
   const era = ERA_BANDS.find(e => bucketIdx >= e.from && bucketIdx <= e.to);
@@ -86,7 +86,10 @@ const POI_NOTES = {
   const svg = d3.select('#vmap-svg');
   const g = svg.append('g').attr('id', 'vmap-zoom-layer');
   const baseLayer = g.append('g').attr('id', 'vmap-base');
+  const districtLayer = g.append('g').attr('id', 'vmap-districts');
+  const dissolvedLayer = g.append('g').attr('id', 'vmap-dissolved');
   const housingLayer = g.append('g').attr('id', 'vmap-housing');
+  const centreLayer = g.append('g').attr('id', 'vmap-centre');
   const loadingEl = document.getElementById('vmap-loading');
   const decadeReadout = document.getElementById('vmap-decade-readout');
   const slider = document.getElementById('vmap-slider');
@@ -101,6 +104,7 @@ const POI_NOTES = {
   const popDotEl = document.getElementById('vmap-pop-dot');
   const decadeListEl = document.getElementById('vmap-decade-list');
   const decadeClearBtn = document.getElementById('vmap-decade-clear');
+  const decadeBreakdownEl = document.querySelector('.vmap-decade-breakdown');
   const markerLayer = document.getElementById('vmap-markers');
   const tooltipEl = document.getElementById('vmap-poi-tooltip');
 
@@ -119,13 +123,14 @@ const POI_NOTES = {
   const W = 1000, H = 720;
   svg.attr('viewBox', `0 0 ${W} ${H}`);
 
-  let colorMode = 'single'; // 'single' | 'timeline'
   let isolatedBuckets = new Set(); // when non-empty, only these buckets show, overriding the slider
 
   try {
-    const [basemap, housing, unitStatsCsv, populationCsv, poi] = await Promise.all([
+    const [basemap, dissolved, districts, centre, unitStatsCsv, populationCsv, poi] = await Promise.all([
       fetch('data/base-map-vienna.geojson').then(r => { if(!r.ok) throw new Error('base map fetch failed'); return r.json(); }),
-      fetch('data/social-housing-vienna.geojson').then(r => { if(!r.ok) throw new Error('housing fetch failed'); return r.json(); }),
+      fetch('data/Dissolved.geojson').then(r => { if(!r.ok) throw new Error('dissolved fetch failed'); return r.json(); }),
+      fetch('data/bezirksgrenzen.geojson').then(r => { if(!r.ok) throw new Error('districts fetch failed'); return r.json(); }),
+      fetch('data/CentrePoint.geojson').then(r => { if(!r.ok) throw new Error('centre point fetch failed'); return r.json(); }),
       fetch('data/vienna-housing-units.csv').then(r => { if(!r.ok) throw new Error('unit stats fetch failed'); return r.text(); }),
       fetch('data/vienna-population.csv').then(r => { if(!r.ok) throw new Error('population fetch failed'); return r.text(); }),
       fetch('data/PointsOfInterestVienna.geojson').then(r => { if(!r.ok) throw new Error('poi fetch failed'); return r.json(); })
@@ -197,18 +202,50 @@ const POI_NOTES = {
       .attr('class', 'vmap-base-path')
       .attr('d', basemap.features.map(f => path(f)).filter(Boolean).join(' '));
 
-    // --- social housing: the hero layer ---
-    // Buildings are only ever shown/hidden a whole decade-bucket at a time
-    // (the timeline slider), so there's no need for one DOM element per
-    // building — group by bucket and merge each group into one path.
-    housing.features.forEach(f => { f._bucket = bucketIndex(f.properties.decade); });
-    const bucketGroups = d3.groups(housing.features, f => f._bucket).sort((a, b) => a[0] - b[0]);
+    // --- district borders: lighter than the city outline ---
+    districtLayer.append('path')
+      .attr('class', 'vmap-district-path')
+      .attr('d', districts.features.map(f => path(f)).filter(Boolean).join(' '));
 
-    const housingPaths = housingLayer.selectAll('path')
-      .data(bucketGroups)
-      .join('path')
+    // --- city centre marker ---
+    if (centre.features[0]){
+      const [cx, cy] = projection(centre.features[0].geometry.coordinates);
+      const s = 6;
+      centreLayer.append('path')
+        .attr('class', 'vmap-centre-cross')
+        .attr('d', `M${cx - s},${cy} L${cx + s},${cy} M${cx},${cy - s} L${cx},${cy + s}`);
+    }
+
+    // --- municipal housing: dissolved (default) + decade-by-decade (lazy) ---
+    // Dissolved.geojson merges every footprint into one outline — a single
+    // path is far cheaper to pan/zoom than the full per-decade breakdown,
+    // so it's the default view. The heavier dataset is only fetched once
+    // "Colour coded by decade built" is actually switched on.
+    dissolvedLayer.append('path')
       .attr('class', 'vmap-house-path')
-      .attr('d', ([, feats]) => feats.map(f => path(f)).filter(Boolean).join(' '));
+      .attr('fill', YELLOW)
+      .style('filter', `drop-shadow(0 0 2.5px ${YELLOW})`)
+      .attr('d', dissolved.features.map(f => path(f)).filter(Boolean).join(' '));
+    housingLayer.style('display', 'none');
+
+    let housingPaths = null;
+    let decadeLayerPromise = null;
+    function ensureDecadeLayer(){
+      if (!decadeLayerPromise){
+        decadeLayerPromise = fetch('data/social-housing-vienna.geojson')
+          .then(r => { if(!r.ok) throw new Error('housing fetch failed'); return r.json(); })
+          .then(housing => {
+            housing.features.forEach(f => { f._bucket = bucketIndex(f.properties.decade); });
+            const bucketGroups = d3.groups(housing.features, f => f._bucket).sort((a, b) => a[0] - b[0]);
+            housingPaths = housingLayer.selectAll('path')
+              .data(bucketGroups)
+              .join('path')
+              .attr('class', 'vmap-house-path')
+              .attr('d', ([, feats]) => feats.map(f => path(f)).filter(Boolean).join(' '));
+          });
+      }
+      return decadeLayerPromise;
+    }
 
     // --- points of interest: landmark buildings, hover for details ---
     // Geometry is each building's own footprint, so the marker sits at its
@@ -264,14 +301,16 @@ const POI_NOTES = {
     function render(){
       const cutoff = +slider.value;
       const isolating = isolatedBuckets.size > 0;
-      housingPaths.each(function([bucket]){
-        const show = isolating ? isolatedBuckets.has(bucket) : bucket <= cutoff;
-        const color = colorMode === 'timeline' ? timelineColor(bucket) : YELLOW;
-        d3.select(this)
-          .style('display', show ? null : 'none')
-          .attr('fill', color)
-          .style('filter', show ? `drop-shadow(0 0 2.5px ${color})` : null);
-      });
+      if (housingPaths){
+        housingPaths.each(function([bucket]){
+          const show = isolating ? isolatedBuckets.has(bucket) : bucket <= cutoff;
+          const color = timelineColor(bucket);
+          d3.select(this)
+            .style('display', show ? null : 'none')
+            .attr('fill', color)
+            .style('filter', show ? `drop-shadow(0 0 2.5px ${color})` : null);
+        });
+      }
       decadeReadout.textContent = isolating
         ? `${isolatedBuckets.size} decade${isolatedBuckets.size > 1 ? 's' : ''} isolated`
         : DECADE_BUCKETS[cutoff];
@@ -285,7 +324,7 @@ const POI_NOTES = {
       decadeChips.forEach(chip => {
         const bucket = +chip.dataset.bucket;
         chip.querySelector('.vmap-decade-swatch').style.background =
-          colorMode === 'timeline' ? timelineColor(bucket) : YELLOW;
+          decadeToggle.checked ? timelineColor(bucket) : YELLOW;
         chip.classList.toggle('is-isolated', isolatedBuckets.has(bucket));
       });
       decadeListEl.classList.toggle('has-isolation', isolatedBuckets.size > 0);
@@ -324,7 +363,7 @@ const POI_NOTES = {
     }
 
     function renderLegend(){
-      if (colorMode === 'single'){
+      if (!decadeToggle.checked){
         legendEl.innerHTML = `
           <div class="vmap-legend-row"><span class="vmap-swatch" style="background:${YELLOW}"></span> Municipal Housing</div>`;
       } else {
@@ -338,8 +377,19 @@ const POI_NOTES = {
       isolatedBuckets.clear(); // dragging the timeline always returns to cumulative mode
       render();
     });
-    decadeToggle.addEventListener('change', () => {
-      colorMode = decadeToggle.checked ? 'timeline' : 'single';
+    decadeToggle.addEventListener('change', async () => {
+      decadeBreakdownEl.classList.toggle('is-disabled', !decadeToggle.checked);
+      if (decadeToggle.checked){
+        loadingEl.textContent = 'Loading decade-by-decade data…';
+        loadingEl.style.display = 'flex';
+        await ensureDecadeLayer();
+        loadingEl.style.display = 'none';
+        dissolvedLayer.style('display', 'none');
+        housingLayer.style('display', null);
+      } else {
+        housingLayer.style('display', 'none');
+        dissolvedLayer.style('display', null);
+      }
       render();
     });
     decadeChips.forEach(chip => {

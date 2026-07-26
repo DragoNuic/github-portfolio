@@ -22,12 +22,17 @@
   <section class="vmap-stage" id="vmap-stage">
     <p class="vmap-loading" id="vmap-loading">Loading map layers…</p>
 
+    <div class="vmap-info-bar">Tip: zoom in on the map to see individual building footprints more clearly.</div>
+
     <svg id="vmap-svg" style="view-transition-name:vienna-thumb;"></svg>
     <div id="vmap-markers"></div>
 
     <div class="vmap-panel vmap-panel--title">
       <p class="geo-eyebrow">Social Housing Atlas</p>
-      <h1>Vienna</h1>
+      <div class="vmap-title-row">
+        <img src="assets/img/StadtWien.png" alt="Stadt Wien" class="vmap-logo" />
+        <h1>Vienna</h1>
+      </div>
       <p class="vmap-subtitle">From Red Vienna to today and beyond</p>
       <p class="geo-coord">48.2082° N, 16.3738° E</p>
       <p>Distribution and growth of social &amp; municipal housing across the city, 1900–2010. Drag the timeline below to watch it grow.</p>
@@ -56,7 +61,7 @@
             Co-Operative Housing <em>(coming soon)</em>
           </label>
         </div>
-        <div class="vmap-decade-breakdown">
+        <div class="vmap-decade-breakdown is-disabled">
           <div class="vmap-decade-breakdown-head">
             <span>By decade</span>
             <button type="button" class="vmap-decade-clear" id="vmap-decade-clear">Clear</button>
@@ -87,6 +92,7 @@
           </svg>
           <span class="vmap-pop-dot" id="vmap-pop-dot"></span>
         </div>
+        <p class="vmap-chart-caption">Bars: municipal housing units constructed · Line: population</p>
       </div>
     </div>
   </section>

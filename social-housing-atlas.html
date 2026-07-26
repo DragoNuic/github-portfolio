@@ -45,7 +45,7 @@
         const el = document.createElement('div');
         el.className = 'globe-marker';
         el.style.viewTransitionName = d.vt;
-        el.innerHTML = `<span class="globe-dot"></span><span class="globe-label">${d.name}</span>`;
+        el.innerHTML = `<img src="assets/img/StadtWien.png" alt="" class="globe-logo"><span class="globe-dot"></span><span class="globe-label">${d.name}</span>`;
         el.onclick = () => { window.location.href = d.href; };
         return el;
       })

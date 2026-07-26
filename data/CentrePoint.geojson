@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "CentrePoint",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{"type":"Feature","properties":{"id":1,"Location":null},"geometry":{"type":"Point","coordinates":[16.372141525471491,48.208430225824188]}}
+]
+}
