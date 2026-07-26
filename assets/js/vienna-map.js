@@ -283,7 +283,7 @@ const POI_NOTES = {
       const isolating = isolatedBuckets.size > 0;
       housingPaths.each(function([bucket]){
         const show = isolating ? isolatedBuckets.has(bucket) : bucket <= cutoff;
-        const color = timelineColor(bucket);
+        const color = decadeToggle.checked ? timelineColor(bucket) : YELLOW;
         d3.select(this)
           .style('display', show ? null : 'none')
           .attr('fill', color)
