@@ -220,6 +220,9 @@
   font-family:'IBM Plex Mono',monospace;font-size:.52rem;color:rgba(255,255,255,.85);
   white-space:nowrap;
 }
+.vmap-slider-hint{
+  font-size:.68rem;line-height:1.5;color:var(--geo-ink-soft);margin:8px 0 0;
+}
 .vmap-controls-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
 .vmap-controls-top .vmap-decade-label{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--geo-ink-soft);text-transform:uppercase;letter-spacing:.08em;}
 #vmap-decade-readout{font-family:'Archivo',sans-serif;font-weight:800;color:var(--geo-accent);}

@@ -15,12 +15,12 @@ const YELLOW = '#F2B705';
 // Decade colouring follows the History section's eras, not a continuous
 // gradient — each era's decades share one colour.
 const ERA_BANDS = [
-  { name: 'Imperial Vienna', color: '#55555E', from: 0, to: 2 },
-  { name: 'Red Vienna', color: '#C0392B', from: 3, to: 4 },
-  { name: 'Austro-Fascism, National Socialism & WWII', color: '#4A3728', from: 5, to: 5 },
-  { name: 'Post-War Reconstruction & Revival', color: '#3E7C87', from: 6, to: 8 },
-  { name: 'Shift to Subsidised Housing', color: '#F2B705', from: 9, to: 11 },
-  { name: 'New Municipal Renaissance', color: '#5C9E6F', from: 12, to: 12 }
+  { name: 'Imperial Vienna', short: 'Imperial Vienna', color: '#55555E', from: 0, to: 2 },
+  { name: 'Red Vienna', short: 'Red Vienna', color: '#C0392B', from: 3, to: 4 },
+  { name: 'Austro-Fascism, National Socialism & WWII', short: 'WW2', color: '#4A3728', from: 5, to: 5 },
+  { name: 'Post-War Reconstruction & Revival', short: 'Post-War Revival', color: '#3E7C87', from: 6, to: 8 },
+  { name: 'Shift to Subsidised Housing', short: 'Subsidised Housing', color: '#F2B705', from: 9, to: 11 },
+  { name: 'New Municipal Renaissance', short: 'Renaissance', color: '#5C9E6F', from: 12, to: 12 }
 ];
 function timelineColor(bucketIdx){
   const era = ERA_BANDS.find(e => bucketIdx >= e.from && bucketIdx <= e.to);
@@ -109,7 +109,7 @@ const POI_NOTES = {
   ticksEl.innerHTML = DECADE_BUCKETS.map(l => `<span>${shortDecadeLabel(l)}</span>`).join('');
 
   eraBandsEl.innerHTML = ERA_BANDS.map(e =>
-    `<span class="vmap-era-band" style="flex:${e.to - e.from + 1};background:${e.color}" title="${e.name}">${e.name}</span>`
+    `<span class="vmap-era-band" style="flex:${e.to - e.from + 1};background:${e.color}" title="${e.name}">${e.short}</span>`
   ).join('');
 
   decadeListEl.innerHTML = DECADE_BUCKETS.map((l, i) => `
