@@ -17,7 +17,7 @@
 .vmap-stage.is-ready #vmap-svg{opacity:1;}
 
 .vmap-base-path{
-  fill:rgba(245,244,240,0.004);
+  fill:rgba(245,244,240,0.0008);
   stroke:rgba(245,244,240,0.22);
   stroke-width:0.6;
   vector-effect:non-scaling-stroke;
@@ -138,7 +138,6 @@
 .vmap-layer-toggle em{font-style:normal;font-size:.7rem;}
 
 .vmap-decade-breakdown{margin-top:16px;padding-top:14px;border-top:1px solid var(--geo-line);transition:opacity .2s;}
-.vmap-decade-breakdown.is-disabled{opacity:.4;pointer-events:none;}
 .vmap-decade-hint{
   font-size:.74rem;line-height:1.5;color:var(--geo-ink-soft);margin:0 0 10px;
 }
@@ -258,5 +257,5 @@
   /* basemap context lines otherwise compete with the housing polygons on
      small, low-DPI screens — fade it back further and let the glow do
      the work of separating buildings from the street grid */
-  .vmap-base-path{fill:rgba(245,244,240,0.002);stroke:rgba(245,244,240,0.16);stroke-width:0.4;}
+  .vmap-base-path{fill:rgba(245,244,240,0.0005);stroke:rgba(245,244,240,0.16);stroke-width:0.4;}
 }

@@ -87,7 +87,6 @@ const POI_NOTES = {
   const g = svg.append('g').attr('id', 'vmap-zoom-layer');
   const baseLayer = g.append('g').attr('id', 'vmap-base');
   const districtLayer = g.append('g').attr('id', 'vmap-districts');
-  const dissolvedLayer = g.append('g').attr('id', 'vmap-dissolved');
   const housingLayer = g.append('g').attr('id', 'vmap-housing');
   const centreLayer = g.append('g').attr('id', 'vmap-centre');
   const loadingEl = document.getElementById('vmap-loading');
@@ -104,7 +103,6 @@ const POI_NOTES = {
   const popDotEl = document.getElementById('vmap-pop-dot');
   const decadeListEl = document.getElementById('vmap-decade-list');
   const decadeClearBtn = document.getElementById('vmap-decade-clear');
-  const decadeBreakdownEl = document.querySelector('.vmap-decade-breakdown');
   const markerLayer = document.getElementById('vmap-markers');
   const tooltipEl = document.getElementById('vmap-poi-tooltip');
 
@@ -126,9 +124,9 @@ const POI_NOTES = {
   let isolatedBuckets = new Set(); // when non-empty, only these buckets show, overriding the slider
 
   try {
-    const [basemap, dissolved, districts, centre, unitStatsCsv, populationCsv, poi] = await Promise.all([
+    const [basemap, housing, districts, centre, unitStatsCsv, populationCsv, poi] = await Promise.all([
       fetch('data/base-map-vienna.geojson').then(r => { if(!r.ok) throw new Error('base map fetch failed'); return r.json(); }),
-      fetch('data/Dissolved.geojson').then(r => { if(!r.ok) throw new Error('dissolved fetch failed'); return r.json(); }),
+      fetch('data/social-housing-vienna.geojson').then(r => { if(!r.ok) throw new Error('housing fetch failed'); return r.json(); }),
       fetch('data/bezirksgrenzen.geojson').then(r => { if(!r.ok) throw new Error('districts fetch failed'); return r.json(); }),
       fetch('data/CentrePoint.geojson').then(r => { if(!r.ok) throw new Error('centre point fetch failed'); return r.json(); }),
       fetch('data/vienna-housing-units.csv').then(r => { if(!r.ok) throw new Error('unit stats fetch failed'); return r.text(); }),
@@ -216,36 +214,18 @@ const POI_NOTES = {
         .attr('d', `M${cx - s},${cy} L${cx + s},${cy} M${cx},${cy - s} L${cx},${cy + s}`);
     }
 
-    // --- municipal housing: dissolved (default) + decade-by-decade (lazy) ---
-    // Dissolved.geojson merges every footprint into one outline — a single
-    // path is far cheaper to pan/zoom than the full per-decade breakdown,
-    // so it's the default view. The heavier dataset is only fetched once
-    // "Colour coded by decade built" is actually switched on.
-    dissolvedLayer.append('path')
-      .attr('class', 'vmap-house-path')
-      .attr('fill', YELLOW)
-      .style('filter', `drop-shadow(0 0 2.5px ${YELLOW})`)
-      .attr('d', dissolved.features.map(f => path(f)).filter(Boolean).join(' '));
-    housingLayer.style('display', 'none');
+    // --- social housing: the hero layer ---
+    // Buildings are only ever shown/hidden a whole decade-bucket at a time
+    // (the timeline slider), so there's no need for one DOM element per
+    // building — group by bucket and merge each group into one path.
+    housing.features.forEach(f => { f._bucket = bucketIndex(f.properties.decade); });
+    const bucketGroups = d3.groups(housing.features, f => f._bucket).sort((a, b) => a[0] - b[0]);
 
-    let housingPaths = null;
-    let decadeLayerPromise = null;
-    function ensureDecadeLayer(){
-      if (!decadeLayerPromise){
-        decadeLayerPromise = fetch('data/social-housing-vienna.geojson')
-          .then(r => { if(!r.ok) throw new Error('housing fetch failed'); return r.json(); })
-          .then(housing => {
-            housing.features.forEach(f => { f._bucket = bucketIndex(f.properties.decade); });
-            const bucketGroups = d3.groups(housing.features, f => f._bucket).sort((a, b) => a[0] - b[0]);
-            housingPaths = housingLayer.selectAll('path')
-              .data(bucketGroups)
-              .join('path')
-              .attr('class', 'vmap-house-path')
-              .attr('d', ([, feats]) => feats.map(f => path(f)).filter(Boolean).join(' '));
-          });
-      }
-      return decadeLayerPromise;
-    }
+    const housingPaths = housingLayer.selectAll('path')
+      .data(bucketGroups)
+      .join('path')
+      .attr('class', 'vmap-house-path')
+      .attr('d', ([, feats]) => feats.map(f => path(f)).filter(Boolean).join(' '));
 
     // --- points of interest: landmark buildings, hover for details ---
     // Geometry is each building's own footprint, so the marker sits at its
@@ -301,16 +281,14 @@ const POI_NOTES = {
     function render(){
       const cutoff = +slider.value;
       const isolating = isolatedBuckets.size > 0;
-      if (housingPaths){
-        housingPaths.each(function([bucket]){
-          const show = isolating ? isolatedBuckets.has(bucket) : bucket <= cutoff;
-          const color = timelineColor(bucket);
-          d3.select(this)
-            .style('display', show ? null : 'none')
-            .attr('fill', color)
-            .style('filter', show ? `drop-shadow(0 0 2.5px ${color})` : null);
-        });
-      }
+      housingPaths.each(function([bucket]){
+        const show = isolating ? isolatedBuckets.has(bucket) : bucket <= cutoff;
+        const color = timelineColor(bucket);
+        d3.select(this)
+          .style('display', show ? null : 'none')
+          .attr('fill', color)
+          .style('filter', show ? `drop-shadow(0 0 4px ${color})` : null);
+      });
       decadeReadout.textContent = isolating
         ? `${isolatedBuckets.size} decade${isolatedBuckets.size > 1 ? 's' : ''} isolated`
         : DECADE_BUCKETS[cutoff];
@@ -377,21 +355,7 @@ const POI_NOTES = {
       isolatedBuckets.clear(); // dragging the timeline always returns to cumulative mode
       render();
     });
-    decadeToggle.addEventListener('change', async () => {
-      decadeBreakdownEl.classList.toggle('is-disabled', !decadeToggle.checked);
-      if (decadeToggle.checked){
-        loadingEl.textContent = 'Loading decade-by-decade data…';
-        loadingEl.style.display = 'flex';
-        await ensureDecadeLayer();
-        loadingEl.style.display = 'none';
-        dissolvedLayer.style('display', 'none');
-        housingLayer.style('display', null);
-      } else {
-        housingLayer.style('display', 'none');
-        dissolvedLayer.style('display', null);
-      }
-      render();
-    });
+    decadeToggle.addEventListener('change', render);
     decadeChips.forEach(chip => {
       chip.addEventListener('click', () => {
         const bucket = +chip.dataset.bucket;
