@@ -18,7 +18,7 @@
 
 .vmap-base-path{
   fill:none;
-  stroke:rgba(245,244,240,0.05);
+  stroke:rgba(245,244,240,0.08);
   stroke-width:0.4;
   vector-effect:non-scaling-stroke;
   shape-rendering:optimizeSpeed;
@@ -257,5 +257,5 @@
   /* basemap context lines otherwise compete with the housing polygons on
      small, low-DPI screens — fade it back further and let the glow do
      the work of separating buildings from the street grid */
-  .vmap-base-path{fill:none;stroke:rgba(245,244,240,0.035);stroke-width:0.25;}
+  .vmap-base-path{fill:none;stroke:rgba(245,244,240,0.06);stroke-width:0.3;}
 }
