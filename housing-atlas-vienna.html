@@ -39,9 +39,22 @@
       <div class="vmap-panel vmap-panel--legend">
         <h4>Legend</h4>
         <div id="vmap-legend"></div>
-        <div class="vmap-mode-toggle">
-          <button class="vmap-mode-btn is-active" data-mode="single">All Social Housing</button>
-          <button class="vmap-mode-btn" data-mode="timeline">Timeline</button>
+        <div class="vmap-layer-list">
+          <div class="vmap-layer-active">
+            <span class="vmap-layer-name">Municipal Housing</span>
+            <label class="vmap-layer-sub">
+              <input type="checkbox" id="vmap-decade-toggle" />
+              Colour coded by decade built
+            </label>
+          </div>
+          <label class="vmap-layer-toggle is-disabled">
+            <input type="checkbox" disabled />
+            Current Housing Development Projects <em>(coming soon)</em>
+          </label>
+          <label class="vmap-layer-toggle is-disabled">
+            <input type="checkbox" disabled />
+            Co-Operative Housing <em>(coming soon)</em>
+          </label>
         </div>
         <div class="vmap-decade-breakdown">
           <div class="vmap-decade-breakdown-head">
@@ -52,11 +65,21 @@
           <ul class="vmap-decade-list" id="vmap-decade-list"></ul>
         </div>
       </div>
+    </div>
 
-      <div class="vmap-panel vmap-panel--stats">
-        <h4>Statistics</h4>
-        <p class="vmap-units-line">Housing units built: <strong id="vmap-units">0</strong></p>
-        <p class="vmap-units-line">Vienna population: <strong id="vmap-population">0</strong></p>
+    <div class="vmap-controls">
+      <div class="vmap-controls-timeline">
+        <div class="vmap-controls-top">
+          <span class="vmap-decade-label">Built by</span>
+          <span id="vmap-decade-readout">2010–Today</span>
+        </div>
+        <input type="range" id="vmap-slider" min="0" max="12" step="1" value="12" />
+        <div class="vmap-tick-labels" id="vmap-ticks"></div>
+        <div class="vmap-era-bands" id="vmap-era-bands"></div>
+      </div>
+      <div class="vmap-controls-stats">
+        <div class="vmap-stat"><span>Units built</span><strong id="vmap-units">0</strong></div>
+        <div class="vmap-stat"><span>Population</span><strong id="vmap-population">0</strong></div>
         <div class="vmap-chart-wrap" id="vmap-chart-wrap">
           <div class="vmap-unit-chart" id="vmap-unit-bars"></div>
           <svg class="vmap-pop-svg" id="vmap-pop-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -64,17 +87,7 @@
           </svg>
           <span class="vmap-pop-dot" id="vmap-pop-dot"></span>
         </div>
-        <p class="vmap-chart-caption">Units built (bars) · population (line)</p>
       </div>
-    </div>
-
-    <div class="vmap-controls">
-      <div class="vmap-controls-top">
-        <span class="vmap-decade-label">Built by</span>
-        <span id="vmap-decade-readout">2000–2010</span>
-      </div>
-      <input type="range" id="vmap-slider" min="0" max="11" step="1" value="11" />
-      <div class="vmap-tick-labels" id="vmap-ticks"></div>
     </div>
   </section>
 
@@ -87,91 +100,97 @@
     <section class="geo-content-sections">
       <article class="geo-panel geo-desc geo-content-block" id="history">
         <p class="geo-eyebrow">01</p>
-        <h2>History</h2>
+        <h2>Temporal Dimension</h2>
 
-        <div class="geo-era-timeline">
+        <div class="geo-era-gallery">
 
-          <div class="geo-era">
-            <p class="geo-era-range">Pre-1918</p>
-            <h3>Imperial Vienna</h3>
-            <p class="geo-era-desc">Voting rights tied to minimum tax requirements, benefiting the wealthy and disenfranchising most of the working class. Tuberculosis spreads aggressively through poor housing — tenement-slums, shack-communities, and workers subletting a mattress for a few hours a day.</p>
+          <div class="geo-era-card">
+            <img src="assets/img/ImperialVienna.jpg" alt="Imperial Vienna" />
+            <div class="geo-era-body">
+              <p class="geo-era-range">Pre-1918</p>
+              <h3>Imperial Vienna</h3>
+              <p class="geo-era-desc">Voting rights tied to minimum tax requirements, benefiting the wealthy and disenfranchising most of the working class. Tuberculosis spreads aggressively through poor housing — tenement-slums, shack-communities, and workers subletting a mattress for a few hours a day.</p>
+            </div>
           </div>
 
-          <div class="geo-era">
-            <p class="geo-era-range">1919–1934</p>
-            <h3>Red Vienna &amp; Palaces for the Workers</h3>
-            <div class="geo-yr"><span class="geo-yr-n">1919</span><p>End of WWI, fall of the Habsburg Monarchy, Republic of Austria proclaimed. Social Democratic Party wins Vienna — start of "Red Vienna".</p></div>
-            <div class="geo-yr"><span class="geo-yr-n">1922</span><p>Vienna becomes a federal state with fiscal sovereignty.</p></div>
-            <div class="geo-yr"><span class="geo-yr-n">1923</span><p>"Breitner Tax" (housing &amp; luxury tax) introduced. First municipal programme: 25,000 flats in five years.</p></div>
-            <div class="geo-yr"><span class="geo-yr-n">1925</span><p>Metzleinstalerhof completed — first municipal housing estate.</p></div>
-            <div class="geo-yr"><span class="geo-yr-n">1927</span><p>Second municipal housing programme initiated.</p></div>
-            <div class="geo-yr"><span class="geo-yr-n">1930</span><p>Karl-Marx-Hof superblock completed.</p></div>
+          <div class="geo-era-card">
+            <img src="assets/img/RedVienna.jpg" alt="Red Vienna" />
+            <div class="geo-era-body">
+              <p class="geo-era-range">1919–1934</p>
+              <h3>Red Vienna &amp; Palaces for the Workers</h3>
+              <div class="geo-yr"><span class="geo-yr-n">1919</span><p>End of WWI, fall of the Habsburg Monarchy, Republic of Austria proclaimed. Social Democratic Party wins Vienna — start of "Red Vienna".</p></div>
+              <div class="geo-yr"><span class="geo-yr-n">1922</span><p>Vienna becomes a federal state with fiscal sovereignty.</p></div>
+              <div class="geo-yr"><span class="geo-yr-n">1923</span><p>"Breitner Tax" (housing &amp; luxury tax) introduced. First municipal programme: 25,000 flats in five years.</p></div>
+              <div class="geo-yr"><span class="geo-yr-n">1925</span><p>Metzleinstalerhof completed — first municipal housing estate.</p></div>
+              <div class="geo-yr"><span class="geo-yr-n">1927</span><p>Second municipal housing programme initiated.</p></div>
+              <div class="geo-yr"><span class="geo-yr-n">1930</span><p>Karl-Marx-Hof superblock completed.</p></div>
+            </div>
           </div>
 
-          <div class="geo-era">
-            <p class="geo-era-range">1933–1945</p>
-            <h3>Austro-Fascist &amp; National Socialist Era</h3>
-            <div class="geo-yr"><span class="geo-yr-n">1933</span><p>Chancellor Engelbert Dollfuß exploits a political crisis to suspend democracy and ban opposition parties.</p></div>
-            <div class="geo-yr"><span class="geo-yr-n">1934</span><p>Austrian Civil War. Social Democratic Party banned — start of the Austro-Fascist, then National Socialist (Anschluss) era. Municipal housing construction nearly ceases.</p></div>
+          <div class="geo-era-card">
+            <img src="assets/img/SecondWorldWar.jfif" alt="Austro-Fascism, National Socialism and the Second World War" />
+            <div class="geo-era-body">
+              <p class="geo-era-range">1933–1945</p>
+              <h3>Austro-Fascism, National Socialism &amp; the Second World War</h3>
+              <div class="geo-yr"><span class="geo-yr-n">1933</span><p>Chancellor Engelbert Dollfuß exploits a political crisis to suspend democracy and ban opposition parties.</p></div>
+              <div class="geo-yr"><span class="geo-yr-n">1934</span><p>Austrian Civil War. Social Democratic Party banned — start of the Austro-Fascist, then National Socialist (Anschluss) era. Municipal housing construction nearly ceases.</p></div>
+              <div class="geo-yr"><span class="geo-yr-n">1945</span><p>The Second World War ends. Second Austrian Republic formed, Social Democrats return to power in Vienna. Over 20% of housing stock destroyed; priority on rapid rebuilding.</p></div>
+            </div>
           </div>
 
-          <div class="geo-era">
-            <p class="geo-era-range">1939–1945</p>
-            <h3>Second World War</h3>
-            <div class="geo-yr"><span class="geo-yr-n">1939–45</span><p>World War II.</p></div>
-            <div class="geo-yr"><span class="geo-yr-n">1945</span><p>War ends, Second Austrian Republic formed, Social Democrats return to power in Vienna. Over 20% of housing stock destroyed; priority on rapid rebuilding.</p></div>
+          <div class="geo-era-card">
+            <img src="assets/img/PostWar.jpg" alt="Post-War Reconstruction" />
+            <div class="geo-era-body">
+              <p class="geo-era-range">1945–1970s</p>
+              <h3>Post-War Reconstruction &amp; Functionalism</h3>
+              <div class="geo-yr"><span class="geo-yr-n">1951</span><p>With Swedish financial aid, Per-Albin-Hansson-Siedlung — the first postwar municipal estate — is completed.</p></div>
+              <div class="geo-yr"><span class="geo-yr-n">1954</span><p>Housing Promotion Act (Wohnbauförderungsgesetz) passed, channelling public funds and levies into municipal/cooperative housing.</p></div>
+              <div class="geo-yr"><span class="geo-yr-n">1969</span><p>The 100,000th municipal flat is completed.</p></div>
+              <div class="geo-yr"><span class="geo-yr-n">1971</span><p>Großfeldsiedlung completed — Vienna's largest municipal estate, 5,500+ units.</p></div>
+            </div>
           </div>
 
-          <div class="geo-era">
-            <p class="geo-era-range">1945–1970s</p>
-            <h3>Post-War Reconstruction &amp; Functionalism</h3>
-            <div class="geo-yr"><span class="geo-yr-n">1951</span><p>With Swedish financial aid, Per-Albin-Hansson-Siedlung — the first postwar municipal estate — is completed.</p></div>
-            <div class="geo-yr"><span class="geo-yr-n">1954</span><p>Housing Promotion Act (Wohnbauförderungsgesetz) passed, channelling public funds and levies into municipal/cooperative housing.</p></div>
-            <div class="geo-yr"><span class="geo-yr-n">1969</span><p>The 100,000th municipal flat is completed.</p></div>
-            <div class="geo-yr"><span class="geo-yr-n">1971</span><p>Großfeldsiedlung completed — Vienna's largest municipal estate, 5,500+ units.</p></div>
+          <div class="geo-era-card">
+            <img src="assets/img/Market.jpg" alt="Market Regulation and Subsidised Housing" />
+            <div class="geo-era-body">
+              <p class="geo-era-range">1970s–2000s</p>
+              <h3>Market Regulation, Subsidised Housing &amp; the Smart City</h3>
+              <div class="geo-yr"><span class="geo-yr-n">1979</span><p>Limited-Profit Housing Act (WGG) passed — caps rents at cost, requires surplus reinvested into affordable homes.</p></div>
+              <div class="geo-yr"><span class="geo-yr-n">1984</span><p>Wohnfonds Wien founded to procure and stockpile real estate for affordable housing.</p></div>
+              <div class="geo-yr"><span class="geo-yr-n">1995</span><p>Austria joins the European Union.</p></div>
+              <div class="geo-yr"><span class="geo-yr-n">2004</span><p>Last municipal estate completed; subsidised housing shifts entirely to non-profit/limited-profit developers.</p></div>
+            </div>
           </div>
 
-          <div class="geo-era">
-            <p class="geo-era-range">1970s–2000s</p>
-            <h3>Market Regulation, Subsidised Housing &amp; the Smart City</h3>
-            <div class="geo-yr"><span class="geo-yr-n">1979</span><p>Limited-Profit Housing Act (WGG) passed — caps rents at cost, requires surplus reinvested into affordable homes.</p></div>
-            <div class="geo-yr"><span class="geo-yr-n">1984</span><p>Wohnfonds Wien founded to procure and stockpile real estate for affordable housing.</p></div>
-            <div class="geo-yr"><span class="geo-yr-n">1995</span><p>Austria joins the European Union.</p></div>
-            <div class="geo-yr"><span class="geo-yr-n">2004</span><p>Last municipal estate completed; subsidised housing shifts entirely to non-profit/limited-profit developers.</p></div>
-          </div>
-
-          <div class="geo-era">
-            <p class="geo-era-range">2010s–Today</p>
-            <h3>Renaissance of Municipal Housing</h3>
-            <div class="geo-yr"><span class="geo-yr-n">2015</span><p>Gemeindebau NEU announced, ending the 11-year freeze on direct municipal construction.</p></div>
-            <div class="geo-yr"><span class="geo-yr-n">2019</span><p>Barbara-Prammer-Hof completed — first of the new generation of municipal housing.</p></div>
-            <div class="geo-yr"><span class="geo-yr-n">2026</span><p>Allocation System Reform (Wohnungsvergabe NEU) and increased Housing Contribution Tax. 4,900 residents now live in Gemeindebau NEU homes.</p></div>
+          <div class="geo-era-card">
+            <img src="assets/img/Renaissance.jpg" alt="Renaissance of Municipal Housing" />
+            <div class="geo-era-body">
+              <p class="geo-era-range">2010s–Today</p>
+              <h3>Renaissance of Municipal Housing</h3>
+              <div class="geo-yr"><span class="geo-yr-n">2015</span><p>Gemeindebau NEU announced, ending the 11-year freeze on direct municipal construction.</p></div>
+              <div class="geo-yr"><span class="geo-yr-n">2019</span><p>Barbara-Prammer-Hof completed — first of the new generation of municipal housing.</p></div>
+              <div class="geo-yr"><span class="geo-yr-n">2026</span><p>Allocation System Reform (Wohnungsvergabe NEU) and increased Housing Contribution Tax. 4,900 residents now live in Gemeindebau NEU homes.</p></div>
+            </div>
           </div>
 
         </div>
       </article>
 
-      <article class="geo-panel geo-desc geo-content-block" id="current-state">
+      <article class="geo-panel geo-desc geo-content-block" id="systems-analysis">
         <p class="geo-eyebrow">02</p>
-        <h2>Current State</h2>
+        <h2>Governance & Systems Dimension</h2>
         <p>Add your text here.</p>
       </article>
-	  
-	  <article class="geo-panel geo-desc geo-content-block" id="systems-analysis">
+
+      <article class="geo-panel geo-desc geo-content-block" id="space-form">
         <p class="geo-eyebrow">03</p>
-        <h2>Governance & System Analysis</h2>
+        <h2>Space & Form Dimension</h2>
         <p>Add your text here.</p>
       </article>
 
       <article class="geo-panel geo-desc geo-content-block" id="challenges">
         <p class="geo-eyebrow">04</p>
-        <h2>Challenges</h2>
-        <p>Add your text here.</p>
-      </article>
-
-      <article class="geo-panel geo-desc geo-content-block" id="future">
-        <p class="geo-eyebrow">05</p>
-        <h2>Future</h2>
+        <h2>Ongoing Challenges & the Future</h2>
         <p>Add your text here.</p>
       </article>
     </section>

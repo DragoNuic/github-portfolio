@@ -281,18 +281,30 @@
 .geo-content-block p{font-size:.95rem;line-height:1.7;color:var(--geo-ink-soft);margin:0 0 14px;}
 .geo-content-block p:last-child{margin-bottom:0;}
 
-/* Era timeline: horizontal scroll of era columns (desktop), each holding
-   a stack of year entries tagged Politics/Stadt. Vertical stack on mobile. */
-.geo-era-timeline{
-  display:flex;gap:1px;background:var(--geo-line);border:1px solid var(--geo-line);
-  overflow-x:auto;margin:8px 0 32px;
+/* Era gallery: wrapping cards, each with an image and a connector dot on
+   its top edge so the row reads as a chronological chain even after wrap. */
+.geo-era-gallery{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:28px;
+  margin:24px 0 32px;
 }
-.geo-era{background:var(--geo-surface);padding:20px;min-width:230px;flex:1 0 230px;}
+.geo-era-card{
+  background:var(--geo-surface);border:1px solid var(--geo-line);
+  position:relative;padding-top:14px;
+}
+.geo-era-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--geo-line);
+}
+.geo-era-card::after{
+  content:'';position:absolute;top:-4px;left:20px;width:10px;height:10px;
+  border-radius:50%;background:var(--geo-accent);box-shadow:0 0 0 3px var(--geo-surface);
+}
+.geo-era-card img{display:block;width:100%;height:160px;object-fit:cover;margin-top:8px;}
+.geo-era-body{padding:20px;}
 .geo-era-range{
   font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--geo-accent);
   letter-spacing:.04em;margin:0 0 6px;
 }
-.geo-era h3{font-family:'Archivo',sans-serif;font-weight:800;font-size:1rem;margin:0 0 14px;line-height:1.25;}
+.geo-era-card h3{font-family:'Archivo',sans-serif;font-weight:800;font-size:1rem;margin:0 0 14px;line-height:1.25;}
 .geo-era-desc{font-size:.85rem;line-height:1.6;color:var(--geo-ink-soft);margin:0;}
 .geo-yr{margin:0 0 20px;}
 .geo-yr:last-child{margin-bottom:0;}
@@ -301,10 +313,6 @@
   font-weight:700;color:var(--geo-ink);margin-bottom:2px;
 }
 .geo-yr p{font-size:.83rem;line-height:1.55;color:var(--geo-ink-soft);margin:0;}
-@media (max-width:760px){
-  .geo-era-timeline{flex-direction:column;overflow-x:visible;}
-  .geo-era{min-width:0;}
-}
 
 .geo-btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px;}
 .geo-btn{

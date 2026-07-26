@@ -7,33 +7,28 @@
 
 const DECADE_BUCKETS = [
   'Pre-1900','1900–1910','1910–1920','1920–1930','1930–1940','1940–1950',
-  '1950–1960','1960–1970','1970–1980','1980–1990','1990–2000','2000–2010'
+  '1950–1960','1960–1970','1970–1980','1980–1990','1990–2000','2000–2010','2010–Today'
 ];
 
 const YELLOW = '#F2B705';
-const TIMELINE_STOPS = ['#33517A', '#3E7C87', '#5C9E6F', '#A3AE4E', '#F2B705'];
 
-function lerpColor(stops, t){
-  t = Math.max(0, Math.min(1, t));
-  const n = stops.length - 1;
-  const seg = Math.min(n - 1, Math.floor(t * n));
-  const localT = (t * n) - seg;
-  const c1 = hexToRgb(stops[seg]), c2 = hexToRgb(stops[seg + 1]);
-  const r = Math.round(c1.r + (c2.r - c1.r) * localT);
-  const g = Math.round(c1.g + (c2.g - c1.g) * localT);
-  const b = Math.round(c1.b + (c2.b - c1.b) * localT);
-  return `rgb(${r},${g},${b})`;
-}
-function hexToRgb(hex){
-  const v = parseInt(hex.slice(1), 16);
-  return { r: (v >> 16) & 255, g: (v >> 8) & 255, b: v & 255 };
-}
+// Decade colouring follows the History section's eras, not a continuous
+// gradient — each era's decades share one colour.
+const ERA_BANDS = [
+  { name: 'Imperial Vienna', color: '#55555E', from: 0, to: 2 },
+  { name: 'Red Vienna', color: '#C0392B', from: 3, to: 4 },
+  { name: 'Austro-Fascism, National Socialism & WWII', color: '#4A3728', from: 5, to: 5 },
+  { name: 'Post-War Reconstruction & Revival', color: '#3E7C87', from: 6, to: 8 },
+  { name: 'Shift to Subsidised Housing', color: '#5C9E6F', from: 9, to: 11 },
+  { name: 'New Municipal Renaissance', color: '#F2B705', from: 12, to: 12 }
+];
 function timelineColor(bucketIdx){
-  return lerpColor(TIMELINE_STOPS, bucketIdx / (DECADE_BUCKETS.length - 1));
+  const era = ERA_BANDS.find(e => bucketIdx >= e.from && bucketIdx <= e.to);
+  return era ? era.color : YELLOW;
 }
 function bucketIndex(decade){
   if (decade == null || decade < 1900) return 0;
-  return Math.min(11, Math.floor((decade - 1900) / 10) + 1);
+  return Math.min(12, Math.floor((decade - 1900) / 10) + 1);
 }
 
 // CSV columns: decade,buildings,units — one row per decade bucket start year.
@@ -70,6 +65,7 @@ function bucketEndYear(bucketIdx){
   return bucketIdx === 0 ? 1900 : 1900 + bucketIdx * 10;
 }
 function shortDecadeLabel(l){
+  if (l === '2010–Today') return 'Today';
   return l.replace('–2010', 's').replace(/^(\d{4})–\d{4}$/, '$1s');
 }
 
@@ -95,7 +91,8 @@ const POI_NOTES = {
   const decadeReadout = document.getElementById('vmap-decade-readout');
   const slider = document.getElementById('vmap-slider');
   const legendEl = document.getElementById('vmap-legend');
-  const modeButtons = document.querySelectorAll('.vmap-mode-btn');
+  const decadeToggle = document.getElementById('vmap-decade-toggle');
+  const eraBandsEl = document.getElementById('vmap-era-bands');
   const ticksEl = document.getElementById('vmap-ticks');
   const unitsEl = document.getElementById('vmap-units');
   const unitBarsEl = document.getElementById('vmap-unit-bars');
@@ -108,6 +105,10 @@ const POI_NOTES = {
   const tooltipEl = document.getElementById('vmap-poi-tooltip');
 
   ticksEl.innerHTML = DECADE_BUCKETS.map(l => `<span>${shortDecadeLabel(l)}</span>`).join('');
+
+  eraBandsEl.innerHTML = ERA_BANDS.map(e =>
+    `<span class="vmap-era-band" style="flex:${e.to - e.from + 1};background:${e.color}" title="${e.name}">${e.name}</span>`
+  ).join('');
 
   decadeListEl.innerHTML = DECADE_BUCKETS.map((l, i) => `
     <li><button type="button" class="vmap-decade-chip" data-bucket="${i}">
@@ -131,8 +132,18 @@ const POI_NOTES = {
     ]);
 
     const unitStats = parseUnitStatsCsv(unitStatsCsv);
-    const maxUnits = Math.max(...unitStats.map(s => s.units));
-    unitBarsEl.innerHTML = DECADE_BUCKETS.map(() => '<span class="vmap-unit-bar"></span>').join('');
+    // Units currently under construction, not yet completed — shown as a
+    // second, striped segment stacked on the most recent decade's bar.
+    const UNDER_CONSTRUCTION = { bucket: DECADE_BUCKETS.length - 1, units: 1000 };
+    const maxUnits = Math.max(
+      ...unitStats.map(s => s.units),
+      unitStats[UNDER_CONSTRUCTION.bucket].units + UNDER_CONSTRUCTION.units
+    );
+    unitBarsEl.innerHTML = DECADE_BUCKETS.map((_, i) => `
+      <span class="vmap-unit-bar">
+        <span class="vmap-unit-bar-built"></span>
+        ${i === UNDER_CONSTRUCTION.bucket ? '<span class="vmap-unit-bar-uc" title="~1,000 units under construction"></span>' : ''}
+      </span>`).join('');
     const unitBars = unitBarsEl.querySelectorAll('.vmap-unit-bar');
 
     // Population line: interpolated onto each bucket's end year, then
@@ -286,9 +297,19 @@ const POI_NOTES = {
       unitBars.forEach((bar, idx) => {
         const isBuilt = idx <= cutoff;
         if (isBuilt) cumulativeUnits += unitStats[idx].units;
-        const h = maxUnits ? Math.max(3, Math.round((unitStats[idx].units / maxUnits) * 100)) : 3;
-        bar.style.height = h + '%';
-        bar.classList.toggle('is-active', isBuilt);
+        const builtPct = maxUnits ? Math.max(3, (unitStats[idx].units / maxUnits) * 100) : 3;
+        const builtEl = bar.querySelector('.vmap-unit-bar-built');
+        builtEl.style.height = builtPct + '%';
+        builtEl.classList.toggle('is-active', isBuilt);
+
+        const ucEl = bar.querySelector('.vmap-unit-bar-uc');
+        if (ucEl){
+          ucEl.style.display = isBuilt ? 'block' : 'none';
+          if (isBuilt && maxUnits){
+            ucEl.style.bottom = builtPct + '%';
+            ucEl.style.height = (UNDER_CONSTRUCTION.units / maxUnits * 100) + '%';
+          }
+        }
       });
       unitsEl.textContent = cumulativeUnits.toLocaleString('en-GB');
     }
@@ -307,9 +328,9 @@ const POI_NOTES = {
         legendEl.innerHTML = `
           <div class="vmap-legend-row"><span class="vmap-swatch" style="background:${YELLOW}"></span> Municipal Housing</div>`;
       } else {
-        legendEl.innerHTML = `
-          <div class="vmap-gradient" style="background:linear-gradient(90deg, ${TIMELINE_STOPS.join(',')})"></div>
-          <div class="vmap-gradient-labels"><span>Pre-1900</span><span>2000s</span></div>`;
+        legendEl.innerHTML = ERA_BANDS.map(e =>
+          `<div class="vmap-legend-row"><span class="vmap-swatch" style="background:${e.color}"></span> ${e.name}</div>`
+        ).join('');
       }
     }
 
@@ -317,13 +338,9 @@ const POI_NOTES = {
       isolatedBuckets.clear(); // dragging the timeline always returns to cumulative mode
       render();
     });
-    modeButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        modeButtons.forEach(b => b.classList.remove('is-active'));
-        btn.classList.add('is-active');
-        colorMode = btn.dataset.mode;
-        render();
-      });
+    decadeToggle.addEventListener('change', () => {
+      colorMode = decadeToggle.checked ? 'timeline' : 'single';
+      render();
     });
     decadeChips.forEach(chip => {
       chip.addEventListener('click', () => {
