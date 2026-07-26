@@ -17,8 +17,8 @@
 .vmap-stage.is-ready #vmap-svg{opacity:1;}
 
 .vmap-base-path{
-  fill:rgba(245,244,240,0.1;
-  stroke:rgba(245,244,240,0.3);
+  fill:none;
+  stroke:rgba(245,244,240,0.05);
   stroke-width:0.4;
   vector-effect:non-scaling-stroke;
   shape-rendering:optimizeSpeed;
