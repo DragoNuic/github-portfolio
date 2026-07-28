@@ -311,6 +311,20 @@
 .geo-collapse-toggle[aria-expanded="true"] .geo-collapse-arrow{transform:rotate(180deg);}
 .geo-collapse-toggle[aria-expanded="true"] .geo-collapse-toggle-text::after{content:" (show less)";}
 
+.geo-jump-nav{
+  display:flex;flex-wrap:wrap;gap:8px;
+  padding:14px 0;margin:28px 0;
+  border-top:1px solid var(--geo-line);border-bottom:1px solid var(--geo-line);
+  position:sticky;top:73px;z-index:5;background:var(--geo-bg);
+}
+.geo-jump-nav a{
+  font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.02em;
+  text-decoration:none;color:var(--geo-ink-soft);
+  padding:8px 14px;border:1px solid var(--geo-line);border-radius:20px;
+  transition:.18s;white-space:nowrap;
+}
+.geo-jump-nav a:hover{border-color:var(--geo-accent);color:var(--geo-accent);}
+
 /* Vienna in Numbers — KPI cards, segmented bars, party timeline */
 .geo-stats-grid{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;
