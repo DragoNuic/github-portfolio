@@ -22,7 +22,10 @@
   <section class="vmap-stage" id="vmap-stage">
     <p class="vmap-loading" id="vmap-loading">Loading map layers…</p>
 
-    <div class="vmap-info-bar">Tip: zoom in on the map to see individual building footprints more clearly.</div>
+    <div class="vmap-info-bar">
+      <span>Tip: zoom in on the map to see individual building footprints more clearly.</span>
+      <button type="button" id="vmap-theme-toggle" class="vmap-theme-toggle">☀ Light mode</button>
+    </div>
 
     <svg id="vmap-svg" style="view-transition-name:vienna-thumb;"></svg>
     <div id="vmap-markers"></div>
@@ -105,8 +108,18 @@
     </div>
 
     <section class="geo-content-sections">
-      <article class="geo-panel geo-desc geo-content-block" id="vienna-numbers">
+      <article class="geo-panel geo-desc geo-content-block" id="housing-dictionary">
         <p class="geo-eyebrow">01</p>
+        <h2>Viennese Social Housing Dictionary</h2>
+        <ul>
+          <li><strong>Municipal Housing (Gemeindebau):</strong> owned and directly managed by the City of Vienna.</li>
+          <li><strong>Subsidised Housing (Genossenschaftswohnungen):</strong> built and managed by non-profit or limited-profit developers, funded through the Housing Promotion Fund.</li>
+          <li><strong>Subsidised Renovated Buildings:</strong> older, privately owned buildings renovated with WohnFonds Wien grants and loans, in exchange for regulated rents and tenant protections.</li>
+        </ul>
+      </article>
+
+      <article class="geo-panel geo-desc geo-content-block" id="vienna-numbers">
+        <p class="geo-eyebrow">02</p>
         <h2>Vienna in Numbers</h2>
 
         <div class="geo-stats-grid">
@@ -174,13 +187,19 @@
         <div class="geo-segbar-block">
           <p class="geo-segbar-title">Ruling party in Vienna, since 1919</p>
           <div class="geo-party-row">
-            <span class="geo-party-band" style="flex:15;background:#C0392B" title="1919–1934: SDAP (Social Democrats) — Red Vienna">1919</span>
+            <span class="geo-party-band" style="flex:15;background:#C0392B" title="1919–1934: SDAP (Social Democrats) — Red Vienna"></span>
             <span class="geo-party-band" style="flex:11;background:#3A3A3A" title="1934–1945: No elected government — Austrofascist / Nazi rule"></span>
-            <span class="geo-party-band" style="flex:65;background:#C0392B" title="1945–2010: SPÖ — single-party rule">1945</span>
-            <span class="geo-party-band" style="flex:10;background:linear-gradient(90deg,#C0392B 50%,#5C9E6F 50%)" title="2010–2020: SPÖ–Grüne coalition"></span>
-            <span class="geo-party-band" style="flex:6;background:linear-gradient(90deg,#C0392B 50%,#C13B8C 50%)" title="2020–today: SPÖ–NEOS coalition"></span>
+            <span class="geo-party-band" style="flex:65;background:#C0392B" title="1945–2010: SPÖ — single-party rule"></span>
+            <span class="geo-party-band" style="flex:10;background:linear-gradient(180deg,#C0392B 50%,#5C9E6F 50%)" title="2010–2020: SPÖ–Grüne coalition"></span>
+            <span class="geo-party-band" style="flex:6;background:linear-gradient(180deg,#C0392B 50%,#C13B8C 50%)" title="2020–today: SPÖ–NEOS coalition"></span>
           </div>
-          <div class="geo-party-years"><span>1919</span><span>2026</span></div>
+          <div class="geo-party-years">
+            <span style="flex:15">1919–1934</span>
+            <span style="flex:11">1934–1945</span>
+            <span style="flex:65">1945–2010</span>
+            <span style="flex:10">2010–2020</span>
+            <span style="flex:6">2020–2026</span>
+          </div>
           <div class="geo-segbar-legend">
             <span class="geo-segbar-legend-item"><span class="geo-segbar-swatch" style="background:#C0392B"></span>SPÖ / SDAP</span>
             <span class="geo-segbar-legend-item"><span class="geo-segbar-swatch" style="background:#3A3A3A"></span>No elections (1934–1945)</span>
@@ -189,19 +208,10 @@
           </div>
           <p class="geo-segbar-note">The SPÖ (and its predecessor, the SDAP) has governed Vienna almost continuously since 1919 — interrupted only by the 1934–1945 authoritarian period — for over 100 of the last 107 years, recently in coalition first with the Greens, then with NEOS.</p>
         </div>
-
-        <div class="geo-segbar-block">
-          <p class="geo-segbar-title">Viennese social housing system</p>
-          <ul>
-            <li><strong>Municipal Housing (Gemeindebau):</strong> owned and directly managed by the City of Vienna.</li>
-            <li><strong>Subsidised Housing (Genossenschaftswohnungen):</strong> built and managed by non-profit or limited-profit developers, funded through the Housing Promotion Fund.</li>
-            <li><strong>Subsidised Renovated Buildings:</strong> older, privately owned buildings renovated with WohnFonds Wien grants and loans, in exchange for regulated rents and tenant protections.</li>
-          </ul>
-        </div>
       </article>
 
       <article class="geo-panel geo-desc geo-content-block" id="history">
-        <p class="geo-eyebrow">02</p>
+        <p class="geo-eyebrow">03</p>
         <h2>Temporal Dimension</h2>
 
         <div class="geo-era-gallery">
@@ -271,6 +281,7 @@
               <h3>Renaissance of Municipal Housing</h3>
               <div class="geo-yr"><span class="geo-yr-n">2015</span><p>Gemeindebau NEU announced, ending the 11-year freeze on direct municipal construction.</p></div>
               <div class="geo-yr"><span class="geo-yr-n">2019</span><p>Barbara-Prammer-Hof completed — first of the new generation of municipal housing.</p></div>
+              <div class="geo-yr"><span class="geo-yr-n">2024</span><p>Wiener Wohnbau-Offensive 2024+ initiated — a new major municipal programme to expand social housing.</p></div>
               <div class="geo-yr"><span class="geo-yr-n">2026</span><p>Allocation System Reform (Wohnungsvergabe NEU) and increased Housing Contribution Tax. 4,900 residents now live in Gemeindebau NEU homes.</p></div>
             </div>
           </div>
@@ -279,7 +290,7 @@
       </article>
 
       <article class="geo-panel geo-desc geo-content-block" id="systems-analysis">
-        <p class="geo-eyebrow">03</p>
+        <p class="geo-eyebrow">04</p>
         <h2>Governance & Systems Dimension</h2>
 
         <p>Understanding social housing through the lens of governance — underlaid by a deep understanding of historical and current social and economic conditions, as well as prevailing policies and power dynamics — highlights the significance of approaching the issue of affordable housing from a firmly political perspective, emphasising municipal and state politics as well as the influence of global political trends.</p>
@@ -363,27 +374,18 @@
       </article>
 
       <article class="geo-panel geo-desc geo-content-block" id="space-form">
-        <p class="geo-eyebrow">04</p>
+        <p class="geo-eyebrow">05</p>
         <h2>Space & Form Dimension</h2>
         <p>Add your text here.</p>
       </article>
 
       <article class="geo-panel geo-desc geo-content-block" id="challenges">
-        <p class="geo-eyebrow">05</p>
+        <p class="geo-eyebrow">06</p>
         <h2>Structural Analysis: The Viennese Housing DNA</h2>
         <p>The Vienna Model is the subject of countless articles, talks, research papers, and documentaries, held up as a prime example of housing cost management and affordable housing provision. There is much to laud about the system, as well as much to critically dissect and analyse — its success in managing and ameliorating the current affordability and climate crisis is yet to be fully seen, but several conclusions can already be drawn about the defining characteristics of the Viennese social housing system:</p>
 
         <ul>
-          <li><strong>A stable ideological core, with a flexible policy overlay:</strong> the system is anchored firmly to an unchanged core set of principles and structural frameworks laid down by the Social Democrats in the 1920s, persisting to this day, around which a dynamic series of rent-control methods, planning approaches, and policy instruments have been incorporated and phased out to adjust to shifting conditions. Fundamentally, the municipal government has maintained its role as the primary landlord and predominant source of capital for affordable housing development, while insisting on and promoting its ideological values — centred on the belief that housing is a public good that should be non-commodified, affordable, widely accessible, and of high quality.
-            <div class="geo-party-row geo-party-row--compact">
-              <span class="geo-party-band" style="flex:15;background:#C0392B" title="1919–1934: SDAP — Red Vienna"></span>
-              <span class="geo-party-band" style="flex:11;background:#3A3A3A" title="1934–1945: No elected government"></span>
-              <span class="geo-party-band" style="flex:65;background:#C0392B" title="1945–2010: SPÖ — single-party rule"></span>
-              <span class="geo-party-band" style="flex:10;background:linear-gradient(90deg,#C0392B 50%,#5C9E6F 50%)" title="2010–2020: SPÖ–Grüne coalition"></span>
-              <span class="geo-party-band" style="flex:6;background:linear-gradient(90deg,#C0392B 50%,#C13B8C 50%)" title="2020–today: SPÖ–NEOS coalition"></span>
-            </div>
-            <p class="geo-segbar-note">SPÖ/SDAP in power 1919–today, interrupted only by 1934–1945; in coalition with the Greens (2010–2020), then NEOS (2020–today). See <a href="#vienna-numbers">Vienna in Numbers</a> for the full timeline.</p>
-          </li>
+          <li><strong>A stable ideological core, with a flexible policy overlay:</strong> the system is anchored firmly to an unchanged core set of principles and structural frameworks laid down by the Social Democrats in the 1920s, persisting to this day, around which a dynamic series of rent-control methods, planning approaches, and policy instruments have been incorporated and phased out to adjust to shifting conditions. Fundamentally, the municipal government has maintained its role as the primary landlord and predominant source of capital for affordable housing development, while insisting on and promoting its ideological values — centred on the belief that housing is a public good that should be non-commodified, affordable, widely accessible, and of high quality.</li>
 
           <li><strong>Enabled by Vienna's unique status as a federal state:</strong> the Viennese Model is born from a specific set of historical conditions and continued political support that has enabled it to exist and persist. What makes the Viennese case rather unique compared to other major cities is that Vienna is itself also a federal state within the Austrian federal system, holding a greater degree of political and fiscal autonomy than other major urban areas. This undoubtedly plays a major role in the ability of the Viennese social-democratic government to so thoroughly support its large and robust social housing system, and regime of private housing market regulation, despite political and systemic shifts at the national and international level.</li>
 
@@ -429,6 +431,12 @@
   <script src="https://unpkg.com/d3@7/dist/d3.min.js"></script>
   <script src="assets/js/vienna-map.js"></script>
   <script>
+    const themeToggle = document.getElementById('vmap-theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.body.classList.toggle('geo-dark');
+      themeToggle.textContent = isDark ? '☀ Light mode' : '☾ Dark mode';
+    });
+
     document.querySelectorAll('.geo-collapse-toggle').forEach(btn => {
       const target = document.getElementById(btn.dataset.target);
       if (!target) return;

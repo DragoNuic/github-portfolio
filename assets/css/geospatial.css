@@ -301,12 +301,12 @@
 
 .geo-collapse-toggle{
   display:inline-flex;align-items:center;gap:8px;margin:0 0 6px;
-  background:none;border:1px solid var(--geo-line);border-radius:2px;
+  background:var(--geo-accent);border:1px solid var(--geo-accent);border-radius:2px;
   padding:9px 16px;cursor:pointer;transition:.18s;
-  font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.02em;
-  color:var(--geo-ink);
+  font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.02em;font-weight:600;
+  color:var(--geo-accent-ink);
 }
-.geo-collapse-toggle:hover{border-color:var(--geo-accent);color:var(--geo-accent);}
+.geo-collapse-toggle:hover{filter:brightness(1.08);transform:translateY(-1px);}
 .geo-collapse-arrow{transition:transform .2s ease;}
 .geo-collapse-toggle[aria-expanded="true"] .geo-collapse-arrow{transform:rotate(180deg);}
 .geo-collapse-toggle[aria-expanded="true"] .geo-collapse-toggle-text::after{content:" (show less)";}
@@ -329,9 +329,9 @@
 
 .geo-segbar-block{margin:0 0 28px;}
 .geo-segbar-block:last-child{margin-bottom:0;}
-.geo-segbar-title{
+p.geo-segbar-title{
   font-family:'IBM Plex Mono',monospace;font-size:.72rem;text-transform:uppercase;
-  letter-spacing:.06em;color:var(--geo-ink-soft);margin:0 0 10px;
+  letter-spacing:.06em;color:var(--geo-accent);font-weight:600;margin:0 0 10px;
 }
 .geo-segbar-row{display:flex;height:28px;border-radius:2px;overflow:hidden;}
 .geo-seg{display:flex;align-items:center;justify-content:center;min-width:2px;}
@@ -348,11 +348,10 @@
   white-space:nowrap;
 }
 .geo-party-years{
-  display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;
-  font-size:.62rem;color:var(--geo-ink-soft);margin-top:4px;
+  display:flex;font-family:'IBM Plex Mono',monospace;
+  font-size:.6rem;color:var(--geo-ink-soft);margin-top:6px;
 }
-.geo-party-row--compact{height:18px;margin:10px 0 6px;}
-.geo-party-row--compact .geo-party-band{font-size:0;}
+.geo-party-years span{text-align:center;overflow:visible;white-space:nowrap;}
 
 /* Era gallery: wrapping cards, each with an image and a connector dot on
    its top edge so the row reads as a chronological chain even after wrap. */

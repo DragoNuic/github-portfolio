@@ -18,14 +18,14 @@
 
 .vmap-base-path{
   fill:none;
-  stroke:rgba(245,244,240,0.08);
+  stroke:color-mix(in srgb, var(--geo-ink) 8%, transparent);
   stroke-width:0.4;
   vector-effect:non-scaling-stroke;
   shape-rendering:optimizeSpeed;
 }
 .vmap-district-path{
   fill:none;
-  stroke:rgba(245,244,240,0.12);
+  stroke:color-mix(in srgb, var(--geo-ink) 12%, transparent);
   stroke-width:0.4;
   vector-effect:non-scaling-stroke;
 }
@@ -55,11 +55,19 @@
 }
 
 .vmap-info-bar{
-  position:absolute;top:0;left:0;right:0;z-index:8;text-align:center;
+  position:absolute;top:0;left:0;right:0;z-index:8;
+  display:flex;align-items:center;justify-content:center;gap:16px;
   padding:9px 16px;background:color-mix(in srgb, var(--geo-surface) 92%, transparent);
   border-bottom:1px solid var(--geo-line);
   font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--geo-ink-soft);
 }
+.vmap-theme-toggle{
+  position:absolute;right:16px;
+  background:none;border:1px solid var(--geo-line);border-radius:2px;
+  padding:5px 12px;cursor:pointer;transition:.18s;
+  font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--geo-ink);
+}
+.vmap-theme-toggle:hover{border-color:var(--geo-accent);color:var(--geo-accent);}
 
 .vmap-panel--title{top:64px;left:26px;max-width:340px;}
 .vmap-panel--title .geo-eyebrow{margin:0 0 8px;}
@@ -253,6 +261,8 @@
   .vmap-info-bar,.vmap-panel--title,.vmap-side-stack{
     position:static;max-width:none;margin:12px 0;backdrop-filter:none;
   }
+  .vmap-info-bar{flex-direction:column;gap:8px;}
+  .vmap-theme-toggle{position:static;}
   .vmap-side-stack{bottom:auto;overflow-y:visible;max-height:none;}
   .vmap-side-stack .vmap-panel{backdrop-filter:none;}
   .vmap-controls{position:static;margin-top:12px;flex-direction:column;align-items:stretch;}
@@ -260,5 +270,5 @@
   /* basemap context lines otherwise compete with the housing polygons on
      small, low-DPI screens — fade it back further and let the glow do
      the work of separating buildings from the street grid */
-  .vmap-base-path{fill:none;stroke:rgba(245,244,240,0.06);stroke-width:0.3;}
+  .vmap-base-path{fill:none;stroke:color-mix(in srgb, var(--geo-ink) 6%, transparent);stroke-width:0.3;}
 }
