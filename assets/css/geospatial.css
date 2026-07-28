@@ -299,6 +299,61 @@
 .geo-content-block li::marker{color:var(--geo-accent);}
 .geo-content-block strong{color:var(--geo-ink);font-weight:700;}
 
+.geo-collapse-toggle{
+  display:inline-flex;align-items:center;gap:8px;margin:0 0 6px;
+  background:none;border:1px solid var(--geo-line);border-radius:2px;
+  padding:9px 16px;cursor:pointer;transition:.18s;
+  font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.02em;
+  color:var(--geo-ink);
+}
+.geo-collapse-toggle:hover{border-color:var(--geo-accent);color:var(--geo-accent);}
+.geo-collapse-arrow{transition:transform .2s ease;}
+.geo-collapse-toggle[aria-expanded="true"] .geo-collapse-arrow{transform:rotate(180deg);}
+.geo-collapse-toggle[aria-expanded="true"] .geo-collapse-toggle-text::after{content:" (show less)";}
+
+/* Vienna in Numbers — KPI cards, segmented bars, party timeline */
+.geo-stats-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;
+  background:var(--geo-line);border:1px solid var(--geo-line);margin:20px 0 28px;
+}
+.geo-stat-card{background:var(--geo-surface);padding:18px 20px;}
+.geo-stat-value{
+  font-family:'Archivo',sans-serif;font-weight:900;font-size:1.6rem;color:var(--geo-ink);
+  line-height:1.1;margin:0 0 4px;
+}
+.geo-stat-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.66rem;text-transform:uppercase;
+  letter-spacing:.05em;color:var(--geo-ink-soft);margin:0;
+}
+.geo-stat-note{font-size:.76rem;color:var(--geo-ink-soft);margin:4px 0 0;}
+
+.geo-segbar-block{margin:0 0 28px;}
+.geo-segbar-block:last-child{margin-bottom:0;}
+.geo-segbar-title{
+  font-family:'IBM Plex Mono',monospace;font-size:.72rem;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--geo-ink-soft);margin:0 0 10px;
+}
+.geo-segbar-row{display:flex;height:28px;border-radius:2px;overflow:hidden;}
+.geo-seg{display:flex;align-items:center;justify-content:center;min-width:2px;}
+.geo-segbar-gap{width:10px;flex:none;}
+.geo-segbar-legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:12px;}
+.geo-segbar-legend-item{display:flex;align-items:center;gap:7px;font-size:.82rem;color:var(--geo-ink-soft);}
+.geo-segbar-swatch{width:11px;height:11px;border-radius:2px;flex:none;}
+.geo-segbar-note{font-size:.82rem;line-height:1.6;color:var(--geo-ink-soft);margin:10px 0 0;}
+
+.geo-party-row{display:flex;height:32px;border-radius:2px;overflow:hidden;}
+.geo-party-band{
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.9);
+  white-space:nowrap;
+}
+.geo-party-years{
+  display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;
+  font-size:.62rem;color:var(--geo-ink-soft);margin-top:4px;
+}
+.geo-party-row--compact{height:18px;margin:10px 0 6px;}
+.geo-party-row--compact .geo-party-band{font-size:0;}
+
 /* Era gallery: wrapping cards, each with an image and a connector dot on
    its top edge so the row reads as a chronological chain even after wrap. */
 .geo-era-gallery{
