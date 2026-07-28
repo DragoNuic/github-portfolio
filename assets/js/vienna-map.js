@@ -287,6 +287,7 @@ const POI_NOTES = {
         d3.select(this)
           .style('display', show ? null : 'none')
           .attr('fill', color)
+          .attr('stroke', color)
           .style('filter', show ? `drop-shadow(0 0 4px ${color})` : null);
       });
       decadeReadout.textContent = isolating

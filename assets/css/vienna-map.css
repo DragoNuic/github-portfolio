@@ -34,12 +34,11 @@
   filter:drop-shadow(0 0 2px rgba(0,0,0,.7));
 }
 .vmap-house-path{
-  stroke:rgba(11,11,10,0.75);
   stroke-width:0.6;
   vector-effect:non-scaling-stroke;
   shape-rendering:optimizeSpeed;
-  transition:fill .35s ease;
-  /* glow colour is set per-decade in JS to match each path's own fill */
+  transition:fill .35s ease, stroke .35s ease;
+  /* stroke and glow colour are set per-decade in JS to match each path's own fill */
 }
 
 .vmap-panel{
