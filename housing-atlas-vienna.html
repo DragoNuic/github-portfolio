@@ -35,7 +35,6 @@
     </div>
 
     <svg id="vmap-svg" style="view-transition-name:vienna-thumb;"></svg>
-    <div id="vmap-markers"></div>
 
     <div class="vmap-panel vmap-panel--title">
       <p class="geo-eyebrow">Social Housing Atlas</p>
@@ -49,15 +48,16 @@
       <p class="vmap-update-note">Data updated as of August 2026.</p>
     </div>
 
-    <div class="vmap-tooltip" id="vmap-poi-tooltip"></div>
-
     <div class="vmap-side-stack">
       <div class="vmap-panel vmap-panel--legend">
         <h4>Legend</h4>
         <div id="vmap-legend"></div>
         <div class="vmap-layer-list">
           <div class="vmap-layer-active">
-            <span class="vmap-layer-name">Municipal Housing</span>
+            <label class="vmap-layer-toggle vmap-layer-toggle--main">
+              <input type="checkbox" id="vmap-municipal-toggle" checked />
+              Municipal Housing
+            </label>
             <label class="vmap-layer-sub">
               <input type="checkbox" id="vmap-decade-toggle" />
               Colour coded by decade built
@@ -313,6 +313,50 @@
 
         <p>Understanding social housing through the lens of governance - underlaid by a deep understanding of historical and current social and economic conditions, as well as prevailing policies and power dynamics - highlights the significance of approaching the issue of affordable housing from a firmly political perspective, emphasising municipal and state politics as well as the influence of global political trends.</p>
         <p>The development of social housing in Vienna offers a fascinating case study into the dynamics between planning and politics, and the way in which the two influence and reinforce one another. The major shifts in Viennese social housing are clearly marked by crises - the severity of which varied but nonetheless forced the city to react - and the types of reactions are evidently influenced by the broader conditions the city was subject to at the time.</p>
+
+        <h3>Governance & Policy Toolbox</h3>
+        <p>Everything above rests on two structural conditions - pictured here as the two foundations the whole system is built on, where they overlap, and the one major limit on their reach.</p>
+
+        <div class="geo-toolbox">
+          <div class="geo-toolbox-pillar">
+            <div class="geo-toolbox-stack">
+              <div class="geo-toolbox-block">Managing & funding of social housing</div>
+              <div class="geo-toolbox-block">Tax autonomy to set housing subsidy contributions</div>
+              <div class="geo-toolbox-block">Fiscal autonomy to set the budget for housing subsidies</div>
+              <div class="geo-toolbox-block">Enforces its own Second Home Tax</div>
+              <div class="geo-toolbox-block">Enforces its own state Building Code, overseeing zoning & housing regulation</div>
+            </div>
+            <div class="geo-toolbox-foundation">
+              <p class="geo-toolbox-foundation-label">Pillar 1</p>
+              <h4>Legislative Autonomy</h4>
+              <p>Vienna is a federal state of Austria - its government exists simultaneously as a municipality and a state parliament.</p>
+            </div>
+          </div>
+
+          <div class="geo-toolbox-pillar">
+            <div class="geo-toolbox-stack">
+              <div class="geo-toolbox-block">Control over land allocation</div>
+              <div class="geo-toolbox-block">Leases ground-rights to limited-profit housing associations & cooperatives</div>
+            </div>
+            <div class="geo-toolbox-foundation">
+              <p class="geo-toolbox-foundation-label">Pillar 2</p>
+              <h4>Land Ownership</h4>
+              <p>The city owns roughly 50% of all land within its boundaries - built through aggressive land purchases in the 1920s after WWI, formalised in 1984 with the founding of WohnFonds Wien to manage Vienna's strategic public-interest land stockpiling.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="geo-toolbox-overlap">
+          <p class="geo-toolbox-overlap-label">Where the pillars overlap</p>
+          <h4>Rezoning</h4>
+          <p>Land ownership combined with its own Building Code lets Vienna coordinate the rezoning of land for high-density affordable housing development and capture the resulting land-value increases.</p>
+        </div>
+
+        <div class="geo-toolbox-limit">
+          <p class="geo-toolbox-limit-label">Limitation</p>
+          <h4>MRG</h4>
+          <p>Regulation of rents in non-subsidised private housing is not a state but a federal competency.</p>
+        </div>
 
         <button type="button" class="geo-collapse-toggle" data-target="systems-analysis-details" aria-expanded="false">
           <span class="geo-collapse-toggle-text">Read the full governance analysis</span>

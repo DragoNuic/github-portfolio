@@ -69,18 +69,6 @@ function shortDecadeLabel(l){
   return l.replace('–2010', 's').replace(/^(\d{4})–\d{4}$/, '$1s');
 }
 
-// Points of interest: geometry is the building's own footprint (MultiPolygon),
-// not a lat/lng - the marker sits at its projected centroid. The source data
-// has no "why it's notable" field, so that's supplied here by hand.
-const POI_NAME_OVERRIDES = { 'SANDLEITENGASSE 45': 'Wohnhausanlage Sandleiten' };
-const POI_NOTES = {
-  'Metzleinstalerhof': 'One of Vienna’s earliest municipal housing blocks, a precursor to the "Red Vienna" building boom of the 1920s.',
-  'Großfeldsiedlung': 'One of Vienna’s largest post-war housing estates, emblematic of large-scale modernist social housing.',
-  'Reumannhof': 'A flagship early Red Vienna Gemeindebau, named after Jakob Reumann, Vienna’s first Social Democratic mayor.',
-  'Karl-Marx-Hof': 'Vienna’s most iconic Gemeindebau - over 1km long, a symbol of interwar municipal socialism.',
-  'Wohnhausanlage Sandleiten': 'One of the largest interwar estates, a model self-contained "garden city" complex.'
-};
-
 (async function initViennaMap(){
   const stage = document.getElementById('vmap-stage');
   const svg = d3.select('#vmap-svg');
@@ -104,9 +92,8 @@ const POI_NOTES = {
   const popDotEl = document.getElementById('vmap-pop-dot');
   const decadeListEl = document.getElementById('vmap-decade-list');
   const decadeClearBtn = document.getElementById('vmap-decade-clear');
-  const markerLayer = document.getElementById('vmap-markers');
-  const tooltipEl = document.getElementById('vmap-poi-tooltip');
   const newDevToggle = document.getElementById('vmap-newdev-toggle');
+  const municipalToggle = document.getElementById('vmap-municipal-toggle');
 
   ticksEl.innerHTML = DECADE_BUCKETS.map(l => `<span>${shortDecadeLabel(l)}</span>`).join('');
 
@@ -126,15 +113,14 @@ const POI_NOTES = {
   let isolatedBuckets = new Set(); // when non-empty, only these buckets show, overriding the slider
 
   try {
-    const [basemap, housing, districts, centre, newDev, unitStatsCsv, populationCsv, poi] = await Promise.all([
+    const [basemap, housing, districts, centre, newDev, unitStatsCsv, populationCsv] = await Promise.all([
       fetch('data/base-map-vienna.geojson').then(r => { if(!r.ok) throw new Error('base map fetch failed'); return r.json(); }),
       fetch('data/social-housing-vienna.geojson').then(r => { if(!r.ok) throw new Error('housing fetch failed'); return r.json(); }),
       fetch('data/bezirksgrenzen.geojson').then(r => { if(!r.ok) throw new Error('districts fetch failed'); return r.json(); }),
       fetch('data/CentrePoint.geojson').then(r => { if(!r.ok) throw new Error('centre point fetch failed'); return r.json(); }),
       fetch('data/NewDevelopments.geojson').then(r => { if(!r.ok) throw new Error('new developments fetch failed'); return r.json(); }),
       fetch('data/vienna-housing-units.csv').then(r => { if(!r.ok) throw new Error('unit stats fetch failed'); return r.text(); }),
-      fetch('data/vienna-population.csv').then(r => { if(!r.ok) throw new Error('population fetch failed'); return r.text(); }),
-      fetch('data/PointsOfInterestVienna.geojson').then(r => { if(!r.ok) throw new Error('poi fetch failed'); return r.json(); })
+      fetch('data/vienna-population.csv').then(r => { if(!r.ok) throw new Error('population fetch failed'); return r.text(); })
     ]);
 
     const unitStats = parseUnitStatsCsv(unitStatsCsv);
@@ -252,54 +238,9 @@ const POI_NOTES = {
       .attr('class', 'vmap-house-path')
       .attr('d', ([, feats]) => feats.map(f => path(f)).filter(Boolean).join(' '));
 
-    // --- points of interest: landmark buildings, hover for details ---
-    // Geometry is each building's own footprint, so the marker sits at its
-    // projected centroid - same projection/path used everywhere else, so
-    // it's guaranteed to line up with the map underneath it.
-    poi.features.forEach(f => {
-      const [x, y] = path.centroid(f);
-      if (Number.isNaN(x) || Number.isNaN(y)) return;
-      const rawName = f.properties.HOFNAME || '';
-      const name = POI_NAME_OVERRIDES[rawName] || rawName;
-      const el = document.createElement('a');
-      el.className = 'vmarker';
-      el.href = f.properties.info_url || '#';
-      el.target = '_blank';
-      el.rel = 'noopener';
-      el.dataset.x = x;
-      el.dataset.y = y;
-      el.addEventListener('mouseenter', () => showPoiTooltip(el, name, f.properties.BAUJAHR));
-      el.addEventListener('focus', () => showPoiTooltip(el, name, f.properties.BAUJAHR));
-      el.addEventListener('mouseleave', hidePoiTooltip);
-      el.addEventListener('blur', hidePoiTooltip);
-      markerLayer.appendChild(el);
-    });
-
-    function showPoiTooltip(el, name, year){
-      const stageRect = stage.getBoundingClientRect();
-      const markerRect = el.getBoundingClientRect();
-      tooltipEl.innerHTML = `
-        <h5>${name}</h5>
-        <p class="vmap-tooltip-year">${year ? 'Built ' + year : ''}</p>
-        <p>${POI_NOTES[name] || ''}</p>`;
-      tooltipEl.style.left = (markerRect.left - stageRect.left + markerRect.width / 2) + 'px';
-      tooltipEl.style.top = (markerRect.top - stageRect.top) + 'px';
-      tooltipEl.classList.add('is-visible');
-    }
-    function hidePoiTooltip(){
-      tooltipEl.classList.remove('is-visible');
-    }
-
-    function positionMarkers(transform){
-      const svgRect = svg.node().getBoundingClientRect();
-      const scale = Math.min(svgRect.width / W, svgRect.height / H);
-      const offsetX = (svgRect.width - W * scale) / 2;
-      const offsetY = (svgRect.height - H * scale) / 2;
-      markerLayer.querySelectorAll('.vmarker').forEach(el => {
-        const x = +el.dataset.x, y = +el.dataset.y;
-        const tx = offsetX + transform.applyX(x) * scale;
-        const ty = offsetY + transform.applyY(y) * scale;
-        el.style.transform = `translate(${tx}px, ${ty}px) scale(${1 / transform.k})`;
+    if (municipalToggle){
+      municipalToggle.addEventListener('change', () => {
+        housingLayer.style('display', municipalToggle.checked ? null : 'none');
       });
     }
 
@@ -399,18 +340,11 @@ const POI_NOTES = {
     render();
 
     // --- zoom / pan ---
-    let lastTransform = d3.zoomIdentity;
     const zoom = d3.zoom()
       .scaleExtent([1, 16])
       .translateExtent([[0, 0], [W, H]])
-      .on('zoom', (event) => {
-        lastTransform = event.transform;
-        g.attr('transform', event.transform);
-        positionMarkers(event.transform);
-      });
+      .on('zoom', (event) => g.attr('transform', event.transform));
     svg.call(zoom);
-    positionMarkers(d3.zoomIdentity);
-    window.addEventListener('resize', () => positionMarkers(lastTransform));
 
     loadingEl.style.display = 'none';
     stage.classList.add('is-ready');
