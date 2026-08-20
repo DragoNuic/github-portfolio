@@ -1,9 +1,9 @@
 /* ============================================================
-   Geospatial Analysis & GIS Mapping — theme
+   Geospatial Analysis & GIS Mapping - theme
    Two modes sharing one token system:
    - Light "studio" mode (browsing/hub pages): beige/white, ink text
    - Dark "map" mode (.geo-dark, actual map viewers): carbon black,
-     silver text, yellow accent — for maximum contrast on map layers
+     silver text, yellow accent - for maximum contrast on map layers
    Type: Archivo (display, bold/iconic) + Inter (body) + IBM Plex Mono (data)
    ============================================================ */
 
@@ -19,7 +19,7 @@
   --geo-accent-ink:#17160F;
 }
 
-/* Dark "map mode" — carbon background, silver text, same yellow accent */
+/* Dark "map mode" - carbon background, silver text, same yellow accent */
 .geo-dark{
   --geo-bg:        #0B0B0A;
   --geo-surface:   #141412;
@@ -30,7 +30,7 @@
   --geo-accent-ink:#0B0B0A;
 }
 
-/* Thermal / infrared mode — used by the Vulnerable Cities atlas */
+/* Thermal / infrared mode - used by the Vulnerable Cities atlas */
 .geo-thermal{
   --geo-bg:        #05010A;
   --geo-surface:   #12061C;
@@ -231,7 +231,7 @@
   letter-spacing:.08em;color:var(--geo-ink-soft);margin:0 0 18px;
 }
 
-/* Map "bleeds" into the page — no box, no border, transparent PNG/SVG sits
+/* Map "bleeds" into the page - no box, no border, transparent PNG/SVG sits
    directly on the body background like part of the layout */
 .geo-map-bleed{
   background:transparent;border:none;padding:0;animation:geoFadeIn .9s ease both;
@@ -312,20 +312,22 @@
 .geo-collapse-toggle[aria-expanded="true"] .geo-collapse-toggle-text::after{content:" (show less)";}
 
 .geo-jump-nav{
-  display:flex;flex-wrap:wrap;gap:8px;
+  display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
   padding:14px 0;margin:28px 0;
   border-top:1px solid var(--geo-line);border-bottom:1px solid var(--geo-line);
   position:sticky;top:73px;z-index:5;background:var(--geo-bg);
 }
 .geo-jump-nav a{
-  font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.02em;
-  text-decoration:none;color:var(--geo-ink-soft);
-  padding:8px 14px;border:1px solid var(--geo-line);border-radius:20px;
+  font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.02em;font-weight:600;
+  text-decoration:none;color:var(--geo-accent);
+  padding:8px 14px;border:1px solid var(--geo-accent);border-radius:20px;
   transition:.18s;white-space:nowrap;
 }
-.geo-jump-nav a:hover{border-color:var(--geo-accent);color:var(--geo-accent);}
+.geo-jump-nav a:hover{background:var(--geo-accent);color:var(--geo-accent-ink);}
 
-/* Vienna in Numbers — KPI cards, segmented bars, party timeline */
+.geo-content-sections > .geo-content-block{scroll-margin-top:150px;}
+
+/* Vienna in Numbers - KPI cards, segmented bars, party timeline */
 .geo-stats-grid{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;
   background:var(--geo-line);border:1px solid var(--geo-line);margin:20px 0 28px;

@@ -1,5 +1,5 @@
 /* ============================================================
-   Vienna — Social Housing Atlas interactive map
+   Vienna - Social Housing Atlas interactive map
    D3-rendered SVG map: base map + social housing layer,
    decade scrubber (cumulative growth), colour-mode toggle,
    zoom/pan.
@@ -13,7 +13,7 @@ const DECADE_BUCKETS = [
 const YELLOW = '#F2B705';
 
 // Decade colouring follows the History section's eras, not a continuous
-// gradient — each era's decades share one colour.
+// gradient - each era's decades share one colour.
 const ERA_BANDS = [
   { name: 'Imperial Vienna', short: 'Imperial Vienna', color: '#55555E', from: 0, to: 2 },
   { name: 'Red Vienna', short: 'Red Vienna', color: '#C0392B', from: 3, to: 4 },
@@ -31,7 +31,7 @@ function bucketIndex(decade){
   return Math.min(12, Math.floor((decade - 1900) / 10) + 1);
 }
 
-// CSV columns: decade,buildings,units — one row per decade bucket start year.
+// CSV columns: decade,buildings,units - one row per decade bucket start year.
 function parseUnitStatsCsv(text){
   const stats = DECADE_BUCKETS.map(() => ({ buildings: 0, units: 0 }));
   text.trim().split('\n').slice(1).forEach(line => {
@@ -41,7 +41,7 @@ function parseUnitStatsCsv(text){
   return stats;
 }
 
-// CSV columns: year,population — irregular census years, linearly
+// CSV columns: year,population - irregular census years, linearly
 // interpolated to line up with the decade buckets used everywhere else.
 function parsePopulationCsv(text){
   return text.trim().split('\n').slice(1)
@@ -70,14 +70,14 @@ function shortDecadeLabel(l){
 }
 
 // Points of interest: geometry is the building's own footprint (MultiPolygon),
-// not a lat/lng — the marker sits at its projected centroid. The source data
+// not a lat/lng - the marker sits at its projected centroid. The source data
 // has no "why it's notable" field, so that's supplied here by hand.
 const POI_NAME_OVERRIDES = { 'SANDLEITENGASSE 45': 'Wohnhausanlage Sandleiten' };
 const POI_NOTES = {
   'Metzleinstalerhof': 'One of Vienna’s earliest municipal housing blocks, a precursor to the "Red Vienna" building boom of the 1920s.',
   'Großfeldsiedlung': 'One of Vienna’s largest post-war housing estates, emblematic of large-scale modernist social housing.',
   'Reumannhof': 'A flagship early Red Vienna Gemeindebau, named after Jakob Reumann, Vienna’s first Social Democratic mayor.',
-  'Karl-Marx-Hof': 'Vienna’s most iconic Gemeindebau — over 1km long, a symbol of interwar municipal socialism.',
+  'Karl-Marx-Hof': 'Vienna’s most iconic Gemeindebau - over 1km long, a symbol of interwar municipal socialism.',
   'Wohnhausanlage Sandleiten': 'One of the largest interwar estates, a model self-contained "garden city" complex.'
 };
 
@@ -135,7 +135,7 @@ const POI_NOTES = {
     ]);
 
     const unitStats = parseUnitStatsCsv(unitStatsCsv);
-    // Units currently under construction, not yet completed — shown as a
+    // Units currently under construction, not yet completed - shown as a
     // second, striped segment stacked on the most recent decade's bar.
     const UNDER_CONSTRUCTION = { bucket: DECADE_BUCKETS.length - 1, units: 1000 };
     const maxUnits = Math.max(
@@ -150,7 +150,7 @@ const POI_NOTES = {
     const unitBars = unitBarsEl.querySelectorAll('.vmap-unit-bar');
 
     // Population line: interpolated onto each bucket's end year, then
-    // plotted in real pixel coordinates (not a percentage/viewBox trick —
+    // plotted in real pixel coordinates (not a percentage/viewBox trick -
     // that stretching didn't resolve reliably on mobile Safari) so it
     // always lines up with the bars regardless of chart width.
     const populationPoints = parsePopulationCsv(populationCsv);
@@ -175,8 +175,8 @@ const POI_NOTES = {
     }
 
     // The timeline controls float over the bottom of the map (desktop
-    // layout only — on the mobile breakpoint they sit below it in normal
-    // flow) — reserve a matching strip at the bottom of the projection so
+    // layout only - on the mobile breakpoint they sit below it in normal
+    // flow) - reserve a matching strip at the bottom of the projection so
     // the city itself renders above the panel instead of disappearing
     // underneath it.
     const controlsEl = document.querySelector('.vmap-controls');
@@ -194,7 +194,7 @@ const POI_NOTES = {
 
     // --- base map: thin context lines, near-invisible fill ---
     // 11k+ features is far too many individual DOM nodes to pan/zoom
-    // smoothly — it's static context with no per-feature styling, so it's
+    // smoothly - it's static context with no per-feature styling, so it's
     // merged into a single <path> (one "d" string with many subpaths).
     baseLayer.append('path')
       .attr('class', 'vmap-base-path')
@@ -217,7 +217,7 @@ const POI_NOTES = {
     // --- social housing: the hero layer ---
     // Buildings are only ever shown/hidden a whole decade-bucket at a time
     // (the timeline slider), so there's no need for one DOM element per
-    // building — group by bucket and merge each group into one path.
+    // building - group by bucket and merge each group into one path.
     housing.features.forEach(f => { f._bucket = bucketIndex(f.properties.decade); });
     const bucketGroups = d3.groups(housing.features, f => f._bucket).sort((a, b) => a[0] - b[0]);
 
@@ -229,7 +229,7 @@ const POI_NOTES = {
 
     // --- points of interest: landmark buildings, hover for details ---
     // Geometry is each building's own footprint, so the marker sits at its
-    // projected centroid — same projection/path used everywhere else, so
+    // projected centroid - same projection/path used everywhere else, so
     // it's guaranteed to line up with the map underneath it.
     poi.features.forEach(f => {
       const [x, y] = path.centroid(f);
@@ -392,6 +392,6 @@ const POI_NOTES = {
 
   } catch (err){
     console.error(err);
-    loadingEl.innerHTML = 'Map data could not be loaded. If you\'re viewing this file directly from disk, serve it over local http(s) — browsers block GeoJSON fetches from file:// URLs.';
+    loadingEl.innerHTML = 'Map data could not be loaded. If you\'re viewing this file directly from disk, serve it over local http(s) - browsers block GeoJSON fetches from file:// URLs.';
   }
 })();
