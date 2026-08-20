@@ -10,6 +10,16 @@
   overflow:hidden;
   background:var(--geo-bg);
 }
+.vmap-stage.is-fullscreen{
+  position:fixed;inset:0;height:100vh;min-height:0;z-index:50;
+}
+.vmap-stage.is-hidden{display:none;}
+body.vmap-scroll-lock{overflow:hidden;}
+
+.vmap-hide-bar{
+  display:flex;justify-content:flex-end;
+  max-width:1180px;margin:0 auto 10px;padding:0 40px;
+}
 #vmap-svg{
   position:absolute;inset:0;width:100%;height:100%;display:block;
   opacity:0;transition:opacity .6s ease;
@@ -33,6 +43,14 @@
   stroke:#fff;stroke-width:1.4;vector-effect:non-scaling-stroke;
   filter:drop-shadow(0 0 2px rgba(0,0,0,.7));
 }
+.vmap-newdev-path{
+  fill:rgba(92,158,111,0.12);
+  stroke:#5C9E6F;
+  stroke-width:1.4;
+  vector-effect:non-scaling-stroke;
+  cursor:pointer;
+}
+.vmap-newdev-path:hover{fill:rgba(92,158,111,0.28);}
 .vmap-house-path{
   stroke-width:0.6;
   vector-effect:non-scaling-stroke;
@@ -60,10 +78,10 @@
   border-bottom:1px solid var(--geo-line);
   font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--geo-ink-soft);
 }
+.vmap-info-actions{position:absolute;right:16px;display:flex;gap:8px;}
 .vmap-theme-toggle{
-  position:absolute;right:16px;
   background:none;border:1px solid var(--geo-line);border-radius:2px;
-  padding:5px 12px;cursor:pointer;transition:.18s;
+  padding:5px 12px;cursor:pointer;transition:.18s;white-space:nowrap;
   font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--geo-ink);
 }
 .vmap-theme-toggle:hover{border-color:var(--geo-accent);color:var(--geo-accent);}
@@ -261,7 +279,8 @@
     position:static;max-width:none;margin:12px 0;backdrop-filter:none;
   }
   .vmap-info-bar{flex-direction:column;gap:8px;}
-  .vmap-theme-toggle{position:static;}
+  .vmap-info-actions{position:static;justify-content:center;}
+  .vmap-stage.is-fullscreen{position:static;height:auto;}
   .vmap-side-stack{bottom:auto;overflow-y:visible;max-height:none;}
   .vmap-side-stack .vmap-panel{backdrop-filter:none;}
   .vmap-controls{position:static;margin-top:12px;flex-direction:column;align-items:stretch;}

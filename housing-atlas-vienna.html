@@ -19,12 +19,19 @@
     <a href="geospatial.html">Geospatial Analyses</a> / <a href="social-housing-atlas.html">Social Housing Atlas</a> / Vienna
   </p>
 
+  <div class="vmap-hide-bar">
+    <button type="button" id="vmap-hide-toggle" class="vmap-theme-toggle">Hide map</button>
+  </div>
+
   <section class="vmap-stage" id="vmap-stage">
     <p class="vmap-loading" id="vmap-loading">Loading map layers…</p>
 
     <div class="vmap-info-bar">
       <span>Tip: zoom in on the map to see individual building footprints more clearly.</span>
-      <button type="button" id="vmap-theme-toggle" class="vmap-theme-toggle">☾ Dark mode</button>
+      <div class="vmap-info-actions">
+        <button type="button" id="vmap-expand-toggle" class="vmap-theme-toggle">⛶ Expand map</button>
+        <button type="button" id="vmap-theme-toggle" class="vmap-theme-toggle">☾ Dark mode</button>
+      </div>
     </div>
 
     <svg id="vmap-svg" style="view-transition-name:vienna-thumb;"></svg>
@@ -56,9 +63,9 @@
               Colour coded by decade built
             </label>
           </div>
-          <label class="vmap-layer-toggle is-disabled">
-            <input type="checkbox" disabled />
-            Current Housing Development Projects <em>(coming soon)</em>
+          <label class="vmap-layer-toggle">
+            <input type="checkbox" id="vmap-newdev-toggle" />
+            Current Housing Development Projects
           </label>
           <label class="vmap-layer-toggle is-disabled">
             <input type="checkbox" disabled />
@@ -446,6 +453,24 @@
     themeToggle.addEventListener('click', () => {
       const isDark = document.body.classList.toggle('geo-dark');
       themeToggle.textContent = isDark ? '☀ Light mode' : '☾ Dark mode';
+    });
+
+    const stageEl = document.getElementById('vmap-stage');
+    const expandToggle = document.getElementById('vmap-expand-toggle');
+    expandToggle.addEventListener('click', () => {
+      const isFull = stageEl.classList.toggle('is-fullscreen');
+      document.body.classList.toggle('vmap-scroll-lock', isFull);
+      expandToggle.textContent = isFull ? '⤢ Minimise map' : '⛶ Expand map';
+      // the SVG's own viewBox scales automatically, but the marker layer
+      // measures real pixel dimensions - nudge it to re-measure now that
+      // the stage's on-screen size just changed.
+      requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
+    });
+
+    const hideToggle = document.getElementById('vmap-hide-toggle');
+    hideToggle.addEventListener('click', () => {
+      const isHidden = stageEl.classList.toggle('is-hidden');
+      hideToggle.textContent = isHidden ? 'Show map' : 'Hide map';
     });
 
     document.querySelectorAll('.geo-collapse-toggle').forEach(btn => {

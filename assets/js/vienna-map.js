@@ -88,6 +88,7 @@ const POI_NOTES = {
   const baseLayer = g.append('g').attr('id', 'vmap-base');
   const districtLayer = g.append('g').attr('id', 'vmap-districts');
   const housingLayer = g.append('g').attr('id', 'vmap-housing');
+  const newDevLayer = g.append('g').attr('id', 'vmap-newdev');
   const centreLayer = g.append('g').attr('id', 'vmap-centre');
   const loadingEl = document.getElementById('vmap-loading');
   const decadeReadout = document.getElementById('vmap-decade-readout');
@@ -105,6 +106,7 @@ const POI_NOTES = {
   const decadeClearBtn = document.getElementById('vmap-decade-clear');
   const markerLayer = document.getElementById('vmap-markers');
   const tooltipEl = document.getElementById('vmap-poi-tooltip');
+  const newDevToggle = document.getElementById('vmap-newdev-toggle');
 
   ticksEl.innerHTML = DECADE_BUCKETS.map(l => `<span>${shortDecadeLabel(l)}</span>`).join('');
 
@@ -124,11 +126,12 @@ const POI_NOTES = {
   let isolatedBuckets = new Set(); // when non-empty, only these buckets show, overriding the slider
 
   try {
-    const [basemap, housing, districts, centre, unitStatsCsv, populationCsv, poi] = await Promise.all([
+    const [basemap, housing, districts, centre, newDev, unitStatsCsv, populationCsv, poi] = await Promise.all([
       fetch('data/base-map-vienna.geojson').then(r => { if(!r.ok) throw new Error('base map fetch failed'); return r.json(); }),
       fetch('data/social-housing-vienna.geojson').then(r => { if(!r.ok) throw new Error('housing fetch failed'); return r.json(); }),
       fetch('data/bezirksgrenzen.geojson').then(r => { if(!r.ok) throw new Error('districts fetch failed'); return r.json(); }),
       fetch('data/CentrePoint.geojson').then(r => { if(!r.ok) throw new Error('centre point fetch failed'); return r.json(); }),
+      fetch('data/NewDevelopments.geojson').then(r => { if(!r.ok) throw new Error('new developments fetch failed'); return r.json(); }),
       fetch('data/vienna-housing-units.csv').then(r => { if(!r.ok) throw new Error('unit stats fetch failed'); return r.text(); }),
       fetch('data/vienna-population.csv').then(r => { if(!r.ok) throw new Error('population fetch failed'); return r.text(); }),
       fetch('data/PointsOfInterestVienna.geojson').then(r => { if(!r.ok) throw new Error('poi fetch failed'); return r.json(); })
@@ -212,6 +215,28 @@ const POI_NOTES = {
       centreLayer.append('path')
         .attr('class', 'vmap-centre-cross')
         .attr('d', `M${cx - s},${cy} L${cx + s},${cy} M${cx},${cy - s} L${cx},${cy + s}`);
+    }
+
+    // --- current housing development projects: transparent, bold outline
+    // so it reads as an overlay of planned/ongoing sites rather than
+    // competing with the solid municipal housing fill ---
+    newDevLayer.selectAll('path')
+      .data(newDev.features)
+      .join('path')
+      .attr('class', 'vmap-newdev-path')
+      .attr('d', f => path(f))
+      .append('title')
+      .text(f => {
+        const p = f.properties;
+        const num = v => v == null ? 'unknown' : v.toLocaleString('en-GB');
+        const years = (p.start_date || '?') + '-' + (p.completion || '?');
+        return `${p.name}\n${years} - ${num(p.units)} units (${num(p.subsidised)} subsidised), ~${num(p.residents)} residents`;
+      });
+    newDevLayer.style('display', 'none');
+    if (newDevToggle){
+      newDevToggle.addEventListener('change', () => {
+        newDevLayer.style('display', newDevToggle.checked ? null : 'none');
+      });
     }
 
     // --- social housing: the hero layer ---
