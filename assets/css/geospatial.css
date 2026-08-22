@@ -299,12 +299,28 @@
 .geo-content-block li::marker{color:var(--geo-accent);}
 .geo-content-block strong{color:var(--geo-ink);font-weight:700;}
 
+.geo-dict-group{
+  margin:16px 0 0;padding:18px 20px;
+  border:2px solid var(--geo-accent);border-radius:2px;
+  background:color-mix(in srgb, var(--geo-accent) 6%, transparent);
+}
+.geo-dict-group-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.7rem;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--geo-accent);margin:0 0 14px;text-align:center;font-weight:600;
+}
+.geo-dict-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;}
+.geo-dict-item{
+  padding:14px 16px;border:1px solid var(--geo-line);border-radius:2px;background:var(--geo-surface);
+}
+.geo-dict-item h4{margin:0 0 8px;font-family:'Archivo',sans-serif;font-weight:800;font-size:.92rem;color:var(--geo-ink);}
+.geo-dict-item p{margin:0;font-size:.85rem;line-height:1.5;color:var(--geo-ink-soft);}
+
 /* Governance & Policy Toolbox - building-block diagram: a stack of
    "enabled by" blocks resting on a foundation pillar, an overlap box
    bridging both pillars, and a separate limitation callout. */
 .geo-toolbox{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin:20px 0 0;}
-.geo-toolbox-pillar{display:flex;flex-direction:column;justify-content:flex-end;}
-.geo-toolbox-stack{display:flex;flex-direction:column;gap:2px;}
+.geo-toolbox-pillar{display:flex;flex-direction:column;}
+.geo-toolbox-stack{display:flex;flex-direction:column;gap:2px;margin-top:-1px;}
 .geo-toolbox-block{
   display:flex;align-items:center;justify-content:center;min-height:60px;
   background:var(--geo-surface);border:1px solid var(--geo-line);
@@ -312,9 +328,9 @@
 }
 .geo-toolbox-foundation{
   display:flex;flex-direction:column;justify-content:center;min-height:168px;
-  margin-top:-1px;padding:16px;
+  padding:16px;
   background:color-mix(in srgb, var(--geo-accent) 12%, var(--geo-surface));
-  border:2px solid var(--geo-accent);border-top:none;
+  border:2px solid var(--geo-accent);border-bottom:none;
 }
 .geo-toolbox-foundation-label{
   font-family:'IBM Plex Mono',monospace;font-size:.66rem;text-transform:uppercase;
@@ -355,8 +371,8 @@
 .geo-toolbox-limit p{margin:0;font-size:.85rem;color:var(--geo-ink-soft);}
 
 .geo-toolbox-challenges{
-  margin:0;padding:14px 18px;
-  border:1px solid #C0392B;border-left:4px solid #C0392B;border-top:1px solid color-mix(in srgb, #C0392B 40%, transparent);border-bottom:none;
+  margin:0 0 20px;padding:14px 18px;
+  border:1px solid #C0392B;border-left:4px solid #C0392B;border-radius:2px;
   background:color-mix(in srgb, #C0392B 12%, var(--geo-surface));
 }
 .geo-toolbox-challenges-label{
