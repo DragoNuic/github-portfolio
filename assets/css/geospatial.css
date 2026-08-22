@@ -354,9 +354,11 @@
   margin:0 0 8px;font-family:'Archivo',sans-serif;font-weight:800;font-size:.88rem;
   text-align:center;color:var(--geo-ink);
 }
-.geo-toolbox-mechanism ul{margin:0;padding-left:1.1em;}
-.geo-toolbox-mechanism li{font-size:.78rem;line-height:1.5;color:var(--geo-ink-soft);margin:0 0 4px;}
-.geo-toolbox-mechanism li:last-child{margin-bottom:0;}
+.geo-toolbox-mechanism-points{display:flex;flex-direction:column;gap:10px;margin-top:8px;}
+.geo-toolbox-mechanism-point-title{
+  margin:0 0 4px;font-family:'Archivo',sans-serif;font-weight:700;font-size:.8rem;color:var(--geo-ink);
+}
+.geo-toolbox-mechanism-point p{margin:0;font-size:.76rem;line-height:1.5;color:var(--geo-ink-soft);}
 
 .geo-toolbox-limit{
   margin:0;padding:14px 18px;
