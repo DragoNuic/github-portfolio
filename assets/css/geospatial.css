@@ -325,13 +325,22 @@
 }
 .geo-toolbox-foundation p{font-size:.82rem;line-height:1.55;color:var(--geo-ink-soft);margin:0;}
 
-.geo-toolbox-overlap{
-  margin:0 0 20px;padding:16px 20px;text-align:center;
+.geo-toolbox-mechanisms{
+  margin:0 0 20px;padding:20px;
   border:1px dashed var(--geo-accent);border-top:2px solid var(--geo-accent);border-radius:0 0 4px 4px;
   background:color-mix(in srgb, var(--geo-accent) 6%, transparent);
 }
-.geo-toolbox-overlap h4{margin:0 0 6px;font-family:'Archivo',sans-serif;font-weight:800;}
-.geo-toolbox-overlap p{margin:0 auto;max-width:640px;font-size:.85rem;color:var(--geo-ink-soft);}
+.geo-toolbox-mechanism-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;}
+.geo-toolbox-mechanism{
+  padding:12px 14px;border:1px solid var(--geo-line);border-radius:2px;background:var(--geo-surface);
+}
+.geo-toolbox-mechanism h4{
+  margin:0 0 8px;font-family:'Archivo',sans-serif;font-weight:800;font-size:.88rem;
+  text-align:center;color:var(--geo-ink);
+}
+.geo-toolbox-mechanism ul{margin:0;padding-left:1.1em;}
+.geo-toolbox-mechanism li{font-size:.78rem;line-height:1.5;color:var(--geo-ink-soft);margin:0 0 4px;}
+.geo-toolbox-mechanism li:last-child{margin-bottom:0;}
 
 .geo-toolbox-limit{
   margin:0;padding:14px 18px;
@@ -344,6 +353,20 @@
 }
 .geo-toolbox-limit h4{margin:0 0 6px;font-family:'Archivo',sans-serif;font-weight:800;font-size:1rem;color:var(--geo-ink);}
 .geo-toolbox-limit p{margin:0;font-size:.85rem;color:var(--geo-ink-soft);}
+
+.geo-toolbox-challenges{
+  margin:0;padding:14px 18px;
+  border:1px solid #C0392B;border-left:4px solid #C0392B;border-top:1px solid color-mix(in srgb, #C0392B 40%, transparent);border-bottom:none;
+  background:color-mix(in srgb, #C0392B 12%, var(--geo-surface));
+}
+.geo-toolbox-challenges-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.66rem;text-transform:uppercase;
+  letter-spacing:.06em;color:#C0392B;margin:0 0 8px;
+}
+.geo-toolbox-challenge-item{
+  margin:0 0 6px;font-family:'Archivo',sans-serif;font-weight:800;font-size:.92rem;color:var(--geo-ink);
+}
+.geo-toolbox-challenge-item:last-child{margin-bottom:0;}
 
 .geo-toolbox-bypass{
   margin:0 0 28px;padding:16px 18px;
