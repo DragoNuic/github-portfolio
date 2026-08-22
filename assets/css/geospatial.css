@@ -315,6 +315,23 @@
 .geo-dict-item h4{margin:0 0 8px;font-family:'Archivo',sans-serif;font-weight:800;font-size:.92rem;color:var(--geo-ink);}
 .geo-dict-item p{margin:0;font-size:.85rem;line-height:1.5;color:var(--geo-ink-soft);}
 
+.geo-toolbox-national{
+  margin:0 0 20px;padding:18px 20px;
+  border:2px solid #2E5FA3;border-radius:2px;
+  background:color-mix(in srgb, #2E5FA3 8%, var(--geo-surface));
+}
+.geo-toolbox-national-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.7rem;text-transform:uppercase;
+  letter-spacing:.06em;color:#2E5FA3;margin:0 0 6px;text-align:center;font-weight:600;
+}
+.geo-toolbox-national-desc{
+  margin:0 0 14px;font-size:.85rem;line-height:1.5;color:var(--geo-ink-soft);text-align:center;
+}
+.geo-toolbox-national-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+.geo-toolbox-national-item{
+  padding:0 14px;border:1px solid var(--geo-line);border-radius:2px;background:var(--geo-surface);
+}
+
 /* Governance & Policy Toolbox - building-block diagram: a stack of
    "enabled by" blocks resting on a foundation pillar, an overlap box
    bridging both pillars, and a separate limitation callout. */
@@ -354,10 +371,12 @@
   margin:0 0 8px;font-family:'Archivo',sans-serif;font-weight:800;font-size:.88rem;
   text-align:center;color:var(--geo-ink);
 }
-.geo-toolbox-mechanism-points{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+.geo-toolbox-mechanism-points{display:flex;flex-direction:column;margin-top:8px;}
+.geo-toolbox-mechanism-point{border-top:1px solid var(--geo-line);}
+.geo-toolbox-mechanism-point:first-child{border-top:none;}
 .geo-toolbox-mechanism-point-toggle{
   display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;
-  background:none;border:none;padding:4px 0;margin:0;cursor:pointer;text-align:left;
+  background:none;border:none;padding:7px 0;margin:0;cursor:pointer;text-align:left;
   font-family:'Archivo',sans-serif;font-weight:700;font-size:.8rem;color:var(--geo-ink);
 }
 .geo-toolbox-mechanism-point-toggle:hover .geo-toolbox-mechanism-point-title{color:var(--geo-accent);}
@@ -365,7 +384,12 @@
   flex:none;font-size:.7rem;color:var(--geo-ink-soft);transition:transform .18s ease;
 }
 .geo-toolbox-mechanism-point-toggle[aria-expanded="true"] .geo-toolbox-mechanism-point-arrow{transform:rotate(180deg);}
-.geo-toolbox-mechanism-point-desc{margin:2px 0 0;padding-top:2px;font-size:.76rem;line-height:1.5;color:var(--geo-ink-soft);}
+.geo-toolbox-mechanism-point-desc{
+  margin:0 0 10px;padding:8px 10px;
+  border-left:2px solid var(--geo-accent);border-radius:0 2px 2px 0;
+  background:color-mix(in srgb, var(--geo-accent) 8%, transparent);
+  font-size:.8rem;line-height:1.5;color:var(--geo-ink-soft);
+}
 
 .geo-toolbox-limit{
   margin:0;padding:14px 18px;
