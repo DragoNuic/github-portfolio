@@ -303,7 +303,7 @@
    "enabled by" blocks resting on a foundation pillar, an overlap box
    bridging both pillars, and a separate limitation callout. */
 .geo-toolbox{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin:20px 0 24px;}
-.geo-toolbox-pillar{display:flex;flex-direction:column;}
+.geo-toolbox-pillar{display:flex;flex-direction:column;justify-content:flex-end;}
 .geo-toolbox-stack{display:flex;flex-direction:column;gap:2px;}
 .geo-toolbox-block{
   background:var(--geo-surface);border:1px solid var(--geo-line);
@@ -336,8 +336,8 @@
 .geo-toolbox-overlap p{margin:0 auto;max-width:640px;font-size:.85rem;color:var(--geo-ink-soft);}
 
 .geo-toolbox-limit{
-  margin:0 0 16px;padding:14px 18px;
-  border:1px solid #C0392B;border-left:4px solid #C0392B;border-radius:2px;
+  margin:0;padding:14px 18px;
+  border:1px solid #C0392B;border-left:4px solid #C0392B;border-radius:2px 2px 0 0;
   background:color-mix(in srgb, #C0392B 12%, var(--geo-surface));
 }
 .geo-toolbox-limit-label{
@@ -346,6 +346,23 @@
 }
 .geo-toolbox-limit h4{margin:0 0 6px;font-family:'Archivo',sans-serif;font-weight:800;font-size:1rem;color:var(--geo-ink);}
 .geo-toolbox-limit p{margin:0;font-size:.85rem;color:var(--geo-ink-soft);}
+
+.geo-toolbox-connector{
+  display:flex;align-items:center;gap:10px;
+  margin:0 0 0 22px;padding:6px 0;
+  border-left:2px dashed #C0392B;
+}
+.geo-toolbox-connector-line{
+  width:16px;height:2px;background:#C0392B;position:relative;
+}
+.geo-toolbox-connector-line::after{
+  content:'';position:absolute;right:-1px;top:-3px;
+  border:5px solid transparent;border-left-color:#C0392B;
+}
+.geo-toolbox-connector-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.68rem;text-transform:uppercase;
+  letter-spacing:.06em;color:#C0392B;
+}
 
 .geo-toolbox-bypass{
   margin:0 0 28px;padding:16px 18px;
