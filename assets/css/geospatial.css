@@ -354,11 +354,18 @@
   margin:0 0 8px;font-family:'Archivo',sans-serif;font-weight:800;font-size:.88rem;
   text-align:center;color:var(--geo-ink);
 }
-.geo-toolbox-mechanism-points{display:flex;flex-direction:column;gap:10px;margin-top:8px;}
-.geo-toolbox-mechanism-point-title{
-  margin:0 0 4px;font-family:'Archivo',sans-serif;font-weight:700;font-size:.8rem;color:var(--geo-ink);
+.geo-toolbox-mechanism-points{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+.geo-toolbox-mechanism-point-toggle{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;
+  background:none;border:none;padding:4px 0;margin:0;cursor:pointer;text-align:left;
+  font-family:'Archivo',sans-serif;font-weight:700;font-size:.8rem;color:var(--geo-ink);
 }
-.geo-toolbox-mechanism-point p{margin:0;font-size:.76rem;line-height:1.5;color:var(--geo-ink-soft);}
+.geo-toolbox-mechanism-point-toggle:hover .geo-toolbox-mechanism-point-title{color:var(--geo-accent);}
+.geo-toolbox-mechanism-point-arrow{
+  flex:none;font-size:.7rem;color:var(--geo-ink-soft);transition:transform .18s ease;
+}
+.geo-toolbox-mechanism-point-toggle[aria-expanded="true"] .geo-toolbox-mechanism-point-arrow{transform:rotate(180deg);}
+.geo-toolbox-mechanism-point-desc{margin:2px 0 0;padding-top:2px;font-size:.76rem;line-height:1.5;color:var(--geo-ink-soft);}
 
 .geo-toolbox-limit{
   margin:0;padding:14px 18px;
