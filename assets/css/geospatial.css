@@ -329,9 +329,10 @@
   letter-spacing:.08em;color:#2E5FA3;margin:0 0 8px;text-align:center;font-weight:700;
 }
 .geo-toolbox-national-desc{
-  margin:0 0 18px;font-size:.86rem;line-height:1.55;color:var(--geo-ink-soft);text-align:center;
-  max-width:560px;margin-left:auto;margin-right:auto;
+  font-size:.86rem;line-height:1.55;color:var(--geo-ink-soft);text-align:center;
+  max-width:560px;
 }
+.geo-toolbox-national .geo-toolbox-national-desc{margin:0 auto 18px;}
 .geo-toolbox-national-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;}
 .geo-toolbox-national-item{
   padding:2px 16px;border:1px solid var(--geo-line);border-radius:6px;background:var(--geo-surface);
@@ -378,10 +379,12 @@
   box-shadow:0 1px 3px color-mix(in srgb, var(--geo-ink) 6%, transparent);
 }
 .geo-toolbox-mechanism h4{
-  margin:0 0 4px;font-family:'Archivo',sans-serif;font-weight:800;font-size:.92rem;
-  text-align:center;color:var(--geo-ink);line-height:1.35;
+  margin:-16px -18px 10px;padding:14px 18px 12px;
+  font-family:'Archivo',sans-serif;font-weight:800;font-size:.9rem;
+  text-align:center;color:var(--geo-accent-ink);background:var(--geo-accent);
+  line-height:1.35;letter-spacing:.01em;border-radius:5px 5px 0 0;
 }
-.geo-toolbox-mechanism-points{display:flex;flex-direction:column;margin-top:10px;}
+.geo-toolbox-mechanism-points{display:flex;flex-direction:column;margin-top:2px;}
 .geo-toolbox-mechanism-point{border-top:1px solid var(--geo-line);}
 .geo-toolbox-mechanism-point:first-child{border-top:none;}
 .geo-toolbox-mechanism-point-toggle{
@@ -450,7 +453,7 @@
 .geo-toolbox-bypass-item p{margin:0;font-size:.83rem;line-height:1.55;color:var(--geo-ink-soft);}
 
 .geo-toolbox-culture{
-  margin:0;padding:22px 24px;
+  margin:0 0 28px;padding:22px 24px;
   border:2px solid #6B4C93;border-radius:8px;
   background:color-mix(in srgb, #6B4C93 8%, var(--geo-surface));
 }
@@ -459,9 +462,10 @@
   letter-spacing:.08em;color:#6B4C93;margin:0 0 8px;text-align:center;font-weight:700;
 }
 .geo-toolbox-culture-desc{
-  margin:0 0 18px;font-size:.86rem;line-height:1.55;color:var(--geo-ink-soft);text-align:center;
-  max-width:640px;margin-left:auto;margin-right:auto;
+  font-size:.86rem;line-height:1.55;color:var(--geo-ink-soft);text-align:center;
+  max-width:640px;
 }
+.geo-toolbox-culture .geo-toolbox-culture-desc{margin:0 auto 18px;}
 .geo-toolbox-culture-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
 .geo-toolbox-culture-item{
   padding:14px 16px;border:1px solid var(--geo-line);border-radius:6px;background:var(--geo-surface);
