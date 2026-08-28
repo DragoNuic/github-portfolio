@@ -74,7 +74,7 @@
 }
 .geo-back:hover{border-color:var(--geo-accent);color:var(--geo-ink);}
 
-.geo-wrap{max-width:1180px;margin:0 auto;padding:0 40px;}
+.geo-wrap{max-width:1680px;margin:0 auto;padding:0 40px;}
 
 /* ---------- Hub / gallery page ---------- */
 .geo-hero{padding:64px 0 40px;border-bottom:1px solid var(--geo-line);}
@@ -548,6 +548,7 @@ p.geo-segbar-title{
 .geo-segbar-legend-item{display:flex;align-items:center;gap:7px;font-size:.82rem;color:var(--geo-ink-soft);}
 .geo-segbar-swatch{width:11px;height:11px;border-radius:2px;flex:none;}
 .geo-segbar-note{font-size:.82rem;line-height:1.6;color:var(--geo-ink-soft);margin:10px 0 0;}
+.geo-segbar-source{font-size:.7rem;font-style:italic;color:var(--geo-ink-soft);margin:8px 0 0;opacity:.8;}
 
 .geo-party-row{display:flex;height:32px;border-radius:2px;overflow:hidden;}
 .geo-party-band{
