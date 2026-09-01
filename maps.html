@@ -1,13 +1,19 @@
 ﻿<!doctype html>
 <html lang="en">
-<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><title>Mapping & GIS / Drago Nuić</title><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/><link rel="stylesheet" href="assets/css/style.css" /></head>
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><title>Mapping & GIS / Drago Nuić</title><link rel="stylesheet" href="assets/css/style.css" /><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/css/geospatial.css" /><link rel="stylesheet" href="assets/css/vienna-map.css" />
+<style>
+  /* Embedded preview height - the fullscreen expand button still overrides this to 100vh. */
+  #vmap-stage{height:640px;min-height:480px;}
+  #vmap-stage.is-fullscreen{height:100vh;min-height:0;}
+</style>
+</head>
 <body>
   <header class="site-header">
     <div class="container">
       <h1><a href="home.html">Drago Nuić</a></h1>
       <nav>
         <a href="projects.html">Projects</a>
-        <a href="articles.html">Articles</a>
+        <!-- <a href="articles.html">Articles</a> -->
         <a href="maps.html">Mapping & GIS</a>
         <a href="about.html">About</a>
         <a href="cv.html">CV</a>
@@ -16,6 +22,102 @@
   </header>
 <main class="container">
   <section class="page-header"><h1>Mapping & GIS</h1><p>Cartographic work and spatial analysis grouped by analytical focus.</p></section>
+
+  <section id="vienna-social-housing" class="map-category">
+    <p class="map-category-label">Urban Housing Systems</p>
+    <h3>Vienna Social Housing Atlas</h3>
+    <p class="map-caption">An interactive, decade-by-decade map of Vienna's municipal (Gemeindebau) housing stock from 1900 to today, with population and construction data layered alongside. Drag the timeline below to watch it grow.</p>
+
+    <div class="geo-body">
+      <section class="vmap-stage" id="vmap-stage">
+        <p class="vmap-loading" id="vmap-loading">Loading map layers…</p>
+
+        <div class="vmap-info-bar">
+          <span>Tip: zoom in on the map to see individual building footprints more clearly.</span>
+          <div class="vmap-info-actions">
+            <button type="button" id="vmap-hide-toggle" class="vmap-theme-toggle">Hide map</button>
+            <button type="button" id="vmap-expand-toggle" class="vmap-theme-toggle">⛶ Expand map</button>
+            <button type="button" id="vmap-theme-toggle" class="vmap-theme-toggle">☾ Dark mode</button>
+          </div>
+        </div>
+
+        <svg id="vmap-svg"></svg>
+
+        <div class="vmap-panel vmap-panel--title">
+          <p class="geo-eyebrow">Social Housing Atlas</p>
+          <div class="vmap-title-row">
+            <img src="assets/img/StadtWien.png" alt="Stadt Wien" class="vmap-logo" />
+            <h1>Vienna</h1>
+          </div>
+          <p class="vmap-subtitle">From Red Vienna to today and beyond</p>
+          <p class="geo-coord">48.2082° N, 16.3738° E</p>
+        </div>
+
+        <div class="vmap-side-stack">
+          <div class="vmap-panel vmap-panel--legend">
+            <h4>Legend</h4>
+            <div id="vmap-legend"></div>
+            <div class="vmap-layer-list">
+              <div class="vmap-layer-active">
+                <label class="vmap-layer-toggle vmap-layer-toggle--main">
+                  <input type="checkbox" id="vmap-municipal-toggle" checked />
+                  Municipal Housing
+                </label>
+                <label class="vmap-layer-sub">
+                  <input type="checkbox" id="vmap-decade-toggle" />
+                  Colour coded by decade built
+                </label>
+              </div>
+              <label class="vmap-layer-toggle">
+                <input type="checkbox" id="vmap-newdev-toggle" />
+                Current Housing Development Projects
+              </label>
+              <label class="vmap-layer-toggle is-disabled">
+                <input type="checkbox" disabled />
+                Co-Operative Housing <em>(coming soon)</em>
+              </label>
+            </div>
+            <div class="vmap-decade-breakdown">
+              <div class="vmap-decade-breakdown-head">
+                <span>By decade</span>
+                <button type="button" class="vmap-decade-clear" id="vmap-decade-clear">Clear</button>
+              </div>
+              <p class="vmap-decade-hint">Click a decade to isolate it on the map - click more to compare several, or Clear to go back to the timeline slider below.</p>
+              <ul class="vmap-decade-list" id="vmap-decade-list"></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="vmap-controls">
+          <div class="vmap-controls-timeline">
+            <div class="vmap-controls-top">
+              <span class="vmap-decade-label">Built by</span>
+              <span id="vmap-decade-readout">2010–Today</span>
+            </div>
+            <input type="range" id="vmap-slider" min="0" max="12" step="1" value="12" />
+            <div class="vmap-tick-labels" id="vmap-ticks"></div>
+            <div class="vmap-era-bands" id="vmap-era-bands"></div>
+            <p class="vmap-slider-hint">Tip: click and drag the yellow point to scrub through time.</p>
+          </div>
+          <div class="vmap-controls-stats">
+            <div class="vmap-stat"><span>Units built</span><strong id="vmap-units">0</strong></div>
+            <div class="vmap-stat"><span>Population</span><strong id="vmap-population">0</strong></div>
+            <div class="vmap-chart-wrap" id="vmap-chart-wrap">
+              <div class="vmap-unit-chart" id="vmap-unit-bars"></div>
+              <svg class="vmap-pop-svg" id="vmap-pop-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <polyline class="vmap-pop-line" id="vmap-pop-polyline"></polyline>
+              </svg>
+              <span class="vmap-pop-dot" id="vmap-pop-dot"></span>
+            </div>
+            <p class="vmap-chart-caption">Bars: municipal housing units constructed · Line: population</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <p class="map-caption"><a href="housing-atlas-vienna.html">View the full Social Housing Atlas, with policy toolbox and timeline →</a></p>
+  </section>
+
   <section id="land-use" class="map-category"><p class="map-category-label">Land-Use Analysis</p><h3>Yolo County Conservation Parcels</h3><div class="map-pair">
     <article class="map-card"><img src="assets/img/maps/yolo-connectivity.jpg" alt="Yolo County conservation parcels connectivity map" /><div class="map-card-body"><h4>Candidate Conservation Parcels</h4><p class="map-caption">Parcel suitability and conservation designations for nature conservation planning.</p></div></article>
     <article class="map-card"><img src="assets/img/maps/yolo-parcels.jpg" alt="Yolo County land parcels and terrestrial landscape connectivity map" /><div class="map-card-body"><h4>Connectivity Opportunity Overlay</h4><p class="map-caption">A companion view layering terrestrial landscape connectivity over parcel categories.</p></div></article>
@@ -24,10 +126,6 @@
     <article id="murrelet" class="map-card featured"><img src="assets/img/maps/murrelet-nesting.jpg" alt="Potential nesting locations of the Marbled Murrelet in the Navarro River watershed" /><div class="map-card-body"><h4>Marbled Murrelet Nesting Potential</h4><p class="map-caption">Elevation, watershed context, and potential nesting locations in the Navarro River watershed.</p></div></article>
     <article id="wildfire" class="map-card"><img src="assets/img/maps/wildfire-burn.jpg" alt="Wildfire burn coverage in California by county" /><div class="map-card-body"><h4>California Wildfire Burn Coverage</h4><p class="map-caption">County-level comparison of wildfire burn proportions across California.</p></div></article>
   </div></section>
-  <section class="map-category"><p class="map-category-label">Urban Housing Systems</p><h3>Vienna Social Housing Atlas</h3><div class="map-grid">
-    <article id="vienna-social-housing" class="map-card featured"><a href="housing-atlas-vienna.html"><img src="assets/img/maps/vienna-social-housing-atlas.png" alt="Interactive map of Vienna's municipal social housing, colour-coded by decade built" /></a><div class="map-card-body"><h4>Social Housing Atlas - Vienna</h4><p class="map-caption">An interactive, decade-by-decade map of Vienna's municipal (Gemeindebau) housing stock from 1900 to today, with population and construction data layered alongside.</p></div></article>
-  </div></section>
-  <section class="map-category"><p class="map-category-label">Interactive Exploration</p><h3>Sample Web Map</h3><p>Explore spatial data and geographic patterns in a Leaflet map interface.</p><div id="map"></div></section>
 </main>
   <footer class="site-footer">
     <div class="container">
@@ -35,13 +133,28 @@
       <p class="footer-tagline">Mapping cities. Understanding systems. Building resilience.</p>
     </div>
   </footer>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="https://unpkg.com/d3@7/dist/d3.min.js"></script>
+<script src="assets/js/vienna-map.js"></script>
 <script>
-  const map = L.map('map').setView([48.2082, 16.3738], 12);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: 'Copyright OpenStreetMap contributors' }).addTo(map);
-  fetch('data/sample.geojson').then(r => r.ok ? r.json() : Promise.reject()).then(geojson => {
-    const geo = L.geoJSON(geojson, { onEachFeature: (f, layer) => { if (f.properties && f.properties.name) layer.bindPopup(f.properties.name); } }).addTo(map);
-    if (geo.getBounds && !geo.getBounds().isEmpty()) map.fitBounds(geo.getBounds());
-  }).catch(() => {});
+  const themeToggle = document.getElementById('vmap-theme-toggle');
+  themeToggle.addEventListener('click', () => {
+    const isDark = themeToggle.closest('.geo-body').classList.toggle('geo-dark');
+    themeToggle.textContent = isDark ? '☀ Light mode' : '☾ Dark mode';
+  });
+
+  const stageEl = document.getElementById('vmap-stage');
+  const expandToggle = document.getElementById('vmap-expand-toggle');
+  expandToggle.addEventListener('click', () => {
+    const isFull = stageEl.classList.toggle('is-fullscreen');
+    document.body.classList.toggle('vmap-scroll-lock', isFull);
+    expandToggle.textContent = isFull ? '⤢ Minimise map' : '⛶ Expand map';
+    requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
+  });
+
+  const hideToggle = document.getElementById('vmap-hide-toggle');
+  hideToggle.addEventListener('click', () => {
+    const isHidden = stageEl.classList.toggle('is-hidden');
+    hideToggle.textContent = isHidden ? 'Show map' : 'Hide map';
+  });
 </script>
 </body></html>
