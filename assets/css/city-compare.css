@@ -65,7 +65,7 @@
 .ladder-legend span{display:flex;align-items:center;gap:7px;font-size:.74rem;color:var(--geo-ink-soft);font-family:'IBM Plex Mono',monospace;}
 .ladder-legend i{width:9px;height:9px;border-radius:50%;flex:none;}
 
-.ladder-row{display:grid;grid-template-columns:170px 1fr 96px;align-items:center;gap:18px;padding:13px 0;border-top:1px solid var(--geo-line);}
+.ladder-row{display:grid;grid-template-columns:170px 1fr;align-items:center;gap:18px;padding:13px 0;border-top:1px solid var(--geo-line);}
 .ladder-row:first-of-type{border-top:none;}
 .ladder-city{display:flex;flex-direction:column;gap:1px;}
 .ladder-city b{font-family:'Archivo',sans-serif;font-weight:800;font-size:.9rem;color:var(--geo-ink);}
@@ -86,10 +86,7 @@
   background:var(--geo-ink);color:var(--geo-bg);font-family:'IBM Plex Mono',monospace;font-size:.66rem;
   padding:3px 7px;border-radius:3px;white-space:nowrap;pointer-events:none;
 }
-.ladder-ratio{text-align:right;}
-.ladder-ratio b{font-family:'IBM Plex Mono',monospace;font-size:.92rem;color:var(--geo-ink);}
-.ladder-ratio span{display:block;font-size:.62rem;color:var(--geo-ink-soft);margin-top:1px;}
-.ladder-axis{display:grid;grid-template-columns:170px 1fr 96px;gap:18px;margin-top:4px;}
+.ladder-axis{display:grid;grid-template-columns:170px 1fr;gap:18px;margin-top:4px;}
 .ladder-axis .ticks{position:relative;height:14px;font-family:'IBM Plex Mono',monospace;font-size:.64rem;color:var(--geo-ink-soft);}
 .ladder-axis .ticks span{position:absolute;transform:translateX(-50%);}
 
@@ -106,14 +103,14 @@
   font-family:'IBM Plex Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.06em;
   color:var(--geo-ink-soft);border:1px solid var(--geo-line);border-radius:3px;padding:2px 6px;flex:none;
 }
-.cc-stat-row{display:flex;gap:22px;}
+.cc-stat-row{display:flex;flex-wrap:wrap;gap:14px 22px;}
 .cc-stat{display:flex;flex-direction:column;gap:2px;}
 .cc-stat b{font-family:'IBM Plex Mono',monospace;font-size:.95rem;color:var(--geo-ink);font-variant-numeric:tabular-nums;}
 .cc-stat span{font-size:.66rem;color:var(--geo-ink-soft);text-transform:uppercase;letter-spacing:.04em;}
 .cc-stat.pending b{color:var(--geo-ink-soft);font-weight:400;font-size:.82rem;font-style:italic;}
 
 @media (max-width:720px){
-  .ladder-row,.ladder-axis{grid-template-columns:120px 1fr 72px;gap:10px;}
+  .ladder-row,.ladder-axis{grid-template-columns:120px 1fr;gap:10px;}
   .ladder-city > span{display:none;}
   .social-bar{max-width:100px;}
 }

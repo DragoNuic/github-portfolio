@@ -131,22 +131,22 @@
     const RUNG_COLOR = ['var(--rung-municipal)', 'var(--rung-coop)', 'var(--rung-median)', 'var(--rung-new)', 'var(--rung-furnished)'];
 
     const compareCities = [
-      { name:'Vienna', country:'Austria', capital:true, pop:2028289, density:4922, social:.446,
+      { name:'Vienna', country:'Austria', capital:true, pop:2028289, density:4922, growth:.0104, landArea:414.82, landOwnership:'~46%', social:.446,
         stock:{municipal:.24, coop:.17, owner:.193, private:.341, other:.056},
         rent:{municipal:5.1, coop:6.1, median:7.5, new:13.7, furnished:21} },
-      { name:'Berlin', country:'Germany', capital:true, pop:3917196, density:4109, social:.276,
+      { name:'Berlin', country:'Germany', capital:true, pop:3917196, density:4109, growth:.0081, landArea:891.3, landOwnership:'~43%', social:.276,
         stock:{municipal:.179, coop:.097, owner:.164, private:.56, other:.07},
         rent:{municipal:6.67, coop:6.27, median:7.1, new:15.78, furnished:24} },
-      { name:'Helsinki', country:'Finland', capital:true, pop:694392, density:3215, social:.168,
+      { name:'Helsinki', country:'Finland', capital:true, pop:694392, density:3215, growth:.009, landArea:217, landOwnership:'~64.7%', social:.168,
         stock:{municipal:.135, coop:.033, owner:.43, private:.332, other:.07},
         rent:{municipal:13.6, coop:14, median:19.4, new:21.5, furnished:30} },
-      { name:'Copenhagen', country:'Denmark', capital:true, pop:670393, density:7390, social:.188,
+      { name:'Copenhagen', country:'Denmark', capital:true, pop:670393, density:7390, growth:.013, landArea:92.4, landOwnership:'~29.51%', social:.188,
         stock:{municipal:.188, coop:.28, owner:.26, private:.272, other:0},
         rent:{municipal:12.5, coop:8.5, median:11.36, new:17, furnished:22.5} },
-      { name:'Amsterdam', country:'Netherlands', capital:true, pop:941873, density:5092, social:.371,
+      { name:'Amsterdam', country:'Netherlands', capital:true, pop:941873, density:5092, growth:.012, landArea:219.32, landOwnership:'~80%', social:.371,
         stock:{municipal:.37, coop:.001, owner:.3, private:.329, other:0},
         rent:{municipal:8.1, coop:10.5, median:11.8, new:25.3, furnished:31.5} },
-      { name:'Paris', country:'France', capital:true, pop:2047602, density:20100, social:.1941,
+      { name:'Paris', country:'France', capital:true, pop:2047602, density:20100, growth:-.007, landArea:105, landOwnership:'~30% - 40%', social:.1941,
         stock:{municipal:.194, coop:.0001, owner:.334, private:.425, other:.04},
         rent:{municipal:7.5, coop:null, median:26.6, new:27.2, furnished:41.46} },
       { name:'London', country:'United Kingdom', capital:true, pop:null, social:.231,
@@ -170,7 +170,6 @@
     compareCities.forEach(c => {
       const pts = RUNGS.map(r => c.rent[r.key]).filter(v => v != null);
       const minX = scaleX(Math.min(...pts)), maxX = scaleX(Math.max(...pts));
-      const ratio = (c.rent.new != null && c.rent.municipal) ? (c.rent.new / c.rent.municipal) : null;
 
       const row = document.createElement('div');
       row.className = 'ladder-row';
@@ -187,7 +186,6 @@
           <div class="seg" style="left:${minX}%;width:${maxX-minX}%"></div>
           ${RUNGS.map((r,i) => c.rent[r.key] != null ? `<div class="pt" data-tip="${r.label}: €${c.rent[r.key]}/m²" style="left:${scaleX(c.rent[r.key])}%;background:${RUNG_COLOR[i]}"></div>` : '').join('')}
         </div>
-        <div class="ladder-ratio">${ratio ? `<b>${ratio.toFixed(1)}×</b><span>new vs municipal</span>` : `<b style="font-size:.8rem;font-style:italic;color:var(--geo-ink-soft)">—</b>`}</div>
       `;
       ladderRows.appendChild(row);
     });
@@ -197,7 +195,6 @@
       <div class="ticks">
         ${[0, 10, 20, 30, 40].filter(v => v <= maxRent + 5).map(v => `<span style="left:${scaleX(v)}%">€${v}</span>`).join('')}
       </div>
-      <div></div>
     `;
 
     const cityGrid = document.getElementById('cityGrid');
@@ -205,7 +202,13 @@
       const card = document.createElement('div');
       card.className = 'cc-card';
       const popBlock = c.pop
-        ? `<div class="cc-stat"><b>${fmtPop(c.pop)}</b><span>Population</span></div>${c.density ? `<div class="cc-stat"><b>${c.density.toLocaleString()}</b><span>People / km²</span></div>` : ''}`
+        ? [
+            `<div class="cc-stat"><b>${fmtPop(c.pop)}</b><span>Population</span></div>`,
+            c.growth != null ? `<div class="cc-stat"><b>${c.growth >= 0 ? '+' : ''}${(c.growth*100).toFixed(1)}%/yr</b><span>Pop. growth</span></div>` : '',
+            c.density ? `<div class="cc-stat"><b>${c.density.toLocaleString()}</b><span>People / km²</span></div>` : '',
+            c.landArea ? `<div class="cc-stat"><b>${c.landArea.toLocaleString()} km²</b><span>Land area</span></div>` : '',
+            c.landOwnership ? `<div class="cc-stat"><b>${c.landOwnership}</b><span>Municipal land</span></div>` : '',
+          ].join('')
         : `<div class="cc-stat pending"><b>data pending</b><span>Population</span></div>`;
 
       const stockEntries = TENURE.map(t => ({...t, value: c.stock[t.key] || 0})).filter(t => t.value > 0);
