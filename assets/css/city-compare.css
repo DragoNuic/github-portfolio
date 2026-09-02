@@ -38,7 +38,7 @@
   --stock-private:#B0559C; --stock-other:#6B6B63;
   --rung-municipal:#3E7C87; --rung-coop:#6FA8B5; --rung-median:#E0B84A;
   --rung-new:#D9704F; --rung-furnished:#D6483A;
-  max-width:1180px;margin:0 auto;padding:44px 40px 80px;
+  max-width:1680px;margin:0 auto;padding:44px 40px 80px;
   animation:geoFadeUp .5s cubic-bezier(.2,.7,.2,1) both;
 }
 @media (prefers-reduced-motion:reduce){.city-compare{animation:none;}}
@@ -128,7 +128,6 @@
   position:absolute;top:100%;margin-top:8px;
   display:flex;align-items:center;justify-content:center;white-space:nowrap;
 }
-.stock-chart-label .flag-pixel{margin-right:4px;}
 .stock-chart-label span{font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:var(--geo-ink-soft);}
 
 .cc-footnote{font-size:.7rem;color:var(--geo-ink-soft);margin:14px 0 0;line-height:1.55;}

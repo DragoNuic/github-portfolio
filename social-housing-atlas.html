@@ -43,18 +43,17 @@
           <p>The same cities on the globe, read side by side: housing stock makeup, and how far rent climbs from a regulated tenancy to the open market.</p>
         </div>
 
-        <div class="cc-section-head"><h2>Rent ladder, by city</h2></div>
-        <p class="cc-note">Figures in €/m²/month · rent data and housing-stock shares from <a href="https://www.housingcoop.eu/" target="_blank" rel="noopener">European Housing Coop</a> · population and density from each city's statistical bureau and the <a href="https://data-explorer.oecd.org/" target="_blank" rel="noopener">OECD</a>. Self-reported figures, not yet independently verified.</p>
-
         <div class="cc-charts-row">
           <div class="ladder-card">
+            <div class="cc-section-head"><h2>Rent ladder, by city</h2></div>
+            <p class="cc-note">Figures in €/m²/month · rent data and housing-stock shares from <a href="https://www.housingcoop.eu/" target="_blank" rel="noopener">European Housing Coop</a> · population and density from each city's statistical bureau and the <a href="https://data-explorer.oecd.org/" target="_blank" rel="noopener">OECD</a>. Self-reported figures, not yet independently verified.</p>
             <div class="ladder-legend" id="ladderLegend"></div>
             <div id="ladderRows"></div>
             <div class="ladder-axis" id="ladderAxis"></div>
           </div>
 
           <div class="stock-card">
-            <p class="stock-card-title">Social housing stock vs. municipal land ownership</p>
+            <p class="stock-card-title">Housing Stock &amp; Municipal Land Ownership</p>
             <div class="stock-legend">
               <span><i class="sw sw-bar"></i>Municipal + cooperative share of housing stock</span>
               <span><i class="sw sw-dot"></i>Municipal land ownership</span>
@@ -161,7 +160,7 @@
       { name:'Paris', country:'France', capital:true, pop:2047602, popFua:13195545, density:20100, growth:-.007, landArea:105, landOwnership:'~30% - 40%', landPct:35, social:.1941,
         stock:{municipal:.194, coop:.0001, owner:.334, private:.425, other:.04},
         rent:{municipal:7.5, coop:null, median:26.6, new:27.2, furnished:41.46} },
-      { name:'London', country:'United Kingdom', capital:true, pop:null, social:.231,
+      { name:'London', country:'United Kingdom', flagCountry:'England', capital:true, pop:null, social:.231,
         stock:{municipal:.231, coop:.009, owner:.467, private:.292, other:0},
         rent:{municipal:9.84, coop:9.6, median:35.1, new:35.1, furnished:36} },
     ];
@@ -174,7 +173,7 @@
       'Denmark':        { legend:{R:'#C60C30',W:'#FFFFFF'}, rows:['RRRWWRRRRR','RRRWWRRRRR','WWWWWWWWWW','WWWWWWWWWW','RRRWWRRRRR','RRRWWRRRRR'] },
       'Netherlands':    { legend:{R:'#AE1C28',W:'#FFFFFF',B:'#21468B'}, rows:['RRRRRRRRRR','RRRRRRRRRR','WWWWWWWWWW','WWWWWWWWWW','BBBBBBBBBB','BBBBBBBBBB'] },
       'France':         { legend:{B:'#0055A4',W:'#FFFFFF',R:'#EF4135'}, rows:Array(6).fill('BBBWWWWRRR') },
-      'United Kingdom': { legend:{B:'#00247D',W:'#FFFFFF',R:'#CF142B'}, rows:['BBBBWWBBBB','BBBBWWBBBB','WWWWRRWWWW','WWWWRRWWWW','BBBBWWBBBB','BBBBWWBBBB'] },
+      'England':        { legend:{W:'#FFFFFF',R:'#CE1124'}, rows:['WWWWRRWWWW','WWWWRRWWWW','RRRRRRRRRR','RRRRRRRRRR','WWWWRRWWWW','WWWWRRWWWW'] },
     };
     const flagSVG = country => {
       const f = FLAGS[country];
@@ -208,7 +207,7 @@
       row.className = 'ladder-row';
       row.innerHTML = `
         <div class="ladder-city">
-          <b>${c.name}</b><span>${flagSVG(c.country)}${c.country}</span>
+          <b>${c.name}</b><span>${flagSVG(c.flagCountry || c.country)}${c.country}</span>
           <div class="social-bar" title="${pct(c.social)} of housing stock is social housing (municipal + cooperative)">
             <div class="social-bar-fill" style="width:${(c.social/maxSocial)*100}%"></div>
             <span>${pct(c.social)} social</span>
@@ -230,8 +229,12 @@
       </div>
     `;
 
-    // ---- social housing stock vs. municipal land ownership ----
-    const citiesBySocial = [...compareCities].sort((a, b) => b.social - a.social);
+    // ---- housing stock & municipal land ownership ----
+    // "social" here is measured the same way as the City profiles below it:
+    // municipal + cooperative share of the housing stock, not the tracker's
+    // separately-sourced summary column (the two can disagree).
+    const socialFromStock = c => c.stock.municipal + c.stock.coop;
+    const citiesBySocial = [...compareCities].sort((a, b) => socialFromStock(b) - socialFromStock(a));
     const stockScaleMax = Math.max(100, ...citiesBySocial.map(c => c.landPct || 0));
     const stockChart = document.getElementById('stockChart');
     stockChart.innerHTML = `
@@ -242,8 +245,8 @@
         ${citiesBySocial.map(c => `
           <div class="stock-chart-col">
             ${c.landPct != null ? `<div class="stock-chart-dot" style="bottom:${(c.landPct/stockScaleMax)*100}%" title="${c.name}: ${c.landOwnership} of land is municipally owned"></div>` : ''}
-            <div class="stock-chart-bar" style="height:${(c.social/stockScaleMax)*100}%" title="${c.name}: ${pct(c.social)} of housing stock is municipal + cooperative"></div>
-            <div class="stock-chart-label">${flagSVG(c.country)}<span>${c.name}</span></div>
+            <div class="stock-chart-bar" style="height:${(socialFromStock(c)/stockScaleMax)*100}%" title="${c.name}: ${pct(socialFromStock(c))} of housing stock is municipal + cooperative"></div>
+            <div class="stock-chart-label"><span>${c.name}</span></div>
           </div>
         `).join('')}
       </div>
@@ -270,7 +273,7 @@
 
       card.innerHTML = `
         <div class="cc-card-head">
-          <div><h3>${c.name}</h3><div class="country">${flagSVG(c.country)}${c.country}</div></div>
+          <div><h3>${c.name}</h3><div class="country">${flagSVG(c.flagCountry || c.country)}${c.country}</div></div>
           ${c.capital ? '<span class="cc-capital">Capital</span>' : ''}
         </div>
         <div class="cc-stat-row">${popBlock}</div>
