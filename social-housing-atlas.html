@@ -46,16 +46,28 @@
         <div class="cc-section-head"><h2>Rent ladder, by city</h2></div>
         <p class="cc-note">Figures in €/m²/month · rent data and housing-stock shares from <a href="https://www.housingcoop.eu/" target="_blank" rel="noopener">European Housing Coop</a> · population and density from each city's statistical bureau and the <a href="https://data-explorer.oecd.org/" target="_blank" rel="noopener">OECD</a>. Self-reported figures, not yet independently verified.</p>
 
-        <div class="ladder-card">
-          <div class="ladder-legend" id="ladderLegend"></div>
-          <div id="ladderRows"></div>
-          <div class="ladder-axis" id="ladderAxis"></div>
+        <div class="cc-charts-row">
+          <div class="ladder-card">
+            <div class="ladder-legend" id="ladderLegend"></div>
+            <div id="ladderRows"></div>
+            <div class="ladder-axis" id="ladderAxis"></div>
+          </div>
+
+          <div class="stock-card">
+            <p class="stock-card-title">Social housing stock vs. municipal land ownership</p>
+            <div class="stock-legend">
+              <span><i class="sw sw-bar"></i>Municipal + cooperative share of housing stock</span>
+              <span><i class="sw sw-dot"></i>Municipal land ownership</span>
+            </div>
+            <div class="stock-chart" id="stockChart"></div>
+          </div>
         </div>
 
         <div class="cc-section-head"><h2>City profiles</h2></div>
         <p class="cc-note">Population where reported; housing-stock shares from the same source as the rent ladder above.</p>
 
         <div class="cc-grid" id="cityGrid"></div>
+        <p class="cc-footnote">* FUA (Functional Urban Area) is the OECD's definition of a city's true economic footprint - the city plus surrounding areas connected to it through employee commuting, extending beyond the administrative city limits.</p>
       </div>
     </section>
   </div>
@@ -131,28 +143,47 @@
     const RUNG_COLOR = ['var(--rung-municipal)', 'var(--rung-coop)', 'var(--rung-median)', 'var(--rung-new)', 'var(--rung-furnished)'];
 
     const compareCities = [
-      { name:'Vienna', country:'Austria', capital:true, pop:2028289, popFua:3231239, density:4922, growth:.0104, landArea:414.82, landOwnership:'~46%', social:.446,
+      { name:'Vienna', country:'Austria', capital:true, pop:2028289, popFua:3231239, density:4922, growth:.0104, landArea:414.82, landOwnership:'~46%', landPct:46, social:.446,
         stock:{municipal:.24, coop:.17, owner:.193, private:.341, other:.056},
         rent:{municipal:5.1, coop:6.1, median:7.5, new:13.7, furnished:21} },
-      { name:'Berlin', country:'Germany', capital:true, pop:3917196, popFua:5051349, density:4109, growth:.0081, landArea:891.3, landOwnership:'~43%', social:.276,
+      { name:'Berlin', country:'Germany', capital:true, pop:3917196, popFua:5051349, density:4109, growth:.0081, landArea:891.3, landOwnership:'~43%', landPct:43, social:.276,
         stock:{municipal:.179, coop:.097, owner:.164, private:.56, other:.07},
         rent:{municipal:6.67, coop:6.27, median:7.1, new:15.78, furnished:24} },
-      { name:'Helsinki', country:'Finland', capital:true, pop:694392, popFua:1773305, density:3215, growth:.009, landArea:217, landOwnership:'~64.7%', social:.168,
+      { name:'Helsinki', country:'Finland', capital:true, pop:694392, popFua:1773305, density:3215, growth:.009, landArea:217, landOwnership:'~64.7%', landPct:64.7, social:.168,
         stock:{municipal:.135, coop:.033, owner:.43, private:.332, other:.07},
         rent:{municipal:13.6, coop:14, median:19.4, new:21.5, furnished:30} },
-      { name:'Copenhagen', country:'Denmark', capital:true, pop:670393, popFua:2294858, density:7390, growth:.013, landArea:92.4, landOwnership:'~29.51%', social:.188,
+      { name:'Copenhagen', country:'Denmark', capital:true, pop:670393, popFua:2294858, density:7390, growth:.013, landArea:92.4, landOwnership:'~29.51%', landPct:29.51, social:.188,
         stock:{municipal:.188, coop:.28, owner:.26, private:.272, other:0},
         rent:{municipal:12.5, coop:8.5, median:11.36, new:17, furnished:22.5} },
-      { name:'Amsterdam', country:'Netherlands', capital:true, pop:941873, popFua:2980410, density:5092, growth:.012, landArea:219.32, landOwnership:'~80%', social:.371,
+      { name:'Amsterdam', country:'Netherlands', capital:true, pop:941873, popFua:2980410, density:5092, growth:.012, landArea:219.32, landOwnership:'~80%', landPct:80, social:.371,
         stock:{municipal:.37, coop:.001, owner:.3, private:.329, other:0},
         rent:{municipal:8.1, coop:10.5, median:11.8, new:25.3, furnished:31.5} },
-      { name:'Paris', country:'France', capital:true, pop:2047602, popFua:13195545, density:20100, growth:-.007, landArea:105, landOwnership:'~30% - 40%', social:.1941,
+      { name:'Paris', country:'France', capital:true, pop:2047602, popFua:13195545, density:20100, growth:-.007, landArea:105, landOwnership:'~30% - 40%', landPct:35, social:.1941,
         stock:{municipal:.194, coop:.0001, owner:.334, private:.425, other:.04},
         rent:{municipal:7.5, coop:null, median:26.6, new:27.2, furnished:41.46} },
       { name:'London', country:'United Kingdom', capital:true, pop:null, social:.231,
         stock:{municipal:.231, coop:.009, owner:.467, private:.292, other:0},
         rent:{municipal:9.84, coop:9.6, median:35.1, new:35.1, furnished:36} },
     ];
+
+    // ---- tiny pixel-art flags, one 10x6 grid per country ----
+    const FLAGS = {
+      'Austria':        { legend:{R:'#ED2939',W:'#FFFFFF'}, rows:['RRRRRRRRRR','RRRRRRRRRR','WWWWWWWWWW','WWWWWWWWWW','RRRRRRRRRR','RRRRRRRRRR'] },
+      'Germany':        { legend:{K:'#000000',R:'#DD0000',G:'#FFCE00'}, rows:['KKKKKKKKKK','KKKKKKKKKK','RRRRRRRRRR','RRRRRRRRRR','GGGGGGGGGG','GGGGGGGGGG'] },
+      'Finland':        { legend:{W:'#FFFFFF',B:'#003580'}, rows:['WWWBBWWWWW','WWWBBWWWWW','BBBBBBBBBB','BBBBBBBBBB','WWWBBWWWWW','WWWBBWWWWW'] },
+      'Denmark':        { legend:{R:'#C60C30',W:'#FFFFFF'}, rows:['RRRWWRRRRR','RRRWWRRRRR','WWWWWWWWWW','WWWWWWWWWW','RRRWWRRRRR','RRRWWRRRRR'] },
+      'Netherlands':    { legend:{R:'#AE1C28',W:'#FFFFFF',B:'#21468B'}, rows:['RRRRRRRRRR','RRRRRRRRRR','WWWWWWWWWW','WWWWWWWWWW','BBBBBBBBBB','BBBBBBBBBB'] },
+      'France':         { legend:{B:'#0055A4',W:'#FFFFFF',R:'#EF4135'}, rows:Array(6).fill('BBBWWWWRRR') },
+      'United Kingdom': { legend:{B:'#00247D',W:'#FFFFFF',R:'#CF142B'}, rows:['BBBBWWBBBB','BBBBWWBBBB','WWWWRRWWWW','WWWWRRWWWW','BBBBWWBBBB','BBBBWWBBBB'] },
+    };
+    const flagSVG = country => {
+      const f = FLAGS[country];
+      if (!f) return '';
+      const cells = f.rows.map((row, y) => [...row].map((ch, x) =>
+        `<rect x="${x}" y="${y}" width="1" height="1" fill="${f.legend[ch]}"/>`
+      ).join('')).join('');
+      return `<svg class="flag-pixel" viewBox="0 0 10 6" shape-rendering="crispEdges" aria-hidden="true">${cells}</svg>`;
+    };
 
     const maxSocial = Math.max(...compareCities.map(c => c.social));
     const fmtPop = n => n == null ? null : n >= 1e6 ? (n/1e6).toFixed(2)+'M' : n.toLocaleString();
@@ -166,14 +197,10 @@
     const maxRent = Math.max(...allRentVals);
     const scaleX = v => (v / maxRent) * 100;
 
-    const rangeOf = c => {
-      const pts = RUNGS.map(r => c.rent[r.key]).filter(v => v != null);
-      return Math.max(...pts) - Math.min(...pts);
-    };
-    const citiesByRange = [...compareCities].sort((a, b) => rangeOf(a) - rangeOf(b));
+    const citiesByMedian = [...compareCities].sort((a, b) => a.rent.median - b.rent.median);
 
     const ladderRows = document.getElementById('ladderRows');
-    citiesByRange.forEach(c => {
+    citiesByMedian.forEach(c => {
       const pts = RUNGS.map(r => c.rent[r.key]).filter(v => v != null);
       const minX = scaleX(Math.min(...pts)), maxX = scaleX(Math.max(...pts));
 
@@ -181,7 +208,7 @@
       row.className = 'ladder-row';
       row.innerHTML = `
         <div class="ladder-city">
-          <b>${c.name}</b><span>${c.country}</span>
+          <b>${c.name}</b><span>${flagSVG(c.country)}${c.country}</span>
           <div class="social-bar" title="${pct(c.social)} of housing stock is social housing (municipal + cooperative)">
             <div class="social-bar-fill" style="width:${(c.social/maxSocial)*100}%"></div>
             <span>${pct(c.social)} social</span>
@@ -203,6 +230,25 @@
       </div>
     `;
 
+    // ---- social housing stock vs. municipal land ownership ----
+    const citiesBySocial = [...compareCities].sort((a, b) => b.social - a.social);
+    const stockScaleMax = Math.max(100, ...citiesBySocial.map(c => c.landPct || 0));
+    const stockChart = document.getElementById('stockChart');
+    stockChart.innerHTML = `
+      <div class="stock-chart-yaxis">
+        ${[0, 25, 50, 75, 100].filter(v => v <= stockScaleMax).map(v => `<span style="bottom:${(v/stockScaleMax)*100}%">${v}%</span>`).join('')}
+      </div>
+      <div class="stock-chart-plot">
+        ${citiesBySocial.map(c => `
+          <div class="stock-chart-col">
+            ${c.landPct != null ? `<div class="stock-chart-dot" style="bottom:${(c.landPct/stockScaleMax)*100}%" title="${c.name}: ${c.landOwnership} of land is municipally owned"></div>` : ''}
+            <div class="stock-chart-bar" style="height:${(c.social/stockScaleMax)*100}%" title="${c.name}: ${pct(c.social)} of housing stock is municipal + cooperative"></div>
+            <div class="stock-chart-label">${flagSVG(c.country)}<span>${c.name}</span></div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+
     const citiesAlpha = [...compareCities].sort((a, b) => a.name.localeCompare(b.name));
 
     const cityGrid = document.getElementById('cityGrid');
@@ -212,7 +258,7 @@
       const popBlock = c.pop
         ? [
             `<div class="cc-stat"><b>${fmtPop(c.pop)}</b><span>Population</span></div>`,
-            c.popFua ? `<div class="cc-stat"><b>${fmtPop(c.popFua)}</b><span>FUA population</span></div>` : '',
+            c.popFua ? `<div class="cc-stat"><b>${fmtPop(c.popFua)}</b><span>FUA population*</span></div>` : '',
             c.growth != null ? `<div class="cc-stat"><b>${c.growth >= 0 ? '+' : ''}${(c.growth*100).toFixed(1)}%/yr</b><span>Pop. growth</span></div>` : '',
             c.density ? `<div class="cc-stat"><b>${c.density.toLocaleString()}</b><span>People / km²</span></div>` : '',
             c.landArea ? `<div class="cc-stat"><b>${c.landArea.toLocaleString()} km²</b><span>Land area</span></div>` : '',
@@ -224,7 +270,7 @@
 
       card.innerHTML = `
         <div class="cc-card-head">
-          <div><h3>${c.name}</h3><div class="country">${c.country}</div></div>
+          <div><h3>${c.name}</h3><div class="country">${flagSVG(c.country)}${c.country}</div></div>
           ${c.capital ? '<span class="cc-capital">Capital</span>' : ''}
         </div>
         <div class="cc-stat-row">${popBlock}</div>

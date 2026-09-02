@@ -56,10 +56,16 @@
 .cc-note{font-size:.78rem;color:var(--geo-ink-soft);margin:0 0 20px;line-height:1.55;}
 .cc-note a{color:var(--geo-ink-soft);}
 
+.cc-charts-row{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;margin-bottom:8px;align-items:start;}
+@media (max-width:900px){.cc-charts-row{grid-template-columns:1fr;}}
+
+/* tiny pixel-art flags */
+.flag-pixel{width:15px;height:9px;flex:none;vertical-align:middle;margin-right:6px;border:1px solid var(--geo-line);border-radius:1px;}
+
 /* rent ladder */
 .ladder-card{
   background:var(--geo-surface);border:1px solid var(--geo-line);border-radius:10px;
-  padding:26px 28px 22px;margin-bottom:40px;
+  padding:26px 28px 22px;margin-bottom:0;
 }
 .ladder-legend{display:flex;flex-wrap:wrap;gap:14px 20px;margin:2px 0 22px;}
 .ladder-legend span{display:flex;align-items:center;gap:7px;font-size:.74rem;color:var(--geo-ink-soft);font-family:'IBM Plex Mono',monospace;}
@@ -89,6 +95,43 @@
 .ladder-axis{display:grid;grid-template-columns:170px 1fr;gap:18px;margin-top:4px;}
 .ladder-axis .ticks{position:relative;height:14px;font-family:'IBM Plex Mono',monospace;font-size:.64rem;color:var(--geo-ink-soft);}
 .ladder-axis .ticks span{position:absolute;transform:translateX(-50%);}
+
+/* social housing stock vs. municipal land ownership */
+.stock-card{
+  background:var(--geo-surface);border:1px solid var(--geo-line);border-radius:10px;
+  padding:26px 24px 42px;
+}
+.stock-card-title{font-family:'Archivo',sans-serif;font-weight:800;font-size:.92rem;margin:0 0 14px;color:var(--geo-ink);}
+.stock-legend{display:flex;flex-direction:column;gap:7px;margin:0 0 22px;}
+.stock-legend span{display:flex;align-items:center;font-size:.72rem;color:var(--geo-ink-soft);font-family:'IBM Plex Mono',monospace;line-height:1.4;}
+.sw{width:10px;height:10px;margin-right:8px;flex:none;}
+.sw-bar{background:var(--stock-municipal);border-radius:2px;}
+.sw-dot{background:var(--stock-owner);border-radius:50%;}
+
+.stock-chart{display:flex;gap:8px;}
+.stock-chart-yaxis{position:relative;width:30px;height:200px;flex:none;}
+.stock-chart-yaxis span{
+  position:absolute;left:0;transform:translateY(50%);
+  font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:var(--geo-ink-soft);
+}
+.stock-chart-plot{
+  flex:1;display:flex;align-items:flex-end;gap:8px;height:200px;
+  border-left:1px solid var(--geo-line);border-bottom:1px solid var(--geo-line);padding-left:6px;
+}
+.stock-chart-col{position:relative;flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;min-width:0;}
+.stock-chart-bar{width:65%;background:var(--stock-municipal);border-radius:3px 3px 0 0;min-height:2px;}
+.stock-chart-dot{
+  position:absolute;left:50%;transform:translate(-50%,50%);
+  width:9px;height:9px;border-radius:50%;background:var(--stock-owner);border:1.5px solid var(--geo-surface);
+}
+.stock-chart-label{
+  position:absolute;top:100%;margin-top:8px;
+  display:flex;align-items:center;justify-content:center;white-space:nowrap;
+}
+.stock-chart-label .flag-pixel{margin-right:4px;}
+.stock-chart-label span{font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:var(--geo-ink-soft);}
+
+.cc-footnote{font-size:.7rem;color:var(--geo-ink-soft);margin:14px 0 0;line-height:1.55;}
 
 /* city profile cards */
 .cc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-bottom:36px;}
