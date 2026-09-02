@@ -1,0 +1,128 @@
+/* ============================================================
+   Compare Cities - a second lens on the Social Housing Atlas
+   globe page: same cities, read side by side instead of spun
+   around on a sphere. Shares the geo-dark token system.
+   ============================================================ */
+
+.atlas-shell{height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+.atlas-shell .geo-topbar{flex:none;}
+
+.atlas-tabs{
+  flex:none;display:flex;gap:28px;
+  padding:0 40px;border-bottom:1px solid var(--geo-line);
+  background:var(--geo-bg);
+}
+.atlas-tab{
+  appearance:none;background:none;border:none;cursor:pointer;
+  display:flex;align-items:center;gap:8px;
+  padding:14px 0;margin-bottom:-1px;border-bottom:2px solid transparent;
+  font-family:'IBM Plex Mono',monospace;font-size:.8rem;letter-spacing:.02em;
+  color:var(--geo-ink-soft);transition:color .15s ease;
+}
+.atlas-tab:hover{color:var(--geo-ink);}
+.atlas-tab[aria-selected="true"]{color:var(--geo-ink);border-bottom-color:var(--geo-accent);}
+.atlas-tab .pill{
+  font-size:.62rem;background:color-mix(in srgb, var(--geo-accent) 20%, transparent);
+  color:var(--geo-accent);border-radius:3px;padding:1px 6px;letter-spacing:.04em;
+}
+
+.atlas-panels{flex:1;min-height:0;overflow-y:auto;}
+.atlas-panel{display:none;}
+.atlas-panel.is-active{display:block;}
+#panel-globe.is-active{height:100%;}
+.atlas-panel#panel-globe .geo-globe-stage{height:100%;}
+
+/* ---- Compare Cities panel ---- */
+.city-compare{
+  --stock-municipal:#F2B705; --stock-coop:#5C9E6F; --stock-owner:#4A84D6;
+  --stock-private:#B0559C; --stock-other:#6B6B63;
+  --rung-municipal:#3E7C87; --rung-coop:#6FA8B5; --rung-median:#E0B84A;
+  --rung-new:#D9704F; --rung-furnished:#D6483A;
+  max-width:1180px;margin:0 auto;padding:44px 40px 80px;
+  animation:geoFadeUp .5s cubic-bezier(.2,.7,.2,1) both;
+}
+@media (prefers-reduced-motion:reduce){.city-compare{animation:none;}}
+
+.city-compare-head{max-width:640px;margin:0 0 36px;}
+.city-compare-head .geo-eyebrow{margin-bottom:10px;}
+.city-compare-head h1{
+  font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(1.7rem,3.2vw,2.3rem);
+  margin:0 0 12px;color:var(--geo-ink);
+}
+.city-compare-head p{font-size:.95rem;line-height:1.65;color:var(--geo-ink-soft);margin:0;}
+
+.cc-section-head{margin:0 0 4px;}
+.cc-section-head h2{font-family:'Archivo',sans-serif;font-weight:800;font-size:1.25rem;margin:0;color:var(--geo-ink);}
+.cc-note{font-size:.78rem;color:var(--geo-ink-soft);margin:0 0 20px;line-height:1.55;}
+.cc-note a{color:var(--geo-ink-soft);}
+
+/* rent ladder */
+.ladder-card{
+  background:var(--geo-surface);border:1px solid var(--geo-line);border-radius:10px;
+  padding:26px 28px 22px;margin-bottom:40px;
+}
+.ladder-legend{display:flex;flex-wrap:wrap;gap:14px 20px;margin:2px 0 22px;}
+.ladder-legend span{display:flex;align-items:center;gap:7px;font-size:.74rem;color:var(--geo-ink-soft);font-family:'IBM Plex Mono',monospace;}
+.ladder-legend i{width:9px;height:9px;border-radius:50%;flex:none;}
+
+.ladder-row{display:grid;grid-template-columns:170px 1fr 96px;align-items:center;gap:18px;padding:13px 0;border-top:1px solid var(--geo-line);}
+.ladder-row:first-of-type{border-top:none;}
+.ladder-city{display:flex;flex-direction:column;gap:1px;}
+.ladder-city b{font-family:'Archivo',sans-serif;font-weight:800;font-size:.9rem;color:var(--geo-ink);}
+.ladder-city > span{font-size:.7rem;color:var(--geo-ink-soft);margin-bottom:4px;}
+.social-bar{position:relative;width:100%;max-width:132px;height:13px;background:color-mix(in srgb, var(--geo-ink) 6%, transparent);border-radius:3px;overflow:hidden;}
+.social-bar-fill{position:absolute;inset:0 auto 0 0;background:color-mix(in srgb, var(--rung-municipal) 55%, transparent);border-right:1px solid var(--rung-municipal);}
+.social-bar span{position:relative;display:block;font-family:'IBM Plex Mono',monospace;font-size:.6rem;line-height:13px;padding-left:5px;color:var(--geo-ink-soft);white-space:nowrap;}
+
+.ladder-track{position:relative;height:26px;}
+.ladder-track .axis-line{position:absolute;left:0;right:0;top:50%;height:1px;background:var(--geo-line);}
+.ladder-track .seg{position:absolute;top:50%;height:1px;background:color-mix(in srgb, var(--geo-ink-soft) 40%, transparent);}
+.ladder-track .pt{
+  position:absolute;top:50%;width:9px;height:9px;border-radius:50%;
+  transform:translate(-50%,-50%);border:1.5px solid var(--geo-surface);
+}
+.ladder-track .pt:hover::after{
+  content:attr(data-tip);position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+  background:var(--geo-ink);color:var(--geo-bg);font-family:'IBM Plex Mono',monospace;font-size:.66rem;
+  padding:3px 7px;border-radius:3px;white-space:nowrap;pointer-events:none;
+}
+.ladder-ratio{text-align:right;}
+.ladder-ratio b{font-family:'IBM Plex Mono',monospace;font-size:.92rem;color:var(--geo-ink);}
+.ladder-ratio span{display:block;font-size:.62rem;color:var(--geo-ink-soft);margin-top:1px;}
+.ladder-axis{display:grid;grid-template-columns:170px 1fr 96px;gap:18px;margin-top:4px;}
+.ladder-axis .ticks{position:relative;height:14px;font-family:'IBM Plex Mono',monospace;font-size:.64rem;color:var(--geo-ink-soft);}
+.ladder-axis .ticks span{position:absolute;transform:translateX(-50%);}
+
+/* city profile cards */
+.cc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-bottom:36px;}
+.cc-card{
+  background:var(--geo-surface);border:1px solid var(--geo-line);border-radius:10px;
+  padding:20px 22px;display:flex;flex-direction:column;gap:14px;
+}
+.cc-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.cc-card-head h3{font-family:'Archivo',sans-serif;font-weight:800;font-size:1.02rem;margin:0;color:var(--geo-ink);}
+.cc-card-head .country{font-size:.74rem;color:var(--geo-ink-soft);margin-top:2px;}
+.cc-capital{
+  font-family:'IBM Plex Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--geo-ink-soft);border:1px solid var(--geo-line);border-radius:3px;padding:2px 6px;flex:none;
+}
+.cc-stat-row{display:flex;gap:22px;}
+.cc-stat{display:flex;flex-direction:column;gap:2px;}
+.cc-stat b{font-family:'IBM Plex Mono',monospace;font-size:.95rem;color:var(--geo-ink);font-variant-numeric:tabular-nums;}
+.cc-stat span{font-size:.66rem;color:var(--geo-ink-soft);text-transform:uppercase;letter-spacing:.04em;}
+.cc-stat.pending b{color:var(--geo-ink-soft);font-weight:400;font-size:.82rem;font-style:italic;}
+
+.cc-pending-row{
+  margin-top:4px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+}
+.cc-pending-row span:first-child{font-size:.72rem;color:var(--geo-ink-soft);margin-right:4px;}
+.cc-chip{
+  font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--geo-ink-soft);
+  border:1px dashed var(--geo-line);border-radius:20px;padding:4px 12px;
+}
+
+@media (max-width:720px){
+  .ladder-row,.ladder-axis{grid-template-columns:120px 1fr 72px;gap:10px;}
+  .ladder-city > span{display:none;}
+  .social-bar{max-width:100px;}
+}

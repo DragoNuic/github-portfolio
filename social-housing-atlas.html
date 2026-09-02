@@ -7,27 +7,79 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/geospatial.css" />
+<link rel="stylesheet" href="assets/css/city-compare.css" />
 </head>
-<body class="geo-body geo-dark">
+<body class="geo-body geo-dark atlas-shell">
   <header class="geo-topbar">
     <a class="geo-brand" href="geospatial.html">Drago Nuić <span>/ Geospatial Analyses</span></a>
     <a class="geo-back" href="geospatial.html">← Categories</a>
   </header>
 
-  <section class="geo-globe-stage">
-    <div id="globeViz"></div>
+  <nav class="atlas-tabs" role="tablist">
+    <button class="atlas-tab" role="tab" aria-selected="true" data-panel="globe" type="button">Globe</button>
+    <button class="atlas-tab" role="tab" aria-selected="false" data-panel="compare" type="button">Compare Cities <span class="pill">new</span></button>
+  </nav>
 
-    <div class="geo-globe-caption">
-      <p class="geo-eyebrow">Social Housing Atlas</p>
-      <h1>Cities under study</h1>
-      <p>Every marker is a completed analysis. Drag the globe to explore, and select a city to open its map.</p>
-    </div>
+  <div class="atlas-panels">
+    <section class="atlas-panel is-active" id="panel-globe">
+      <section class="geo-globe-stage">
+        <div id="globeViz"></div>
 
-    <p class="geo-globe-hint">Drag to rotate · Scroll to zoom<br>Click a marker to explore</p>
-  </section>
+        <div class="geo-globe-caption">
+          <p class="geo-eyebrow">Social Housing Atlas</p>
+          <h1>Cities under study</h1>
+          <p>Every marker is a completed analysis. Drag the globe to explore, and select a city to open its map.</p>
+        </div>
+
+        <p class="geo-globe-hint">Drag to rotate · Scroll to zoom<br>Click a marker to explore</p>
+      </section>
+    </section>
+
+    <section class="atlas-panel" id="panel-compare">
+      <div class="city-compare">
+        <div class="city-compare-head">
+          <p class="geo-eyebrow">Social Housing Atlas</p>
+          <h1>Compare cities</h1>
+          <p>The same cities on the globe, read side by side: housing stock makeup, and how far rent climbs from a regulated tenancy to the open market.</p>
+        </div>
+
+        <div class="cc-section-head"><h2>Rent ladder, by city</h2></div>
+        <p class="cc-note">Figures in €/m²/month · rent data and housing-stock shares from <a href="https://www.housingcoop.eu/" target="_blank" rel="noopener">European Housing Coop</a> · population and density from each city's statistical bureau and the <a href="https://data-explorer.oecd.org/" target="_blank" rel="noopener">OECD</a>. Self-reported figures, not yet independently verified.</p>
+
+        <div class="ladder-card">
+          <div class="ladder-legend" id="ladderLegend"></div>
+          <div id="ladderRows"></div>
+          <div class="ladder-axis" id="ladderAxis"></div>
+        </div>
+
+        <div class="cc-section-head"><h2>City profiles</h2></div>
+        <p class="cc-note">Population where reported; housing-stock shares from the same source as the rent ladder above.</p>
+
+        <div class="cc-grid" id="cityGrid"></div>
+
+        <div class="cc-pending-row">
+          <span>Tracked, not yet populated:</span>
+          <span class="cc-chip">Singapore</span>
+          <span class="cc-chip">Tokyo</span>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <script src="https://unpkg.com/globe.gl@2.31.0/dist/globe.gl.min.js"></script>
   <script>
+    document.querySelectorAll('.atlas-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.atlas-tab').forEach(b => b.setAttribute('aria-selected', 'false'));
+        document.querySelectorAll('.atlas-panel').forEach(p => p.classList.remove('is-active'));
+        btn.setAttribute('aria-selected', 'true');
+        document.getElementById('panel-' + btn.dataset.panel).classList.add('is-active');
+        if (btn.dataset.panel === 'globe') {
+          requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
+        }
+      });
+    });
+
     const stage = document.getElementById('globeViz');
 
     const cities = [
@@ -59,6 +111,124 @@
 
     window.addEventListener('resize', () => {
       globe.width(stage.clientWidth).height(stage.clientHeight);
+    });
+  </script>
+
+  <script>
+    // ---- Compare Cities - data transcribed from European Housing Coop
+    // (housing stock & rent ladder) and each city's statistical bureau /
+    // the OECD (population & density). See the note above the ladder card
+    // for the live source links. ----
+    const TENURE = [
+      { key: 'municipal', label: 'Municipal', color: 'var(--stock-municipal)' },
+      { key: 'coop',      label: 'Cooperative', color: 'var(--stock-coop)' },
+      { key: 'owner',     label: 'Owner-occupied', color: 'var(--stock-owner)' },
+      { key: 'private',   label: 'Private rental', color: 'var(--stock-private)' },
+      { key: 'other',     label: 'Other', color: 'var(--stock-other)' },
+    ];
+
+    const RUNGS = [
+      { key: 'municipal', label: 'Municipal' },
+      { key: 'coop',      label: 'Cooperative' },
+      { key: 'median',    label: 'All-stock median' },
+      { key: 'new',       label: 'New contracts' },
+      { key: 'furnished', label: 'Furnished / serviced' },
+    ];
+    const RUNG_COLOR = ['var(--rung-municipal)', 'var(--rung-coop)', 'var(--rung-median)', 'var(--rung-new)', 'var(--rung-furnished)'];
+
+    const compareCities = [
+      { name:'Vienna', country:'Austria', capital:true, pop:2028289, density:4922, social:.446,
+        stock:{municipal:.24, coop:.17, owner:.193, private:.341, other:.056},
+        rent:{municipal:5.1, coop:6.1, median:7.5, new:13.7, furnished:21} },
+      { name:'Berlin', country:'Germany', capital:true, pop:3917196, density:4109, social:.276,
+        stock:{municipal:.179, coop:.097, owner:.164, private:.56, other:.07},
+        rent:{municipal:6.67, coop:6.27, median:7.1, new:15.78, furnished:24} },
+      { name:'Helsinki', country:'Finland', capital:true, pop:694392, density:3215, social:.168,
+        stock:{municipal:.135, coop:.033, owner:.43, private:.332, other:.07},
+        rent:{municipal:13.6, coop:14, median:19.4, new:21.5, furnished:30} },
+      { name:'Copenhagen', country:'Denmark', capital:true, pop:null, social:.188,
+        stock:{municipal:.188, coop:.28, owner:.26, private:.272, other:0},
+        rent:{municipal:12.5, coop:8.5, median:11.36, new:17, furnished:22.5} },
+      { name:'Amsterdam', country:'Netherlands', capital:true, pop:null, social:.371,
+        stock:{municipal:.37, coop:.001, owner:.3, private:.329, other:0},
+        rent:{municipal:8.1, coop:10.5, median:11.8, new:25.3, furnished:31.5} },
+      { name:'Paris', country:'France', capital:true, pop:null, social:.1941,
+        stock:{municipal:.194, coop:.0001, owner:.334, private:.425, other:.04},
+        rent:{municipal:7.5, coop:null, median:26.6, new:27.2, furnished:41.46} },
+      { name:'London', country:'United Kingdom', capital:true, pop:null, social:.231,
+        stock:{municipal:.231, coop:.009, owner:.467, private:.292, other:0},
+        rent:{municipal:9.84, coop:9.6, median:35.1, new:35.1, furnished:36} },
+    ];
+
+    const maxSocial = Math.max(...compareCities.map(c => c.social));
+    const fmtPop = n => n == null ? null : n >= 1e6 ? (n/1e6).toFixed(2)+'M' : n.toLocaleString();
+    const pct = n => (n*100).toFixed(1).replace(/\.0$/, '') + '%';
+
+    document.getElementById('ladderLegend').innerHTML = RUNGS.map((r,i) =>
+      `<span><i style="background:${RUNG_COLOR[i]}"></i>${r.label}</span>`
+    ).join('');
+
+    const allRentVals = compareCities.flatMap(c => Object.values(c.rent)).filter(v => v != null);
+    const maxRent = Math.max(...allRentVals);
+    const scaleX = v => (v / maxRent) * 100;
+
+    const ladderRows = document.getElementById('ladderRows');
+    compareCities.forEach(c => {
+      const pts = RUNGS.map(r => c.rent[r.key]).filter(v => v != null);
+      const minX = scaleX(Math.min(...pts)), maxX = scaleX(Math.max(...pts));
+      const ratio = (c.rent.new != null && c.rent.municipal) ? (c.rent.new / c.rent.municipal) : null;
+
+      const row = document.createElement('div');
+      row.className = 'ladder-row';
+      row.innerHTML = `
+        <div class="ladder-city">
+          <b>${c.name}</b><span>${c.country}</span>
+          <div class="social-bar" title="${pct(c.social)} of housing stock is social housing (municipal + cooperative)">
+            <div class="social-bar-fill" style="width:${(c.social/maxSocial)*100}%"></div>
+            <span>${pct(c.social)} social</span>
+          </div>
+        </div>
+        <div class="ladder-track">
+          <div class="axis-line"></div>
+          <div class="seg" style="left:${minX}%;width:${maxX-minX}%"></div>
+          ${RUNGS.map((r,i) => c.rent[r.key] != null ? `<div class="pt" data-tip="${r.label}: €${c.rent[r.key]}/m²" style="left:${scaleX(c.rent[r.key])}%;background:${RUNG_COLOR[i]}"></div>` : '').join('')}
+        </div>
+        <div class="ladder-ratio">${ratio ? `<b>${ratio.toFixed(1)}×</b><span>new vs municipal</span>` : `<b style="font-size:.8rem;font-style:italic;color:var(--geo-ink-soft)">—</b>`}</div>
+      `;
+      ladderRows.appendChild(row);
+    });
+
+    document.getElementById('ladderAxis').innerHTML = `
+      <div></div>
+      <div class="ticks">
+        ${[0, 10, 20, 30, 40].filter(v => v <= maxRent + 5).map(v => `<span style="left:${scaleX(v)}%">€${v}</span>`).join('')}
+      </div>
+      <div></div>
+    `;
+
+    const cityGrid = document.getElementById('cityGrid');
+    compareCities.forEach(c => {
+      const card = document.createElement('div');
+      card.className = 'cc-card';
+      const popBlock = c.pop
+        ? `<div class="cc-stat"><b>${fmtPop(c.pop)}</b><span>Population</span></div>${c.density ? `<div class="cc-stat"><b>${c.density.toLocaleString()}</b><span>People / km²</span></div>` : ''}`
+        : `<div class="cc-stat pending"><b>data pending</b><span>Population</span></div>`;
+
+      const stockEntries = TENURE.map(t => ({...t, value: c.stock[t.key] || 0})).filter(t => t.value > 0);
+
+      card.innerHTML = `
+        <div class="cc-card-head">
+          <div><h3>${c.name}</h3><div class="country">${c.country}</div></div>
+          ${c.capital ? '<span class="cc-capital">Capital</span>' : ''}
+        </div>
+        <div class="cc-stat-row">${popBlock}</div>
+        <div class="geo-segbar-block">
+          <p class="geo-segbar-title">Housing stock</p>
+          <div class="geo-segbar-row">${stockEntries.map(t => `<span class="geo-seg" style="flex:${t.value};background:${t.color}" title="${t.label} - ${pct(t.value)}"></span>`).join('')}</div>
+          <div class="geo-segbar-legend">${stockEntries.map(t => `<span class="geo-segbar-legend-item"><span class="geo-segbar-swatch" style="background:${t.color}"></span>${t.label} - ${pct(t.value)}</span>`).join('')}</div>
+        </div>
+      `;
+      cityGrid.appendChild(card);
     });
   </script>
 </body>
