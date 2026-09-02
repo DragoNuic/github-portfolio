@@ -112,15 +112,6 @@
 .cc-stat span{font-size:.66rem;color:var(--geo-ink-soft);text-transform:uppercase;letter-spacing:.04em;}
 .cc-stat.pending b{color:var(--geo-ink-soft);font-weight:400;font-size:.82rem;font-style:italic;}
 
-.cc-pending-row{
-  margin-top:4px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
-}
-.cc-pending-row span:first-child{font-size:.72rem;color:var(--geo-ink-soft);margin-right:4px;}
-.cc-chip{
-  font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--geo-ink-soft);
-  border:1px dashed var(--geo-line);border-radius:20px;padding:4px 12px;
-}
-
 @media (max-width:720px){
   .ladder-row,.ladder-axis{grid-template-columns:120px 1fr 72px;gap:10px;}
   .ladder-city > span{display:none;}
